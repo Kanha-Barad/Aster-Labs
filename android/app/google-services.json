@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "601802083704",
+    "project_id": "aster-labs-492f9",
+    "storage_bucket": "aster-labs-492f9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:601802083704:android:02f4b986038a1888ef0c8d",
+        "android_client_info": {
+          "package_name": "com.suvarnatechnosoft.asterlabs"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "601802083704-2o5aagvnjf6jn392ovhc558cdl5i184k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCcoEpgtIiuwE3RGtv1lKgd0aUUxqLa6Ck"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "601802083704-2o5aagvnjf6jn392ovhc558cdl5i184k.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "601802083704-2ha9bk5rpl5jvd027eppv649m9u85hj3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.suvarnatechnosoft.asterlabs"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
