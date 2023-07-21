@@ -194,15 +194,12 @@ class _PatientLoginState extends State<PatientLogin> {
         child: ListView(
             // keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             children: <Widget>[
-              SizedBox(
-                height: 80,
-              ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(0, 3, 0, 65),
+                padding: const EdgeInsets.fromLTRB(0, 80, 0, 65),
                 child: SizedBox(
-                    height: 90.0,
-                    width: 200.0,
-                    child: Image(image: AssetImage(globals.All_Client_Logo))),
+                    height: 150.0,
+                    width: 150.0,
+                    child: Image.asset(globals.All_Client_Logo)),
               ),
               // Container(
               //   height: 100.0,
@@ -314,9 +311,6 @@ class _PatientLoginState extends State<PatientLogin> {
                       }),
                 ],
               ),
-              SizedBox(
-                height: 15,
-              ),
 
               TextButton(
                 child: Text(
@@ -327,18 +321,20 @@ class _PatientLoginState extends State<PatientLogin> {
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(50, 0.0, 50, 0.0),
-                child: RichText(
-                  text: TextSpan(
-                    children: <TextSpan>[
-                      TextSpan(
-                          text: 'Terms & Conditions ',
-                          style: TextStyle(color: Color(0xff123456))),
-                      TextSpan(
-                          text: '& ', style: TextStyle(color: Colors.black)),
-                      TextSpan(
-                          text: 'Privacy Policy',
-                          style: TextStyle(color: Color(0xff123456)))
-                    ],
+                child: Center(
+                  child: RichText(
+                    text: TextSpan(
+                      children: <TextSpan>[
+                        TextSpan(
+                            text: 'Terms & Conditions ',
+                            style: TextStyle(color: Color(0xff123456))),
+                        TextSpan(
+                            text: '& ', style: TextStyle(color: Colors.black)),
+                        TextSpan(
+                            text: 'Privacy Policy',
+                            style: TextStyle(color: Color(0xff123456)))
+                      ],
+                    ),
                   ),
                 ),
               ),

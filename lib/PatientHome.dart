@@ -214,7 +214,7 @@ class _PatientHomeState extends State<PatientHome> {
           // backgroundColor: Color.fromARGB(179, 239, 243, 247),
           leading: Builder(
             builder: (context) => IconButton(
-              icon: Icon(Icons.menu_rounded, color: Colors.white),
+              icon: Image.asset("assets/images/asterlabs.png"),
               onPressed: () => Scaffold.of(context).openDrawer(),
             ),
           ),
@@ -504,8 +504,8 @@ class _PatientHomeState extends State<PatientHome> {
                     Padding(
                       padding: EdgeInsets.fromLTRB(0, 3, 0, 3),
                       child: Container(
-                        height: 43.0,
-                        width: 50.0,
+                        height: 50.0,
+                        width: 70.0,
                         decoration: const BoxDecoration(
                             shape: BoxShape.rectangle,
                             image: DecorationImage(
