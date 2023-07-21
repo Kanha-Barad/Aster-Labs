@@ -288,10 +288,10 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
         body: data,
         encoding: Encoding.getByName("utf-8"));
 
-    if (response.statusCode == 200 || response.statusCode == 500) {
+    if (response.statusCode == 200) {
       Map<String, dynamic> resposne = jsonDecode(response.body);
       // resposne["Data"] == null ? GridViewList = [] : Container();
-      List jsonResponse = resposne["Data"];
+      List jsonResponse = resposne["Data"] ?? [];
 
       //globals.SelectedlocationId = "";
       GridViewList = [];
@@ -370,7 +370,7 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
     if (response.statusCode == 200 || response.statusCode == 500) {
       Map<String, dynamic> resposne = jsonDecode(response.body);
 
-      List jsonResponse = resposne["Data"];
+      List jsonResponse = resposne["Data"] ?? [];
 
       return jsonResponse.map((strans) => Data_Model.fromJson(strans)).toList();
     } else {
@@ -399,9 +399,9 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
           },
           body: params,
           encoding: Encoding.getByName("utf-8"));
-      print(response.body);
+      // print(response.body);
       map = json.decode(response.body);
-      print(response.body);
+      // print(response.body);
       if (response.statusCode == 200) {
         functionCalls = "true";
       } else {
@@ -467,36 +467,36 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
     // _Add_Test_fetchSaleTransaction1() {}
 
     Widget verticalList3 = Container(
-      child: FutureBuilder<List<Data_Model>>(
-          future:
-              (globals.SelectedlocationId != null && GridViewList.length == 0)
-                  ? _fetchSaleTransaction()
-                  : _Add_Test_fetchSaleTransaction1(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              if (snapshot.data!.isEmpty == true) {
-                return NoContent3();
+        child: FutureBuilder<List<Data_Model>>(
+            future:
+                (globals.SelectedlocationId != null && GridViewList.length == 0)
+                    ? _fetchSaleTransaction()
+                    : _Add_Test_fetchSaleTransaction1(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                if (snapshot.data!.isEmpty == true) {
+                  return NoContent3();
+                }
+                var data = snapshot.data;
+                return SizedBox(child: Application_ListView(data, context));
+              } else if (snapshot.hasError) {
+                return Text("${snapshot.error}");
               }
-              var data = snapshot.data;
-              return SizedBox(child: Application_ListView(data, context));
-            } else if (snapshot.hasError) {
-              return Text("${snapshot.error}");
-            }
-            return SizedBox(
-              height: 100,
-              width: 100,
-              child: Center(
-                child: LoadingIndicator(
-                  indicatorType: Indicator.ballClipRotateMultiple,
-                  colors: Colors.primaries,
-                  strokeWidth: 4.0,
-                  //   pathBackgroundColor:ColorSwatch(Action[])
+              return SizedBox(
+                height: 100,
+                width: 100,
+                child: Center(
+                  child: LoadingIndicator(
+                    indicatorType: Indicator.ballClipRotateMultiple,
+                    colors: Colors.primaries,
+                    strokeWidth: 4.0,
+                    //   pathBackgroundColor:ColorSwatch(Action[])
+                  ),
                 ),
-              ),
-            );
-          }),
-    );
-
+              );
+            }),
+      );
+    
     All_Test_Widget(var data, BuildContext context) {
       return Column(
         children: [

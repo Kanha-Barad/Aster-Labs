@@ -116,11 +116,6 @@ class _AllBottOMNaviGAtionBarState extends State<AllBottOMNaviGAtionBar> {
                       context,
                       MaterialPageRoute(builder: (context) => PatientLogin("")),
                     );
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //       builder: (context) => AccessClientCodeLogin()),
-                    // );
                   },
                   child: Column(children: [
                     Icon(

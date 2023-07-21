@@ -30,20 +30,25 @@ class ProductOverviewPage extends StatefulWidget {
 }
 
 class _ProductOverviewPageState extends State<ProductOverviewPage> {
-  @override
-  Widget build(BuildContext context) {
-    final controller = Get.put(ProductController());
+  final controller = Get.put(ProductController());
 
 // Call fetchProducts to refresh the data
+  @override
+  void initState() {
+    // TODO: implement initState
     controller.fetchProducts(globals.Preferedsrvs);
-    var _showOnlyFavourites = false;
+    super.initState();
+  }
 
+  @override
+  Widget build(BuildContext context) {
     //  bookCart();
 
     // Get.put(ProductController());
     // Get.put(CartController());
     // Get.appUpdate();
-    setState(() {});
+    //setState(() {});
+    
     return Scaffold(
       appBar: AppBar(
           iconTheme: IconThemeData(color: Colors.white),
@@ -67,10 +72,7 @@ class _ProductOverviewPageState extends State<ProductOverviewPage> {
           // ),
           ),
       endDrawer: AppDrawer(),
-      body: (!_showOnlyFavourites)
-          ? ProductsGrid()
-          // ignore: dead_code
-          : Text('Done'),
+      body: ProductsGrid(),
       bottomNavigationBar: AllBottOMNaviGAtionBar(),
     );
   }
