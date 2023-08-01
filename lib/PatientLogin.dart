@@ -61,7 +61,7 @@ class _PatientLoginState extends State<PatientLogin> {
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
         timeInSecForIosWeb: 1,
-        backgroundColor: Color.fromARGB(190, 38, 238, 38),
+        backgroundColor: Color.fromARGB(189, 59, 227, 180),
         textColor: Colors.white,
         fontSize: 16.0);
     EnterMobNo(MobileNocontroller.text.toString(), randomNumber.toString());
@@ -94,14 +94,14 @@ class _PatientLoginState extends State<PatientLogin> {
     if (response.statusCode == 200) {
       Map<String, dynamic> resposne = jsonDecode(response.body);
       //if (resposne["Data"][0]["MSG_ID"].toString().split('.')[0] != "0") {
-      Fluttertoast.showToast(
-          msg: "OTP sent sucessfully",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Color.fromARGB(189, 134, 223, 134),
-          textColor: Colors.white,
-          fontSize: 16.0);
+      // Fluttertoast.showToast(
+      //     msg: "OTP sent sucessfully",
+      //     toastLength: Toast.LENGTH_SHORT,
+      //     gravity: ToastGravity.CENTER,
+      //     timeInSecForIosWeb: 1,
+      //     backgroundColor: Color.fromARGB(189, 134, 223, 134),
+      //     textColor: Colors.white,
+      //     fontSize: 16.0);
       globals.mobNO = MobileNocontroller.text.toString();
 
       globals.selectedLogin_Data = jsonDecode(response.body);
@@ -141,6 +141,26 @@ class _PatientLoginState extends State<PatientLogin> {
     }
   }
 
+  bool isButtonDisabled = false;
+
+  Future<void> PatientREGIstraTIoN() async {
+    if (!isButtonDisabled) {
+      setState(() {
+        isButtonDisabled = true; // Disable the button
+      });
+
+      // Call your API here to book the test
+      EnterMobNo1(MobileNocontroller.text, "");
+      // Example delay to simulate API call
+      Future.delayed(Duration(seconds: 5), () {
+        // Enable the button again after the delay
+        setState(() {
+          isButtonDisabled = false;
+        });
+      });
+    }
+  }
+
   EnterMobNo1(mobno, RandomOTP) async {
     isvalidmob = [];
 
@@ -176,7 +196,7 @@ class _PatientLoginState extends State<PatientLogin> {
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIosWeb: 1,
-          backgroundColor: Color.fromARGB(246, 255, 106, 101),
+          backgroundColor: Color.fromARGB(255, 235, 103, 93),
           textColor: Colors.white,
           fontSize: 16.0,
         );
@@ -195,7 +215,7 @@ class _PatientLoginState extends State<PatientLogin> {
             // keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.fromLTRB(0, 80, 0, 65),
+                padding: const EdgeInsets.fromLTRB(0, 80, 0, 45),
                 child: SizedBox(
                     height: 150.0,
                     width: 150.0,
@@ -217,73 +237,78 @@ class _PatientLoginState extends State<PatientLogin> {
                   style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold),
                 ),
               ),
-              SizedBox(
-                height: 20,
-              ),
-              Container(
-                height: 60,
-                padding: EdgeInsets.symmetric(vertical: 2),
-                child: TextField(
-                  focusNode: myFocusNode,
-                  keyboardType: TextInputType.number,
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.digitsOnly
-                  ],
-                  // obscureText: true,
-                  controller: MobileNocontroller,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(50)),
-                    prefixIcon: Icon(Icons.phone_android),
-                    focusColor: Color(0xff123456),
-                    hintText: 'Enter 10 digit mobile number',
+             
+              Padding(
+                padding: const EdgeInsets.only(top:30.0),
+                child: Container(
+                  height: 60,
+                  padding: EdgeInsets.symmetric(vertical: 2),
+                  child: TextField(
+                    focusNode: myFocusNode,
+                    keyboardType: TextInputType.number,
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.digitsOnly
+                    ],
+                    // obscureText: true,
+                    controller: MobileNocontroller,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(50)),
+                      prefixIcon: Icon(Icons.phone_android),
+                      focusColor: Color(0xff123456),
+                      hintText: 'Enter 10 digit mobile number',
+                    ),
                   ),
                 ),
               ),
-              SizedBox(
-                height: 18,
-              ),
 
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    height: 50,
-                    width: 100,
-                    child: Card(
-                        color: Color(0xff123456),
-                        shape: RoundedRectangleBorder(
-                            side: BorderSide(color: Colors.blueGrey),
-                            borderRadius: BorderRadius.circular(20)),
-                        child: TextButton(
-                            onPressed: () {
-                              EnterMobNo1(MobileNocontroller.text, "");
-                            },
+              Padding(
+                padding: const EdgeInsets.only(top: 30.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        PatientREGIstraTIoN();
+                      },
+                      child: Card(
+                          color: Color.fromARGB(255, 7, 185, 141),
+                          shape: RoundedRectangleBorder(
+                              side: BorderSide(
+                                  color: Color.fromARGB(255, 216, 248, 247)),
+                              borderRadius: BorderRadius.circular(25)),
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(18, 12, 18, 12),
                             child: Text('Send OTP',
                                 style: TextStyle(
-                                    color: Colors.white, fontSize: 15)))),
-                  ),
-                  SizedBox(
-                    height: 50,
-                    width: 100,
-                    child: Card(
-                        color: Color.fromARGB(255, 177, 199, 234),
-                        shape: RoundedRectangleBorder(
-                            side: BorderSide(color: Colors.white),
-                            borderRadius: BorderRadius.circular(20)),
-                        child: TextButton(
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => PatientHome()));
-                              // MobileNocontroller.clear();
-                            },
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500)),
+                          )),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => PatientHome()));
+                      },
+                      child: Card(
+                          color: Color.fromARGB(255, 167, 236, 237),
+                          shape: RoundedRectangleBorder(
+                              side: BorderSide(color: Color.fromARGB(255, 50, 224, 212)),
+                              borderRadius: BorderRadius.circular(25)),
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(25, 11, 25, 11),
                             child: Text('Cancel',
                                 style: TextStyle(
-                                    color: Colors.black, fontSize: 16)))),
-                  ),
-                ],
+                                    color: Colors.black,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500)),
+                          )),
+                    ),
+                  ],
+                ),
               ),
               SizedBox(
                 height: 15,
@@ -351,7 +376,7 @@ mobileError() {
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.CENTER,
       timeInSecForIosWeb: 1,
-      backgroundColor: Colors.red,
+      backgroundColor: Color.fromARGB(255, 235, 103, 93),
       textColor: Colors.white,
       fontSize: 16.0);
 }
@@ -362,7 +387,7 @@ Validatemobno() {
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.CENTER,
       timeInSecForIosWeb: 1,
-      backgroundColor: Colors.red,
+      backgroundColor: Color.fromARGB(255, 235, 103, 93),
       textColor: Colors.white,
       fontSize: 16.0);
 }
@@ -373,7 +398,7 @@ OTPError() {
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.CENTER,
       timeInSecForIosWeb: 1,
-      backgroundColor: Color.fromARGB(255, 206, 19, 12),
+      backgroundColor: Color.fromARGB(255, 235, 103, 93),
       textColor: Colors.white,
       fontSize: 16.0);
 }
@@ -424,7 +449,7 @@ loginerror() {
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.CENTER,
       timeInSecForIosWeb: 1,
-      backgroundColor: Color.fromARGB(230, 228, 55, 32),
+      backgroundColor: Color.fromARGB(255, 235, 103, 93),
       textColor: Colors.white,
       fontSize: 16.0);
 }

@@ -1,14 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:asterlabs/OrdersHistory.dart';
-import 'package:asterlabs/PatientHome.dart';
 import 'package:asterlabs/Widgets/BottomNavigation.dart';
 import 'package:asterlabs/thankYou_screen.dart';
 import 'globals.dart' as globals;
@@ -27,8 +23,129 @@ class UpLoadPrescrIPtioN extends StatefulWidget {
 class _UpLoadPrescrIPtioNState extends State<UpLoadPrescrIPtioN> {
   final ImagePicker _picker = ImagePicker();
   File? file;
+  DateTime selectedDate = DateTime.now();
+
   List<File?> files = [];
   // late Uint8List BYTes;
+  SavingBase64ImageSingleUser(BilLNuMbEr, billDATE) async {
+    Map data = {
+      "Bill_no": BilLNuMbEr,
+      "connection": globals.Patient_App_Connection_String,
+      "Base64string": globals.PresCripTion_Image_Converter,
+    };
+    final jobsListAPIUrl = Uri.parse(
+        globals.Global_Patient_Api_URL + '/PatinetMobileApp/UpdateBytesimage');
+
+    var bodys = json.encode(data);
+
+    var response = await http.post(jobsListAPIUrl,
+        headers: {"Content-Type": "application/json"}, body: bodys);
+    print("${response.statusCode}");
+    print("${response.body}");
+    if (response.statusCode == 200) {
+      Map<String, dynamic> resposne = jsonDecode(response.body);
+      List jsonResponse = resposne["Data"];
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: ((context) =>
+                  ThankYouScreenOFUploadPrescripTIOn(BilLNuMbEr, billDATE))));
+    } else {
+      throw Exception('Failed to load jobs from API');
+    }
+  }
+
+  SingleUserTestBookings() async {
+    if (globals.SelectedlocationId == "" || globals.SelectedlocationId == "0") {
+      return Fluttertoast.showToast(
+          msg: "Please Select the Location",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Color.fromARGB(255, 235, 103, 93),
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    if (globals.Session_ID == null || globals.Session_ID == "") {
+      globals.Session_ID = prefs.getString('SeSSion_ID')!;
+    }
+    if (globals.umr_no == null || globals.umr_no == "") {
+      globals.umr_no = prefs.getString('singleUMr_No')!;
+    }
+    Map data = {
+      "PATIENT_ID": "1",
+      "UMR_NO": globals.umr_no,
+      "TEST_IDS": "",
+      "TEST_AMOUNTS": "0",
+      "CONSESSION_AMOUNT": "0",
+      "BILL_AMOUNT": "0",
+      "DUE_AMOUNT": "0",
+      "MOBILE_NO": globals.mobNO,
+      "MOBILE_REG_FLAG": "y",
+      "SESSION_ID": globals.Session_ID,
+      "PAYMENT_MODE_ID": "1",
+      "IP_NET_AMOUNT": "0",
+      "IP_TEST_CONCESSION": "0",
+      "IP_TEST_NET_AMOUNTS": "0",
+      "IP_POLICY_ID": "",
+      "IP_PAID_AMOUNT": "0",
+      "IP_OUTSTANDING_DUE": "0",
+      "connection": globals.Patient_App_Connection_String,
+      "loc_id": globals.SelectedlocationId,
+      "IP_SLOT": globals.Slot_id,
+      "IP_DATE": "${selectedDate.toLocal()}".split(' ')[0],
+      "IP_UPLOAD_IMG": globals.PresCripTion_Image_Converter.toString(),
+      "IP_PRESCRIPTION": "",
+      "IP_REMARKS": "",
+      "Mobile_Device_Id": Device_token_ID,
+    };
+
+    final jobsListAPIUrl = Uri.parse(
+        globals.Global_Patient_Api_URL + '/PatinetMobileApp/NewRegistration');
+
+    var bodys = json.encode(data);
+
+    var response = await http.post(jobsListAPIUrl,
+        headers: {"Content-Type": "application/json"}, body: bodys);
+    print("${response.statusCode}");
+    print("${response.body}");
+
+    if (response.statusCode == 200) {
+      Map<String, dynamic> resposne = jsonDecode(response.body);
+      List jsonResponse = resposne["Data"];
+      globals.Bill_No = resposne["Data"][0]["BILL_NO"].toString();
+      var bill_NUmber = resposne["Data"][0]["BILL_NO"].toString();
+      var Bill_Date = resposne["Data"][0]["CREATE_DT"].toString();
+
+      //  Push_Notification(context);
+      SavingBase64ImageSingleUser(bill_NUmber, Bill_Date);
+      globals.SelectedlocationId = "";
+    } else {
+      throw Exception('Failed to load jobs from API');
+    }
+  }
+
+  bool isButtonDisabled = false;
+  Future<void> SingleUserPaymentsBooking() async {
+    if (!isButtonDisabled) {
+      setState(() {
+        isButtonDisabled = true; // Disable the button
+      });
+
+      // Call your API here to book the test
+      SingleUserTestBookings();
+
+      // Example delay to simulate API call
+      Future.delayed(Duration(seconds: 5), () {
+        // Enable the button again after the delay
+        setState(() {
+          isButtonDisabled = false;
+        });
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,108 +153,6 @@ class _UpLoadPrescrIPtioNState extends State<UpLoadPrescrIPtioN> {
       Device_token_ID = value!;
       print(value);
     });
-    DateTime selectedDate = DateTime.now();
-    SavingBase64ImageSingleUser(BilLNuMbEr, billDATE) async {
-      Map data = {
-        "Bill_no": BilLNuMbEr,
-        "connection": globals.Patient_App_Connection_String,
-        "Base64string": globals.PresCripTion_Image_Converter,
-      };
-      final jobsListAPIUrl = Uri.parse(globals.Global_Patient_Api_URL +
-          '/PatinetMobileApp/UpdateBytesimage');
-
-      var bodys = json.encode(data);
-
-      var response = await http.post(jobsListAPIUrl,
-          headers: {"Content-Type": "application/json"}, body: bodys);
-      print("${response.statusCode}");
-      print("${response.body}");
-      if (response.statusCode == 200) {
-        Map<String, dynamic> resposne = jsonDecode(response.body);
-        List jsonResponse = resposne["Data"];
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: ((context) =>
-                    ThankYouScreenOFUploadPrescripTIOn(BilLNuMbEr, billDATE))));
-      } else {
-        throw Exception('Failed to load jobs from API');
-      }
-    }
-
-    SingleUserTestBookings() async {
-      if (globals.SelectedlocationId == "" ||
-          globals.SelectedlocationId == "0") {
-        return Fluttertoast.showToast(
-            msg: "Please Select the Location",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.CENTER,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Color.fromARGB(255, 220, 91, 26),
-            textColor: Colors.white,
-            fontSize: 16.0);
-      }
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-
-      if (globals.Session_ID == null || globals.Session_ID == "") {
-        globals.Session_ID = prefs.getString('SeSSion_ID')!;
-      }
-      if (globals.umr_no == null || globals.umr_no == "") {
-        globals.umr_no = prefs.getString('singleUMr_No')!;
-      }
-      Map data = {
-        "PATIENT_ID": "1",
-        "UMR_NO": globals.umr_no,
-        "TEST_IDS": "",
-        "TEST_AMOUNTS": "0",
-        "CONSESSION_AMOUNT": "0",
-        "BILL_AMOUNT": "0",
-        "DUE_AMOUNT": "0",
-        "MOBILE_NO": globals.mobNO,
-        "MOBILE_REG_FLAG": "y",
-        "SESSION_ID": globals.Session_ID,
-        "PAYMENT_MODE_ID": "1",
-        "IP_NET_AMOUNT": "0",
-        "IP_TEST_CONCESSION": "0",
-        "IP_TEST_NET_AMOUNTS": "0",
-        "IP_POLICY_ID": "",
-        "IP_PAID_AMOUNT": "0",
-        "IP_OUTSTANDING_DUE": "0",
-        "connection": globals.Patient_App_Connection_String,
-        "loc_id": globals.SelectedlocationId,
-        "IP_SLOT": globals.Slot_id,
-        "IP_DATE": "${selectedDate.toLocal()}".split(' ')[0],
-        "IP_UPLOAD_IMG": globals.PresCripTion_Image_Converter.toString(),
-        //globals.PresCripTion_Image_Converter.toString(),
-        "IP_PRESCRIPTION": "",
-        "IP_REMARKS": "",
-        "Mobile_Device_Id": Device_token_ID,
-      };
-
-      final jobsListAPIUrl = Uri.parse(
-          globals.Global_Patient_Api_URL + '/PatinetMobileApp/NewRegistration');
-
-      var bodys = json.encode(data);
-
-      var response = await http.post(jobsListAPIUrl,
-          headers: {"Content-Type": "application/json"}, body: bodys);
-      print("${response.statusCode}");
-      print("${response.body}");
-
-      if (response.statusCode == 200) {
-        Map<String, dynamic> resposne = jsonDecode(response.body);
-        List jsonResponse = resposne["Data"];
-        globals.Bill_No = resposne["Data"][0]["BILL_NO"].toString();
-        var bill_NUmber = resposne["Data"][0]["BILL_NO"].toString();
-        var Bill_Date = resposne["Data"][0]["CREATE_DT"].toString();
-
-        //  Push_Notification(context);
-        SavingBase64ImageSingleUser(bill_NUmber, Bill_Date);
-        globals.SelectedlocationId = "";
-      } else {
-        throw Exception('Failed to load jobs from API');
-      }
-    }
 
     return Scaffold(
       appBar: AppBar(
@@ -145,7 +160,7 @@ class _UpLoadPrescrIPtioNState extends State<UpLoadPrescrIPtioN> {
         iconTheme: IconThemeData(
           color: Colors.white, //change your color here
         ),
-        backgroundColor: Color(0xff123456),
+        backgroundColor: Color.fromARGB(255, 7, 185, 141),
         leading: Builder(
           builder: (BuildContext context) {
             return IconButton(
@@ -211,21 +226,7 @@ class _UpLoadPrescrIPtioNState extends State<UpLoadPrescrIPtioN> {
           }),
       floatingActionButton: InkWell(
         onTap: () async {
-          bool isButtonDisabled = false;
-
-          void SingleUserPaymentsBooking() {
-            if (!isButtonDisabled) {
-              isButtonDisabled = true; // Disable the button
-
-              // Call your API here to book the test
-              SingleUserTestBookings();
-              // Example delay to simulate API call
-              Future.delayed(Duration(seconds: 2), () {
-                // Enable the button again after the delay
-                isButtonDisabled = false;
-              });
-            }
-          }
+          SingleUserPaymentsBooking();
 
           SharedPreferences prefs = await SharedPreferences.getInstance();
 
@@ -245,7 +246,7 @@ class _UpLoadPrescrIPtioNState extends State<UpLoadPrescrIPtioN> {
             height: 40,
             width: 80,
             child: Card(
-                color: Color(0xff123456),
+                color: Color.fromARGB(255, 7, 185, 141),
                 child: Center(
                     child: Text("Upload",
                         style: TextStyle(
@@ -296,8 +297,8 @@ class _MultiUserBookingsPopupState extends State<MultiUserBookingsPopup> {
                 color: Colors.white,
               )),
           // automaticallyImplyLeading: false,
-          title: Text('User List', style: TextStyle(color: Colors.white)),
-          backgroundColor: Color(0xff123456),
+          title: Text('Family Members', style: TextStyle(color: Colors.white)),
+          backgroundColor: Color.fromARGB(255, 7, 185, 141),
         ),
         body: MultiUserListBookings(globals.selectedLogin_Data, context),
       ),
@@ -353,7 +354,7 @@ Widget MultiUserBookings(data, BuildContext context, index) {
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIosWeb: 1,
-          backgroundColor: Color.fromARGB(255, 220, 91, 26),
+          backgroundColor: Color.fromARGB(255, 235, 103, 93),
           textColor: Colors.white,
           fontSize: 16.0);
     }
@@ -504,7 +505,7 @@ UploadError() {
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.CENTER,
       timeInSecForIosWeb: 1,
-      backgroundColor: Color.fromARGB(230, 228, 55, 32),
+      backgroundColor: Color.fromARGB(255, 235, 103, 93),
       textColor: Colors.white,
       fontSize: 16.0);
 }

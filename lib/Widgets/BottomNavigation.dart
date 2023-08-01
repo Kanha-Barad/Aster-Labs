@@ -23,7 +23,7 @@ class _AllBottOMNaviGAtionBarState extends State<AllBottOMNaviGAtionBar> {
         // height: 150,
         width: MediaQuery.of(context).size.width,
         height: 63,
-        color: Color(0xff123456),
+        color: Color.fromARGB(255, 7, 185, 141),
         child: Padding(
           padding: const EdgeInsets.only(top: 4.0),
           child: Row(

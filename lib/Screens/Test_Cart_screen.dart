@@ -45,6 +45,159 @@ class _CartScreenState extends State<CartScreen> {
   // }
 
   var _selectedItem;
+
+  SingleUserOrderPayments() async {
+    if (globals.SelectedlocationId == "" || globals.SelectedlocationId == "0") {
+      return Fluttertoast.showToast(
+          msg: "Please Select the Location",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Color.fromARGB(255, 235, 103, 93),
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
+    var cartController = Get.put(CartController());
+    var orderController = Get.put(OrderController());
+    String test_ids = '';
+    String test_amount = '';
+    String test_concession = '';
+    String Test_net = "";
+    int i;
+    // var cartController = Get.put(CartController());
+    var dataset = null;
+    cartController.items.forEach((key, cartItem) {
+      test_ids += cartItem.Service_Id.toString() + ',';
+      test_amount += cartItem.price.toString() + ',';
+      if (globals.GlobalDiscountCoupons.toString() == "") {
+        globals.GlobalDiscountCoupons = "0";
+      }
+      test_concession += globals.GlobalDiscountCoupons.toString() + ',';
+      Test_net += (double.parse(cartItem.price.toString()) -
+                  double.parse(globals.GlobalDiscountCoupons.toString()))
+              .toString() +
+          ',';
+    });
+    // dataset = cartController.items;
+    // for (i = 0; i <= dataset.length; i++) {
+    //   test_ids += dataset[i];
+    // }
+    if (globals.Discount_Amount_Coupon == "" ||
+        globals.Discount_Amount_Coupon == null) {
+      globals.Discount_Amount_Coupon = "0";
+    }
+    if (globals.Coupon_Policy_Id == "" || globals.Coupon_Policy_Id == null) {
+      globals.Coupon_Policy_Id = "0";
+    }
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    if (globals.Session_ID == null || globals.Session_ID == "") {
+      globals.Session_ID = prefs.getString('SeSSion_ID')!;
+    }
+
+    if (globals.umr_no == null || globals.umr_no == "") {
+      globals.umr_no = prefs.getString('singleUMr_No')!;
+    }
+    Map data = {
+      "PATIENT_ID": "1",
+      "UMR_NO": globals.umr_no,
+      "TEST_IDS": test_ids,
+      "TEST_AMOUNTS": test_amount,
+      "CONSESSION_AMOUNT": globals.Discount_Amount_Coupon.toString(),
+      "BILL_AMOUNT": cartController.totalAmount.toStringAsFixed(0),
+      "DUE_AMOUNT": cartController.totalAmount.toStringAsFixed(0),
+      "MOBILE_NO": globals.mobNO,
+      "MOBILE_REG_FLAG": "y",
+      "SESSION_ID": globals.Session_ID,
+      "PAYMENT_MODE_ID": "1",
+      "IP_NET_AMOUNT": cartController.totalAmount.toStringAsFixed(0),
+      "IP_TEST_CONCESSION": test_concession,
+      "IP_TEST_NET_AMOUNTS": Test_net,
+      "IP_POLICY_ID": globals.Coupon_Policy_Id,
+      "IP_PAID_AMOUNT": "0",
+      "IP_OUTSTANDING_DUE": cartController.totalAmount.toStringAsFixed(0),
+      "connection": globals.Patient_App_Connection_String,
+      "loc_id": globals.SelectedlocationId,
+      "IP_SLOT": globals.Slot_id,
+      "IP_DATE": "${selectedDate.toLocal()}".split(' ')[0],
+      "IP_UPLOAD_IMG": "",
+      "IP_PRESCRIPTION": "",
+      "IP_REMARKS": "",
+      "Mobile_Device_Id": Device_token_ID,
+      //"Server_Flag":""
+    };
+
+    final jobsListAPIUrl = Uri.parse(
+        globals.Global_Patient_Api_URL + '/PatinetMobileApp/NewRegistration');
+
+    var response = await http.post(jobsListAPIUrl,
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: data,
+        encoding: Encoding.getByName("utf-8"));
+
+    if (response.statusCode == 200) {
+      Map<String, dynamic> resposne = jsonDecode(response.body);
+      List jsonResponse = resposne["Data"];
+      //  globals.Bill_No = resposne["Data"][0]["BILL_NO"].toString();
+      globals.SelectedlocationId = "";
+
+      // globals.Preferedsrvs = jsonDecode(response.body);
+      //  Push_Notification_Message(context, globals.Bill_No);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Thank you, Test booked Successfully'),
+        backgroundColor: Color.fromARGB(255, 26, 177, 122),
+        action: SnackBarAction(
+          label: "View",
+          textColor: Colors.white,
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => OredersHistory()));
+            cartController.clear();
+            productcontroller.resetAll();
+            globals.GlobalDiscountCoupons = "";
+          },
+        ),
+        // duration: const Duration(seconds: 15),
+        //width: 320.0, // Width of the SnackBar.
+        padding: const EdgeInsets.symmetric(
+          horizontal: 4.0, // Inner padding for SnackBar content.
+        ),
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+      ));
+      cartController.clear();
+      productcontroller.resetAll();
+    } else {
+      throw Exception('Failed to load jobs from API');
+    }
+  }
+
+  bool isButtonDisabled = false;
+  Future<void> SingleUserPaymentsBooking() async {
+    if (!isButtonDisabled) {
+      setState(() {
+        isButtonDisabled = true; // Disable the button
+      });
+
+      // Call your API here to book the test
+      SingleUserOrderPayments();
+
+      // Example delay to simulate API call
+      Future.delayed(Duration(seconds: 5), () {
+        // Enable the button again after the delay
+        setState(() {
+          isButtonDisabled = false;
+        });
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     FirebaseMessaging.instance.getToken().then((value) {
@@ -135,139 +288,6 @@ class _CartScreenState extends State<CartScreen> {
     var cartController = Get.put(CartController());
     var orderController = Get.put(OrderController());
 
-    SingleUserOrderPayments() async {
-      if (globals.SelectedlocationId == "" ||
-          globals.SelectedlocationId == "0") {
-        return Fluttertoast.showToast(
-            msg: "Please Select the Location",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.CENTER,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Color.fromARGB(255, 220, 91, 26),
-            textColor: Colors.white,
-            fontSize: 16.0);
-      }
-      var cartController = Get.put(CartController());
-      var orderController = Get.put(OrderController());
-      String test_ids = '';
-      String test_amount = '';
-      String test_concession = '';
-      String Test_net = "";
-      int i;
-      // var cartController = Get.put(CartController());
-      var dataset = null;
-      cartController.items.forEach((key, cartItem) {
-        test_ids += cartItem.Service_Id.toString() + ',';
-        test_amount += cartItem.price.toString() + ',';
-        if (globals.GlobalDiscountCoupons.toString() == "") {
-          globals.GlobalDiscountCoupons = "0";
-        }
-        test_concession += globals.GlobalDiscountCoupons.toString() + ',';
-        Test_net += (double.parse(cartItem.price.toString()) -
-                    double.parse(globals.GlobalDiscountCoupons.toString()))
-                .toString() +
-            ',';
-      });
-      // dataset = cartController.items;
-      // for (i = 0; i <= dataset.length; i++) {
-      //   test_ids += dataset[i];
-      // }
-      if (globals.Discount_Amount_Coupon == "" ||
-          globals.Discount_Amount_Coupon == null) {
-        globals.Discount_Amount_Coupon = "0";
-      }
-      if (globals.Coupon_Policy_Id == "" || globals.Coupon_Policy_Id == null) {
-        globals.Coupon_Policy_Id = "0";
-      }
-
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-
-      if (globals.Session_ID == null || globals.Session_ID == "") {
-        globals.Session_ID = prefs.getString('SeSSion_ID')!;
-      }
-
-      if (globals.umr_no == null || globals.umr_no == "") {
-        globals.umr_no = prefs.getString('singleUMr_No')!;
-      }
-      Map data = {
-        "PATIENT_ID": "1",
-        "UMR_NO": globals.umr_no,
-        "TEST_IDS": test_ids,
-        "TEST_AMOUNTS": test_amount,
-        "CONSESSION_AMOUNT": globals.Discount_Amount_Coupon.toString(),
-        "BILL_AMOUNT": cartController.totalAmount.toStringAsFixed(0),
-        "DUE_AMOUNT": cartController.totalAmount.toStringAsFixed(0),
-        "MOBILE_NO": globals.mobNO,
-        "MOBILE_REG_FLAG": "y",
-        "SESSION_ID": globals.Session_ID,
-        "PAYMENT_MODE_ID": "1",
-        "IP_NET_AMOUNT": cartController.totalAmount.toStringAsFixed(0),
-        "IP_TEST_CONCESSION": test_concession,
-        "IP_TEST_NET_AMOUNTS": Test_net,
-        "IP_POLICY_ID": globals.Coupon_Policy_Id,
-        "IP_PAID_AMOUNT": "0",
-        "IP_OUTSTANDING_DUE": cartController.totalAmount.toStringAsFixed(0),
-        "connection": globals.Patient_App_Connection_String,
-        "loc_id": globals.SelectedlocationId,
-        "IP_SLOT": globals.Slot_id,
-        "IP_DATE": "${selectedDate.toLocal()}".split(' ')[0],
-        "IP_UPLOAD_IMG": "",
-        "IP_PRESCRIPTION": "",
-        "IP_REMARKS": "",
-        "Mobile_Device_Id": Device_token_ID,
-        //"Server_Flag":""
-      };
-
-      final jobsListAPIUrl = Uri.parse(
-          globals.Global_Patient_Api_URL + '/PatinetMobileApp/NewRegistration');
-
-      var response = await http.post(jobsListAPIUrl,
-          headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/x-www-form-urlencoded"
-          },
-          body: data,
-          encoding: Encoding.getByName("utf-8"));
-
-      if (response.statusCode == 200) {
-        Map<String, dynamic> resposne = jsonDecode(response.body);
-        List jsonResponse = resposne["Data"];
-        //  globals.Bill_No = resposne["Data"][0]["BILL_NO"].toString();
-        globals.SelectedlocationId = "";
-
-        // globals.Preferedsrvs = jsonDecode(response.body);
-        //  Push_Notification_Message(context, globals.Bill_No);
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text('Thank you, Test booked Successfully'),
-          backgroundColor: Color.fromARGB(255, 26, 177, 122),
-          action: SnackBarAction(
-            label: "View",
-            textColor: Colors.white,
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => OredersHistory()));
-              cartController.clear();
-              productcontroller.resetAll();
-              globals.GlobalDiscountCoupons = "";
-            },
-          ),
-          // duration: const Duration(seconds: 15),
-          //width: 320.0, // Width of the SnackBar.
-          padding: const EdgeInsets.symmetric(
-            horizontal: 4.0, // Inner padding for SnackBar content.
-          ),
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-        ));
-        cartController.clear();
-        productcontroller.resetAll();
-      } else {
-        throw Exception('Failed to load jobs from API');
-      }
-    }
-
     return WillPopScope(
       onWillPop: () async {
         return false;
@@ -280,7 +300,7 @@ class _CartScreenState extends State<CartScreen> {
                 Navigator.pop(context);
               },
               icon: Icon(Icons.arrow_back_rounded, color: Colors.white)),
-          backgroundColor: Color(0xff123456),
+          backgroundColor: Color.fromARGB(255, 7, 185, 141),
           title: Text("Test Cart", style: TextStyle(color: Colors.white)),
           actions: [
             GetBuilder<CartController>(
@@ -612,31 +632,8 @@ class _CartScreenState extends State<CartScreen> {
                                                             onPressed:
                                                                 () async {
                                                               //  OrderPayments();
-                                                              //    _buildUserBookingPopup(context);
-                                                              bool
-                                                                  isButtonDisabled =
-                                                                  false;
 
-                                                              void
-                                                                  SingleUserPaymentsBooking() {
-                                                                if (!isButtonDisabled) {
-                                                                  isButtonDisabled =
-                                                                      true; // Disable the button
-
-                                                                  // Call your API here to book the test
-                                                                  SingleUserOrderPayments();
-                                                                  // Example delay to simulate API call
-                                                                  Future.delayed(
-                                                                      Duration(
-                                                                          seconds:
-                                                                              2),
-                                                                      () {
-                                                                    // Enable the button again after the delay
-                                                                    isButtonDisabled =
-                                                                        false;
-                                                                  });
-                                                                }
-                                                              }
+                                                              // SingleUserPaymentsBooking();
 
                                                               SharedPreferences
                                                                   prefs =
@@ -671,11 +668,7 @@ class _CartScreenState extends State<CartScreen> {
                                                                               .CENTER,
                                                                           timeInSecForIosWeb:
                                                                               1,
-                                                                          backgroundColor: Color.fromARGB(
-                                                                              230,
-                                                                              228,
-                                                                              55,
-                                                                              32),
+                                                                          backgroundColor: Color.fromARGB(255, 235, 103, 93),
                                                                           textColor: Colors
                                                                               .white,
                                                                           fontSize:
@@ -758,20 +751,7 @@ class _CartScreenState extends State<CartScreen> {
                             //  OrderPayments();
                             //    _buildUserBookingPopup(context);
                             bool isButtonDisabled = false;
-                            void SingleUserPaymentsBooking() {
-                              if (!isButtonDisabled) {
-                                isButtonDisabled = true; // Disable the button
-
-                                // Call your API here to book the test
-                                SingleUserOrderPayments();
-                                // Example delay to simulate API call
-                                Future.delayed(Duration(seconds: 2), () {
-                                  // Enable the button again after the delay
-                                  isButtonDisabled = false;
-                                });
-                              }
-                            }
-
+                            // SingleUserPaymentsBooking();
                             SharedPreferences prefs =
                                 await SharedPreferences.getInstance();
 
@@ -790,7 +770,7 @@ class _CartScreenState extends State<CartScreen> {
                                         gravity: ToastGravity.CENTER,
                                         timeInSecForIosWeb: 1,
                                         backgroundColor:
-                                            Color.fromARGB(230, 228, 55, 32),
+                                            Color.fromARGB(255, 235, 103, 93),
                                         textColor: Colors.white,
                                         fontSize: 16.0)
                                     : SingleUserPaymentsBooking();
@@ -799,7 +779,7 @@ class _CartScreenState extends State<CartScreen> {
                             // Navigator.pop(context, true);
                           },
                           child: Card(
-                            color: Color(0xff123456),
+                            color: Color.fromARGB(255, 7, 185, 141),
                             elevation: 2.0,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(16),
@@ -858,58 +838,20 @@ class UserlistBottomPopup extends StatefulWidget {
 }
 
 class _UserlistBottomPopupState extends State<UserlistBottomPopup> {
-  @override
-  Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        return false;
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-              onPressed: () async {
-                Navigator.pop(context);
-                SharedPreferences prefs = await SharedPreferences.getInstance();
-
-                String? encodedJson = prefs.getString('data1');
-                // List<dynamic> decodedJson = json.decode(encodedJson!);
-                if (globals.selectedLogin_Data == null) {
-                  globals.selectedLogin_Data = json.decode(encodedJson!);
-                }
-              },
-              icon: Icon(
-                Icons.arrow_back_rounded,
-                color: Colors.white,
-              )),
-          // automaticallyImplyLeading: false,
-          title: Text('User List', style: TextStyle(color: Colors.white)),
-          backgroundColor: Color(0xff123456),
-        ),
-        body: UserListBookings(globals.selectedLogin_Data, context),
-      ),
-    );
+  ListView UserListBookings(var data, BuildContext contex) {
+    var myData = data["Data"].length;
+    return ListView.builder(
+        itemCount: myData,
+        scrollDirection: Axis.vertical,
+        //  globals.selectedLogin_Data["Data"].length
+        itemBuilder: (context, index) {
+          return Container(
+              //  color: Color.fromARGB(255, 236, 235, 235),
+              // height: MediaQuery.of(context).size.height * 0.16,
+              child: userBookings(data["Data"][index], index, context));
+        });
   }
-}
 
-ListView UserListBookings(var data, BuildContext contex) {
-  var myData = data["Data"].length;
-  return ListView.builder(
-      itemCount: myData,
-      scrollDirection: Axis.vertical,
-      //  globals.selectedLogin_Data["Data"].length
-      itemBuilder: (context, index) {
-        return Container(
-            //  color: Color.fromARGB(255, 236, 235, 235),
-            // height: MediaQuery.of(context).size.height * 0.16,
-            child: userBookings(data["Data"][index], index, context));
-      });
-}
-
-Widget userBookings(
-  data,
-  index,
-  context,
-) {
   MultiUserOrderPayments() async {
     bool _isLoading = false;
 
@@ -920,7 +862,7 @@ Widget userBookings(
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIosWeb: 1,
-          backgroundColor: Color.fromARGB(255, 220, 91, 26),
+          backgroundColor: Color.fromARGB(255, 235, 103, 93),
           textColor: Colors.white,
           fontSize: 16.0);
     }
@@ -1049,88 +991,146 @@ Widget userBookings(
     }
   }
 
-  bool isButtonDisabled = false;
+  Widget userBookings(
+    data,
+    index,
+    context,
+  ) {
+    // bool isButtonDisabled = false;
 
-  void MultiUserOrderPaymentsBooking() {
+    // void MultiUserOrderPaymentsBooking() {
+    //   if (!isButtonDisabled) {
+    //     isButtonDisabled = true; // Disable the button
+
+    //     // Call your API here to book the test
+    //     MultiUserOrderPayments();
+    //     // Example delay to simulate API call
+    //     Future.delayed(Duration(seconds: 5), () {
+    //       // Enable the button again after the delay
+    //       isButtonDisabled = false;
+    //     });
+    //   }
+    // }
+
+    return InkWell(
+      onTap: () {
+        bool _isLoading = false;
+        globals.umr_no = data["UMR_NO"].toString();
+        (globals.Booking_Status_Flag == "0")
+            ? Fluttertoast.showToast(
+                msg: "Booking InProgress",
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.CENTER,
+                timeInSecForIosWeb: 1,
+                backgroundColor: Color.fromARGB(255, 235, 103, 93),
+                textColor: Colors.white,
+                fontSize: 16.0)
+            : MultiUserOrderPaymentsBooking();
+
+        //MultiUserOrderPayments();
+      },
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(10, 3, 10, 0),
+            child: Card(
+              elevation: 3.0,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(16.0))),
+              child: Row(
+                children: [
+                  Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(6.0),
+                        child: Icon(
+                          Icons.account_circle_rounded,
+                          color: Colors.indigoAccent,
+                          size: 40,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 1, 0, 3),
+                        child: Text(
+                          data["DISPLAY_NAME"].toString(),
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 1, 0, 2),
+                        child: Text(
+                          data["UMR_NO"].toString(),
+                          style:
+                              TextStyle(fontSize: 14, color: Colors.red[400]),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  bool isButtonDisabled = false;
+  Future<void> MultiUserOrderPaymentsBooking() async {
     if (!isButtonDisabled) {
-      isButtonDisabled = true; // Disable the button
+      setState(() {
+        isButtonDisabled = true; // Disable the button
+      });
 
       // Call your API here to book the test
       MultiUserOrderPayments();
       // Example delay to simulate API call
-      Future.delayed(Duration(seconds: 2), () {
+      Future.delayed(Duration(seconds: 5), () {
         // Enable the button again after the delay
-        isButtonDisabled = false;
+        setState(() {
+          isButtonDisabled = false;
+        });
       });
     }
   }
 
-  return InkWell(
-    onTap: () {
-      bool _isLoading = false;
-      globals.umr_no = data["UMR_NO"].toString();
-      (globals.Booking_Status_Flag == "0")
-          ? Fluttertoast.showToast(
-              msg: "Booking InProgress",
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.CENTER,
-              timeInSecForIosWeb: 1,
-              backgroundColor: Color.fromARGB(230, 228, 55, 32),
-              textColor: Colors.white,
-              fontSize: 16.0)
-          : MultiUserOrderPaymentsBooking();
+  @override
+  Widget build(BuildContext context) {
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+              onPressed: () async {
+                Navigator.pop(context);
+                SharedPreferences prefs = await SharedPreferences.getInstance();
 
-      //MultiUserOrderPayments();
-    },
-    child: Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(10, 3, 10, 0),
-          child: Card(
-            elevation: 3.0,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(16.0))),
-            child: Row(
-              children: [
-                Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(6.0),
-                      child: Icon(
-                        Icons.account_circle_rounded,
-                        color: Colors.indigoAccent,
-                        size: 40,
-                      ),
-                    ),
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 1, 0, 3),
-                      child: Text(
-                        data["DISPLAY_NAME"].toString(),
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 1, 0, 2),
-                      child: Text(
-                        data["UMR_NO"].toString(),
-                        style: TextStyle(fontSize: 14, color: Colors.red[400]),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
+                String? encodedJson = prefs.getString('data1');
+                // List<dynamic> decodedJson = json.decode(encodedJson!);
+                if (globals.selectedLogin_Data == null) {
+                  globals.selectedLogin_Data = json.decode(encodedJson!);
+                }
+              },
+              icon: Icon(
+                Icons.arrow_back_rounded,
+                color: Colors.white,
+              )),
+          // automaticallyImplyLeading: false,
+          title: Text('Family Members', style: TextStyle(color: Colors.white)),
+          backgroundColor: Color.fromARGB(255, 7, 185, 141),
         ),
-      ],
-    ),
-  );
+        body: UserListBookings(globals.selectedLogin_Data, context),
+      ),
+    );
+  }
 }
 
 _CouponsBottomPicker(BuildContext context) {

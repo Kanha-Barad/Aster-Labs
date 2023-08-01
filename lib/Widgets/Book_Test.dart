@@ -97,7 +97,7 @@ class ProductsGrid extends StatelessWidget {
                                                       children: [
                                                         Text(
                                                             'Rs.' +
-                                                            "\u{20B9} " +
+                                                                "\u{20B9} " +
                                                                 "${e.price}",
                                                             style: TextStyle(
                                                                 fontSize: 16,
@@ -105,65 +105,136 @@ class ProductsGrid extends StatelessWidget {
                                                                     .deepOrange)),
                                                         Spacer(),
 
-            InkWell(
-          borderRadius: BorderRadius.circular(15.0),
-          onTap: () {
-       final filteredProductIndex = controller.productList.indexOf(e);
+                                                        InkWell(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      15.0),
+                                                          onTap: () {
+                                                            final filteredProductIndex =
+                                                                controller
+                                                                    .productList
+                                                                    .indexOf(e);
 
-    if (filteredProductIndex >= 0) {
-      final product = controller.productList[filteredProductIndex];
-      controller.toggleAddRemove(filteredProductIndex);
+                                                            if (filteredProductIndex >=
+                                                                0) {
+                                                              final product = controller
+                                                                      .productList[
+                                                                  filteredProductIndex];
+                                                              controller
+                                                                  .toggleAddRemove(
+                                                                      filteredProductIndex);
 
-  print(e.id);
-  print(product.isAdded.value);
-  if (product.isAdded.value) {
-    cartController.addItem(
-      controller.productList[filteredProductIndex].id,
-      controller.productList[filteredProductIndex].price,
-      controller.productList[filteredProductIndex].title,
-      controller.productList[filteredProductIndex].Service_Id,
-      1,
-    );
-  } else {
-    cartController.removeitem(
-      controller.productList[filteredProductIndex].Service_Id,
-      controller.productList[filteredProductIndex].price,
-      controller.productList[filteredProductIndex].title,
-      controller.productList[filteredProductIndex].id,
-      1,
-    );
-  }
-}
-          },
-          child: Center(
-    child: Obx(() {
-      final filteredProductIndex = controller.productList.indexOf(e);
-      final isAdded = filteredProductIndex >= 0 && controller.addedProductIds.contains(controller.productList[filteredProductIndex].id);
+                                                              print(e.id);
+                                                              print(product
+                                                                  .isAdded
+                                                                  .value);
+                                                              if (product
+                                                                  .isAdded
+                                                                  .value) {
+                                                                cartController
+                                                                    .addItem(
+                                                                  controller
+                                                                      .productList[
+                                                                          filteredProductIndex]
+                                                                      .id,
+                                                                  controller
+                                                                      .productList[
+                                                                          filteredProductIndex]
+                                                                      .price,
+                                                                  controller
+                                                                      .productList[
+                                                                          filteredProductIndex]
+                                                                      .title,
+                                                                  controller
+                                                                      .productList[
+                                                                          filteredProductIndex]
+                                                                      .Service_Id,
+                                                                  1,
+                                                                );
+                                                              } else {
+                                                                cartController
+                                                                    .removeitem(
+                                                                  controller
+                                                                      .productList[
+                                                                          filteredProductIndex]
+                                                                      .Service_Id,
+                                                                  controller
+                                                                      .productList[
+                                                                          filteredProductIndex]
+                                                                      .price,
+                                                                  controller
+                                                                      .productList[
+                                                                          filteredProductIndex]
+                                                                      .title,
+                                                                  controller
+                                                                      .productList[
+                                                                          filteredProductIndex]
+                                                                      .id,
+                                                                  1,
+                                                                );
+                                                              }
+                                                            }
+                                                          },
+                                                          child: Center(
+                                                            child: Obx(() {
+                                                              final filteredProductIndex =
+                                                                  controller
+                                                                      .productList
+                                                                      .indexOf(
+                                                                          e);
+                                                              final isAdded = filteredProductIndex >=
+                                                                      0 &&
+                                                                  controller
+                                                                      .addedProductIds
+                                                                      .contains(controller
+                                                                          .productList[
+                                                                              filteredProductIndex]
+                                                                          .id);
 
-     return SizedBox(
-        height: 36,
-        width: 69,
-        child: Card(
-          color: isAdded ? Color.fromARGB(247, 216, 109, 102) : Color.fromARGB(255, 26, 177, 122),
-          elevation: 1,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(4),
-          ),
-          child: Center(
-            child: Text(
-              isAdded ? 'Remove' : 'Add',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 15,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
-        ),
-      );
-    }),
-  ),
-    )
+                                                              return SizedBox(
+                                                                height: 36,
+                                                                width: 69,
+                                                                child: Card(
+                                                                  color: isAdded
+                                                                      ? Color.fromARGB(
+                                                                          247,
+                                                                          216,
+                                                                          109,
+                                                                          102)
+                                                                      : Color.fromARGB(
+                                                                          255,
+                                                                          26,
+                                                                          177,
+                                                                          122),
+                                                                  elevation: 1,
+                                                                  shape:
+                                                                      RoundedRectangleBorder(
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .circular(4),
+                                                                  ),
+                                                                  child: Center(
+                                                                    child: Text(
+                                                                      isAdded
+                                                                          ? 'Remove'
+                                                                          : 'Add',
+                                                                      style:
+                                                                          TextStyle(
+                                                                        color: Colors
+                                                                            .white,
+                                                                        fontSize:
+                                                                            15,
+                                                                        fontWeight:
+                                                                            FontWeight.w500,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              );
+                                                            }),
+                                                          ),
+                                                        )
 //      InkWell(
 //   borderRadius: BorderRadius.circular(15.0),
 //   onTap: () {
@@ -220,7 +291,6 @@ class ProductsGrid extends StatelessWidget {
 //     }),
 //   ),
 // ),
-
                                                       ],
                                                     ),
                                                   ),
@@ -249,7 +319,7 @@ class ProductsGrid extends StatelessWidget {
                           child: Card(
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8)),
-                            color: Color.fromARGB(255, 27, 165, 114),
+                            color: Color.fromARGB(255, 7, 185, 141),
                             // margin: EdgeInsets.all(15),
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),

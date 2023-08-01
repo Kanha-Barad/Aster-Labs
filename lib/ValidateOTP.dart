@@ -128,10 +128,30 @@ class _ValidateOTPState extends State<ValidateOTP> {
     // }
   }
 
+  bool isButtonDisabled = false;
+
+  Future<void> PatientREGIstraTIoN() async {
+    if (!isButtonDisabled) {
+      setState(() {
+        isButtonDisabled = true; // Disable the button
+      });
+
+      // Call your API here to book the test
+      PatientOTP();
+      // Example delay to simulate API call
+      Future.delayed(Duration(seconds: 5), () {
+        // Enable the button again after the delay
+        setState(() {
+          isButtonDisabled = false;
+        });
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.grey[500],
+       // backgroundColor: Colors.grey[500],
         body: AlertDialog(
             backgroundColor: Colors.grey[200],
             shape: RoundedRectangleBorder(
@@ -147,7 +167,7 @@ class _ValidateOTPState extends State<ValidateOTP> {
                     borderRadius: BorderRadius.circular(20),
                     fieldHeight: 40,
                     fieldWidth: 40,
-                    activeColor: Color(0xff123456),
+                    activeColor: Color.fromARGB(255, 7, 185, 141),
                     inactiveColor: Colors.blueGrey,
                     activeFillColor: Colors.black,
                   ),
@@ -170,60 +190,67 @@ class _ValidateOTPState extends State<ValidateOTP> {
                   },
                   appContext: context,
                 ),
-                SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      height: 45,
-                      width: 120,
-                      child: Card(
-                          color: Color(0xff123456),
-                          shape: RoundedRectangleBorder(
-                              side: BorderSide(color: Colors.grey),
-                              borderRadius: BorderRadius.circular(20)),
-                          child: TextButton(
-                              onPressed: () {
-                                print(MobileNocontroller.text);
-                                print(OTPController.text);
-
-                                PatientOTP();
-                              },
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          print(MobileNocontroller.text);
+                          print(OTPController.text);
+                          PatientREGIstraTIoN();
+                        },
+                        child: Card(
+                            color: Color.fromARGB(255, 7, 185, 141),
+                            shape: RoundedRectangleBorder(
+                                side: BorderSide(
+                                    color: Color.fromARGB(255, 215, 242, 243)),
+                                borderRadius: BorderRadius.circular(20)),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.fromLTRB(10, 10, 10, 10),
                               child: Text('Validate OTP',
                                   style: TextStyle(
-                                      color: Colors.white, fontSize: 15)))),
-                    ),
-                    SizedBox(
-                      height: 45,
-                      width: 100,
-                      child: Card(
-                          color: Color(0xffc4d8ec),
-                          shape: RoundedRectangleBorder(
-                              side: BorderSide(color: Colors.white),
-                              borderRadius: BorderRadius.circular(20)),
-                          child: TextButton(
-                              onPressed: () async {
-                                SharedPreferences prefs =
-                                    await SharedPreferences.getInstance();
-                                prefs.setString("Msg_id", "");
-                                prefs.setString('Mobileno', "");
+                                      color: Colors.white,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500)),
+                            )),
+                      ),
+                      InkWell(
+                        onTap: () async {
+                          SharedPreferences prefs =
+                              await SharedPreferences.getInstance();
+                          prefs.setString("Msg_id", "");
+                          prefs.setString('Mobileno', "");
 
-                                prefs.setString('email', "");
+                          prefs.setString('email', "");
 
-                                prefs.setString("Otp", "");
-                                // prefs.getStringList('data1') ?? [];
-                                (prefs.setString('data1', ""));
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            PatientLogin("")));
-                              },
+                          prefs.setString("Otp", "");
+                          // prefs.getStringList('data1') ?? [];
+                          (prefs.setString('data1', ""));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => PatientLogin("")));
+                        },
+                        child: Card(
+                            color: Color.fromARGB(255, 178, 236, 239),
+                            shape: RoundedRectangleBorder(
+                                side: BorderSide(
+                                    color: Color.fromARGB(255, 33, 208, 199)),
+                                borderRadius: BorderRadius.circular(20)),
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(25, 9, 25, 9),
                               child: Text('Cancel',
                                   style: TextStyle(
-                                      color: Colors.black, fontSize: 16)))),
-                    ),
-                  ],
+                                      color: Colors.black,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500)),
+                            )),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             )));
@@ -236,7 +263,7 @@ OTPError() {
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.CENTER,
       timeInSecForIosWeb: 1,
-      backgroundColor: Color.fromARGB(255, 206, 19, 12),
+      backgroundColor: Color.fromARGB(255, 235, 103, 93),
       textColor: Colors.white,
       fontSize: 16.0);
 }
@@ -247,7 +274,7 @@ loginerror() {
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.CENTER,
       timeInSecForIosWeb: 1,
-      backgroundColor: Color.fromARGB(230, 228, 55, 32),
+      backgroundColor: Color.fromARGB(255, 235, 103, 93),
       textColor: Colors.white,
       fontSize: 16.0);
 }

@@ -86,7 +86,7 @@ class _UsersProfileState extends State<UsersProfile> {
         // height: 150,
         width: MediaQuery.of(context).size.width,
         height: 48,
-        color: Color(0xff123456),
+        color: Color.fromARGB(255, 7, 185, 141),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -152,8 +152,7 @@ class _UsersProfileState extends State<UsersProfile> {
                   if (prefs.getString('Mobileno') != "") {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => PatientLogin("")),
+                      MaterialPageRoute(builder: (context) => PatientLogin("")),
                     );
                   } else {
                     prefs.setString("Msg_id", "");
@@ -196,7 +195,7 @@ class _UsersProfileState extends State<UsersProfile> {
             'My Profile',
             style: TextStyle(color: Colors.white),
           ),
-          backgroundColor: Color(0xff123456),
+          backgroundColor: Color.fromARGB(255, 7, 185, 141),
           centerTitle: true,
           //  backgroundColor: Color.fromARGB(179, 239, 243, 247),
           automaticallyImplyLeading: false,
@@ -244,7 +243,7 @@ Widget _UserProfileCard(data, BuildContext context, index) {
                             Icon(
                               Icons.account_circle_rounded,
                               size: 90,
-                              color: Color(0xff123456),
+                              color: Color.fromARGB(255, 7, 185, 141),
                             ),
                             SizedBox(
                               height: 8,

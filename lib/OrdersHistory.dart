@@ -56,7 +56,7 @@ class _OredersHistoryState extends State<OredersHistory> {
                   side: BorderSide(color: Colors.white),
                 ),
                 color: _selectedIndex == index
-                    ? Color(0xB8C00E0E)
+                    ? Color.fromARGB(255, 30, 92, 153)
                     : Color.fromARGB(192, 221, 194, 193),
                 child: _selectedIndex == index
                     ? Row(
@@ -245,13 +245,13 @@ class _OredersHistoryState extends State<OredersHistory> {
       child: Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
-          backgroundColor: Color(0xff123456),
+          backgroundColor: Color.fromARGB(255, 7, 185, 141),
           toolbarHeight: 115,
           leadingWidth: 0,
           bottom: TabBar(
               labelColor: Colors.white,
-              labelStyle: TextStyle(),
-              unselectedLabelColor: Colors.grey,
+              labelStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+              unselectedLabelColor: Color.fromARGB(255, 73, 71, 71),
               tabs: [
                 Tab(text: 'Completed'),
                 Tab(text: 'In Progress'),
@@ -734,7 +734,7 @@ Widget _OrderListDetails(var data, BuildContext context, flg) {
                                         child: InkWell(
                                             child: Card(
                                               color: Color.fromARGB(
-                                                  255, 237, 77, 37),
+                                                  255, 30, 92, 153),
                                               elevation: 2.0,
                                               shape: RoundedRectangleBorder(
                                                   borderRadius:
@@ -808,8 +808,11 @@ Widget _OrderListDetails(var data, BuildContext context, flg) {
                                                                     //     Icon(Icons
                                                                     //         .phone_android),
                                                                     focusColor:
-                                                                        Color(
-                                                                            0xff123456),
+                                                                        Color.fromARGB(
+                                                                            255,
+                                                                            30,
+                                                                            92,
+                                                                            153),
                                                                     hintText:
                                                                         'Cancel Reason',
                                                                   ),
@@ -822,23 +825,24 @@ Widget _OrderListDetails(var data, BuildContext context, flg) {
                                                                     InkWell(
                                                                       child:
                                                                           Card(
-                                                                          color: Color.fromARGB(
+                                                                        color: Color.fromARGB(
                                                                             255,
                                                                             21,
                                                                             50,
                                                                             179),
-                                                                          elevation:
+                                                                        elevation:
                                                                             2.0,
-                                                                          shape:
-                                                                            RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-                                                                          child:
+                                                                        shape: RoundedRectangleBorder(
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(4)),
+                                                                        child:
                                                                             Padding(
                                                                           padding:
                                                                               const EdgeInsets.all(3.0),
                                                                           child:
                                                                               Center(child: Text("ok", style: TextStyle(color: Colors.white, fontSize: 14 * mediaQuery.textScaleFactor, fontWeight: FontWeight.w600))),
-                                                                          ),
                                                                         ),
+                                                                      ),
                                                                       onTap:
                                                                           () {
                                                                         CanCELTesT(
@@ -865,10 +869,11 @@ Widget _OrderListDetails(var data, BuildContext context, flg) {
                             child: SizedBox(
                                 child: Theme(
                               data: ThemeData(
-                                  accentColor: Colors.green,
-                                  primarySwatch: Colors.green,
-                                  colorScheme:
-                                      ColorScheme.light(primary: Colors.green)),
+                                  accentColor: Color.fromARGB(255, 7, 185, 141),
+                                  //primarySwatch: Colors.greenAccent,
+                                  colorScheme: ColorScheme.light(
+                                      primary:
+                                          Color.fromARGB(255, 7, 185, 141))),
                               child: Stepper(
                                 type: StepperType.horizontal,
                                 physics: const ScrollPhysics(),
@@ -1329,7 +1334,7 @@ class _PatientBottomPopupState extends State<PatientBottomPopup> {
               //       ),
             ],
           ),
-          backgroundColor: Color(0xff123456),
+          backgroundColor: Color.fromARGB(255, 7, 185, 141),
         ),
         body: SingleChildScrollView(
           child: Container(
@@ -1500,7 +1505,7 @@ AlertError() {
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.CENTER,
       timeInSecForIosWeb: 1,
-      backgroundColor: Colors.red,
+      backgroundColor: Color.fromARGB(255, 235, 103, 93),
       textColor: Colors.white,
       fontSize: 16.0);
 }

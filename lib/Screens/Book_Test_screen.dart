@@ -48,12 +48,12 @@ class _ProductOverviewPageState extends State<ProductOverviewPage> {
     // Get.put(CartController());
     // Get.appUpdate();
     //setState(() {});
-    
+
     return Scaffold(
       appBar: AppBar(
           iconTheme: IconThemeData(color: Colors.white),
-          backgroundColor: Color(0xff123456),
-          title: Text('Book A Test', style: TextStyle(color: Colors.white)),
+          backgroundColor: Color.fromARGB(255, 7, 185, 141),
+          title: Text('Test Enquiry', style: TextStyle(color: Colors.white)),
           leading: IconButton(
               onPressed: () {
                 //   Get.find<ProductController>().onClose();
