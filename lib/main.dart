@@ -1,12 +1,9 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import './PatientHome.dart';
 import './ClientCodeLogin.dart';
-import 'globals.dart' as globals;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -49,7 +46,7 @@ class _PatientAppState extends State<PatientApp> {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.grey,
-          accentColor: Color(0xff123456),
+          accentColor: Color.fromARGB(255, 22, 225, 205),
         ),
         home: PatientHome());
   }

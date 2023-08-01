@@ -67,7 +67,7 @@ class _PatientRegisterState extends State<PatientRegister> {
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIosWeb: 1,
-          backgroundColor: Color.fromARGB(255, 27, 165, 114),
+          backgroundColor: Color.fromARGB(189, 59, 227, 180),
           textColor: Colors.white,
           fontSize: 16.0);
 
@@ -81,7 +81,7 @@ class _PatientRegisterState extends State<PatientRegister> {
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIosWeb: 1,
-          backgroundColor: Color.fromARGB(232, 243, 49, 24),
+          backgroundColor: Color.fromARGB(255, 235, 103, 93),
           textColor: Colors.white,
           fontSize: 16.0);
     }
@@ -215,20 +215,14 @@ class _PatientRegisterState extends State<PatientRegister> {
             ),
           ),
         ),
-        SizedBox(height: 35),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(
-              height: 50,
-              width: 110,
-              child: Card(
-                  color: Color(0xff123456),
-                  shape: RoundedRectangleBorder(
-                      side: BorderSide(color: Colors.blueGrey),
-                      borderRadius: BorderRadius.circular(20)),
-                  child: TextButton(
-                      onPressed: () {
+        
+        Padding(
+                padding: const EdgeInsets.only(top: 35.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    InkWell(
+                      onTap: () {
                         if (NameController.text == null ||
                             NameController.text == "") {
                           Fluttertoast.showToast(
@@ -236,7 +230,7 @@ class _PatientRegisterState extends State<PatientRegister> {
                               toastLength: Toast.LENGTH_SHORT,
                               gravity: ToastGravity.CENTER,
                               timeInSecForIosWeb: 1,
-                              backgroundColor: Color.fromARGB(232, 243, 49, 24),
+                              backgroundColor: Color.fromARGB(255, 235, 103, 93),
                               textColor: Colors.white,
                               fontSize: 16.0);
                         } else if (MobNoController.text == null ||
@@ -246,7 +240,7 @@ class _PatientRegisterState extends State<PatientRegister> {
                               toastLength: Toast.LENGTH_SHORT,
                               gravity: ToastGravity.CENTER,
                               timeInSecForIosWeb: 1,
-                              backgroundColor: Color.fromARGB(232, 243, 49, 24),
+                              backgroundColor: Color.fromARGB(255, 235, 103, 93),
                               textColor: Colors.white,
                               fontSize: 16.0);
                         } else if (selectedSalutation == null ||
@@ -256,7 +250,7 @@ class _PatientRegisterState extends State<PatientRegister> {
                               toastLength: Toast.LENGTH_SHORT,
                               gravity: ToastGravity.CENTER,
                               timeInSecForIosWeb: 1,
-                              backgroundColor: Color.fromARGB(232, 243, 49, 24),
+                              backgroundColor: Color.fromARGB(255, 235, 103, 93),
                               textColor: Colors.white,
                               fontSize: 16.0);
                         } else if (AgeController.text == null ||
@@ -266,7 +260,7 @@ class _PatientRegisterState extends State<PatientRegister> {
                               toastLength: Toast.LENGTH_SHORT,
                               gravity: ToastGravity.CENTER,
                               timeInSecForIosWeb: 1,
-                              backgroundColor: Color.fromARGB(232, 243, 49, 24),
+                              backgroundColor: Color.fromARGB(255, 235, 103, 93),
                               textColor: Colors.white,
                               fontSize: 16.0);
                         } else if (MailIdController.text == null ||
@@ -276,7 +270,7 @@ class _PatientRegisterState extends State<PatientRegister> {
                               toastLength: Toast.LENGTH_SHORT,
                               gravity: ToastGravity.CENTER,
                               timeInSecForIosWeb: 1,
-                              backgroundColor: Color.fromARGB(232, 243, 49, 24),
+                              backgroundColor: Color.fromARGB(255, 235, 103, 93),
                               textColor: Colors.white,
                               fontSize: 16.0);
                         } else if (AddressController.text == null ||
@@ -286,7 +280,7 @@ class _PatientRegisterState extends State<PatientRegister> {
                               toastLength: Toast.LENGTH_SHORT,
                               gravity: ToastGravity.CENTER,
                               timeInSecForIosWeb: 1,
-                              backgroundColor: Color.fromARGB(232, 243, 49, 24),
+                              backgroundColor: Color.fromARGB(255, 235, 103, 93),
                               textColor: Colors.white,
                               fontSize: 16.0);
                         } else {
@@ -295,31 +289,46 @@ class _PatientRegisterState extends State<PatientRegister> {
                         // RegisterPatient();
                         //PatientREGIstraTIoN();
                       },
-                      child: Text('Register',
-                          style:
-                              TextStyle(color: Colors.white, fontSize: 16)))),
-            ),
-            SizedBox(
-              height: 50,
-              width: 110,
-              child: Card(
-                  color: Color.fromARGB(237, 198, 219, 239),
-                  shape: RoundedRectangleBorder(
-                      side: BorderSide(color: Colors.white),
-                      borderRadius: BorderRadius.circular(20)),
-                  child: TextButton(
-                      onPressed: () {
+                      child: Card(
+                          color: Color.fromARGB(255, 7, 185, 141),
+                          shape: RoundedRectangleBorder(
+                              side: BorderSide(
+                                  color: Color.fromARGB(255, 216, 248, 247)),
+                              borderRadius: BorderRadius.circular(25)),
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(20, 14, 20, 14),
+                            child: Text('Register',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500)),
+                          )),
+                    ),
+                    InkWell(
+                      onTap: () {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => PatientLogin("")));
                       },
-                      child: Text('Cancel',
-                          style:
-                              TextStyle(color: Colors.black, fontSize: 16)))),
-            ),
-          ],
-        )
+                      child: Card(
+                          color: Color.fromARGB(255, 167, 236, 237),
+                          shape: RoundedRectangleBorder(
+                              side: BorderSide(color: Color.fromARGB(255, 50, 224, 212)),
+                              borderRadius: BorderRadius.circular(25)),
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(25, 12, 25, 12),
+                            child: Text('Cancel',
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500)),
+                          )),
+                    ),
+                  ],
+                ),
+              ),
+       
       ])),
     );
   }
@@ -331,7 +340,7 @@ RegistrationError() {
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.CENTER,
       timeInSecForIosWeb: 1,
-      backgroundColor: Color.fromARGB(232, 243, 49, 24),
+      backgroundColor: Color.fromARGB(255, 235, 103, 93),
       textColor: Colors.white,
       fontSize: 16.0);
 }

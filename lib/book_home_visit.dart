@@ -56,9 +56,9 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
             )),
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             overlayColor:
-                MaterialStateColor.resolveWith((states) => Colors.red),
+                MaterialStateColor.resolveWith((states) => Color.fromARGB(255, 30, 92, 153)),
             backgroundColor: selectedIndex == index && globals.fromDate == ''
-                ? MaterialStateColor.resolveWith((states) => Colors.pink)
+                ? MaterialStateColor.resolveWith((states) => Color.fromARGB(255, 30, 92, 153))
                 : MaterialStateColor.resolveWith((states) => Colors.blueGrey),
             shadowColor:
                 MaterialStateColor.resolveWith((states) => Colors.blueGrey),
@@ -254,6 +254,18 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
     return ListView();
   }
 
+  void initState() {
+    _selectedItem2 = "";
+    Select_State_Wise_Services();
+    clearDropdownValue();
+    clearDropdownValue_Location();
+    globals.Glb_PATIENT_APP_STATES_ID = null;
+    globals.Glb_PATIENT_APP_CITTY_ID = null;
+    globals.SelectedlocationId = "";
+    globals.Selectedlocationname = null;
+    super.initState();
+  }
+
   Future<List<Data_Model>> _fetchSaleTransaction() async {
     var jobsListAPIUrl = null;
     var dsetName = '';
@@ -312,6 +324,123 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
     } else {
       throw Exception('Failed to load jobs from API');
     }
+  }
+
+  Select_State_Wise_Services() async {
+    params = {
+      "IP_FLAG": "s",
+      "IP_STATE_ID": "",
+      "IP_AREA_ID": "",
+      "IP_LOC_ID": "",
+      "IP_SESSION_ID": "",
+      "connection": globals.Patient_App_Connection_String
+      //"Server_Flag":""
+    };
+
+    final response = await http.post(
+        Uri.parse(globals.Global_Patient_Api_URL +
+            'PatinetMobileApp/GET_PATIENT_APP_AREAS'),
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: params,
+        encoding: Encoding.getByName("utf-8"));
+
+    print('im here');
+    print(response.body);
+    map = json.decode(response.body);
+    print(response.body);
+    if (response.statusCode == 200) {
+      Map<String, dynamic> resposne = jsonDecode(response.body);
+      List jsonResponse = resposne["Data"];
+    } else {
+      throw Exception('Failed to load jobs from API');
+    }
+    setState(() {
+      data1 = map["Data"] as List;
+    });
+
+    return "Sucess";
+  }
+
+  Select_City_Wise_Services() async {
+    params = {
+      "IP_FLAG": "A",
+      "IP_STATE_ID": globals.Glb_PATIENT_APP_STATES_ID,
+      "IP_AREA_ID": "",
+      "IP_LOC_ID": "",
+      "IP_SESSION_ID": "",
+      "connection": globals.Patient_App_Connection_String
+    };
+
+    final response = await http.post(
+        Uri.parse(globals.Global_Patient_Api_URL +
+            'PatinetMobileApp/GET_PATIENT_APP_AREAS'),
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: params,
+        encoding: Encoding.getByName("utf-8"));
+
+    print('im here');
+    print(response.body);
+    map = json.decode(response.body);
+    print(response.body);
+    if (response.statusCode == 200) {
+      data2 = [];
+      globals.Glb_PATIENT_APP_STATES_ID = "";
+      Map<String, dynamic> resposne = jsonDecode(response.body);
+      List jsonResponse = resposne["Data"];
+    } else {
+      throw Exception('Failed to load jobs from API');
+    }
+    setState(() {
+      data2 = map["Data"] as List;
+    });
+
+    return "Sucess";
+  }
+
+  Select_Location_Wise_Services() async {
+    params = {
+      "IP_FLAG": "L",
+      "IP_STATE_ID": globals.Glb_PATIENT_APP_STATES_ID,
+      "IP_AREA_ID": globals.Glb_PATIENT_APP_CITTY_ID,
+      "IP_LOC_ID": "",
+      "IP_SESSION_ID": "",
+      "connection": globals.Patient_App_Connection_String
+    };
+
+    final response = await http.post(
+        Uri.parse(globals.Global_Patient_Api_URL +
+            'PatinetMobileApp/GET_PATIENT_APP_AREAS'),
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: params,
+        encoding: Encoding.getByName("utf-8"));
+
+    print('im here');
+    print(response.body);
+    map = json.decode(response.body);
+    print(response.body);
+    if (response.statusCode == 200) {
+      data3 = [];
+      List<dynamic> jsonResponse;
+      // List<dynamic> list = jsonDecode(response.body);
+      // jsonResponse = json.decode(resposne["Data"]);
+    } else {
+      throw Exception('Failed to load jobs from API');
+    }
+    setState(() {
+      data3 = jsonDecode(response.body)["Data"]
+          .cast<Map<String, dynamic>>(); //map["Data"];
+    });
+
+    return "Success";
   }
 
   SeleCTLocationWIseServices(var SelectedLOCID) async {
@@ -379,42 +508,30 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
   }
 
   var _selectedItem;
+  var _selectedItem1;
+  var _selectedItem2;
   late Map<String, dynamic> params;
   late Map<String, dynamic> map;
   List data = []; //edi
+  List data1 = []; //edi
+  List data2 = []; //edi
+  List<Map<String, dynamic>> data3 = [];
+  Map<String, dynamic>? selectedItem5;
+
+  void clearDropdownValue() {
+    setState(() {
+      _selectedItem2 = null;
+    });
+  }
+
+  void clearDropdownValue_Location() {
+    setState(() {
+      selectedItem5 = null;
+    });
+  }
 
   Widget build(BuildContext context) {
-    getSWData() async {
-      params = {
-        "IP_SESSION_ID": globals.Session_ID,
-        "connection": globals.Patient_App_Connection_String,
-      };
-
-      final response = await http.post(
-          Uri.parse(globals.Global_Patient_Api_URL +
-              '/PatinetMobileApp/Location_list'),
-          headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/x-www-form-urlencoded"
-          },
-          body: params,
-          encoding: Encoding.getByName("utf-8"));
-      // print(response.body);
-      map = json.decode(response.body);
-      // print(response.body);
-      if (response.statusCode == 200) {
-        functionCalls = "true";
-      } else {
-        functionCalls == "false";
-      }
-      setState(() {
-        data = map["Data"] as List;
-      });
-
-      return "Sucess";
-    }
-
-    final locationDropdwon = SizedBox(
+    final State_Dropdwon = SizedBox(
         width: 340,
         height: 48,
         child: Card(
@@ -427,76 +544,163 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
               child: DropdownButton(
                 isDense: true,
                 isExpanded: true,
-                value: _selectedItem,
-                hint: Text('Select Location'),
+                value: _selectedItem1,
+                hint: MediaQuery(
+                    data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+                    child: Text('Select State')),
                 onChanged: (value) {
                   setState(() {
-                    _selectedItem = value;
-                    globals.SelectedlocationId = _selectedItem;
-                    //  GridViewList.length = 0;
-                    GridViewList = [];
-                    _onLoading();
-                    Book_Home_Visit(this.selectedIndex);
-                    globals.Is_search = "";
-                    SeleCTLocationWIseServices(globals.SelectedlocationId);
-                    // Get.put(ProductController().onitemTapped());
+                    _selectedItem1 = value;
+                    globals.Glb_PATIENT_APP_STATES_ID = _selectedItem1;
+                    clearDropdownValue();
+                    clearDropdownValue_Location();
+                    Select_City_Wise_Services();
+                    // globals.Glb_PATIENT_APP_STATES_ID = null;
+                    globals.Glb_PATIENT_APP_CITTY_ID = null;
+                    globals.SelectedlocationId = "";
+                    globals.Selectedlocationname = null;
                   });
                 },
-                items: data.map((ldata) {
+                items: data1.map((ldata) {
                   return DropdownMenuItem(
-                    child: Text(
-                      ldata['LOCATION_NAME'].toString(),
-                      style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w400),
+                    child: MediaQuery(
+                      data:
+                          MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+                      child: Text(
+                        ldata['STATE_NAME'].toString(),
+                        style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w400),
+                      ),
                     ),
-                    value: ldata['LOC_ID'].toString(),
+                    value: ldata['PATIENT_APP_STATES_ID'].toString(),
                   );
                 }).toList(),
-
                 // style: TextStyle(color: Colors.black, fontSize: 20,fontFamily: "Montserrat"),
               ),
             ),
           ),
         ));
 
-    if (data == "" || data.length == 0) {
-      getSWData();
+    final City_Dropdwon = SizedBox(
+        width: 340,
+        height: 48,
+        child: Card(
+          elevation: 2.0,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(10, 3, 10, 3),
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton(
+                isDense: true,
+                isExpanded: true,
+                value: _selectedItem2,
+                hint: MediaQuery(
+                    data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+                    child: Text('Select City')),
+                onChanged: (value) {
+                  setState(() {
+                    _selectedItem2 = value;
+
+                    globals.Glb_PATIENT_APP_CITTY_ID = _selectedItem2;
+                    clearDropdownValue_Location();
+                    Select_Location_Wise_Services();
+                    globals.SelectedlocationId = "";
+                    globals.Selectedlocationname = null;
+                  });
+                },
+                items: data2.map((ldata) {
+                  return DropdownMenuItem(
+                    child: MediaQuery(
+                      data:
+                          MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+                      child: Text(
+                        ldata['AREA_NAME'].toString(),
+                        style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w400),
+                      ),
+                    ),
+                    value: ldata['PATIENT_APP_AREA_ID'].toString(),
+                  );
+                }).toList(),
+                // style: TextStyle(color: Colors.black, fontSize: 20,fontFamily: "Montserrat"),
+              ),
+            ),
+          ),
+        ));
+
+    void _showDropdown() {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Select Location'),
+            content: Container(
+              width: double.minPositive,
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: data3.length,
+                itemBuilder: (context, index) {
+                  final item = data3[index];
+                  return ListTile(
+                    title: Text(item['LOCATION_NAME']),
+                    onTap: () {
+                      setState(() {
+                        var selectedItem5 = item['LOC_ID'].toString();
+                        globals.SelectedlocationId = selectedItem5;
+                        globals.Selectedlocationname = item['LOCATION_NAME'];
+                        GridViewList = [];
+                        _onLoading();
+                        Book_Home_Visit(this.selectedIndex);
+                        globals.Is_search = "";
+                        SeleCTLocationWIseServices(globals.SelectedlocationId);
+                      });
+                      Navigator.of(context).pop();
+                    },
+                  );
+                },
+              ),
+            ),
+          );
+        },
+      );
     }
-    // _Add_Test_fetchSaleTransaction1() {}
 
     Widget verticalList3 = Container(
-        child: FutureBuilder<List<Data_Model>>(
-            future:
-                (globals.SelectedlocationId != null && GridViewList.length == 0)
-                    ? _fetchSaleTransaction()
-                    : _Add_Test_fetchSaleTransaction1(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                if (snapshot.data!.isEmpty == true) {
-                  return NoContent3();
-                }
-                var data = snapshot.data;
-                return SizedBox(child: Application_ListView(data, context));
-              } else if (snapshot.hasError) {
-                return Text("${snapshot.error}");
+      child: FutureBuilder<List<Data_Model>>(
+          future:
+              (globals.SelectedlocationId != null && GridViewList.length == 0)
+                  ? _fetchSaleTransaction()
+                  : _Add_Test_fetchSaleTransaction1(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              if (snapshot.data!.isEmpty == true) {
+                return NoContent3();
               }
-              return SizedBox(
-                height: 100,
-                width: 100,
-                child: Center(
-                  child: LoadingIndicator(
-                    indicatorType: Indicator.ballClipRotateMultiple,
-                    colors: Colors.primaries,
-                    strokeWidth: 4.0,
-                    //   pathBackgroundColor:ColorSwatch(Action[])
-                  ),
+              var data = snapshot.data;
+              return SizedBox(child: Application_ListView(data, context));
+            } else if (snapshot.hasError) {
+              return Text("${snapshot.error}");
+            }
+            return SizedBox(
+              height: 100,
+              width: 100,
+              child: Center(
+                child: LoadingIndicator(
+                  indicatorType: Indicator.ballClipRotateMultiple,
+                  colors: Colors.primaries,
+                  strokeWidth: 4.0,
+                  //   pathBackgroundColor:ColorSwatch(Action[])
                 ),
-              );
-            }),
-      );
-    
+              ),
+            );
+          }),
+    );
+
     All_Test_Widget(var data, BuildContext context) {
       return Column(
         children: [
@@ -504,7 +708,7 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
             child: Column(
               children: [
                 Container(
-                    height: MediaQuery.of(context).size.height * 0.06,
+                    height: MediaQuery.of(context).size.height * 0.05,
                     child: Row(
                       children: [
                         Padding(
@@ -518,7 +722,7 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
                       ],
                     )),
                 Container(
-                    height: MediaQuery.of(context).size.height * 0.55,
+                    height: MediaQuery.of(context).size.height * 0.39,
                     child: GridView.builder(
                         gridDelegate:
                             const SliverGridDelegateWithMaxCrossAxisExtent(
@@ -1244,7 +1448,7 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
       child: Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
-          backgroundColor: Color(0xff123456),
+          backgroundColor: Color.fromARGB(255, 26, 177, 122),
           leading: Builder(
             builder: (BuildContext context) {
               return IconButton(
@@ -1297,9 +1501,39 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
               SizedBox(height: 48, child: DateSelection()),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: locationDropdwon,
+                child: State_Dropdwon,
               ),
-              // verticalList3,
+              globals.Glb_PATIENT_APP_STATES_ID == null
+                  ? Container()
+                  : Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: City_Dropdwon,
+                    ),
+              globals.Glb_PATIENT_APP_CITTY_ID == null
+                  ? Container()
+                  : Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Card(
+                        elevation: 2.0,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15)),
+                        child: TextButton(
+                          onPressed: () => _showDropdown(),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Text(globals.Selectedlocationname == null
+                                  ? "Select Location"
+                                  : globals.Selectedlocationname.length > 45
+                                      ? globals.Selectedlocationname.substring(
+                                          0, 45)
+                                      : globals.Selectedlocationname),
+                              Icon(Icons.arrow_drop_down),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
               Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: globals.SelectedlocationId == null ||

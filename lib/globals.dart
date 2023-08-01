@@ -49,8 +49,11 @@ var PatientRepeatOrder = null;
 String GlobalDiscountCoupons = '';
 String Coupon_Policy_Id = '';
 var SelectedlocationId = null;
+var Glb_PATIENT_APP_STATES_ID = null;
+var Glb_PATIENT_APP_CITTY_ID = null;
+var Glb_PATIENT_APP_LOCATION_ID = null;
 
-var Is_search="";
+var Is_search = "";
 String selectDate = "";
 String SlotsBooked = "";
 String Location_BookedTest = "";
@@ -70,14 +73,17 @@ String PresCripTion_Image_Converter = "";
 // String Patient_OTP_URL = "";
 // var Client_App_Code = null;
 
-
 /**-----------------------APP INFO For ASter ONly---------------------------------------------------- */
 String Global_All_Client_Api_URL = "https://mobileappjw.softmed.in";
-String Global_Patient_Api_URL = "https://asterlabs.asterdmhealthcare.com/MOBILEAPPAPI/";
-String Patient_App_Connection_String = "Server=172.24.248.12;User id=ALUATDB.SVCA;Password=DSFg45THFD;Database=P_ASTER_LIMS_UAT_2023";
+String Global_Patient_Api_URL =
+    "https://asterlabs.asterdmhealthcare.com/MOBILEAPPAPI/";
+String Patient_App_Connection_String =
+    "Server=172.24.248.12;User id=ALUATDB.SVCA;Password=DSFg45THFD;Database=P_ASTER_LIMS_UAT_2023";
 //String All_Client_Logo = "http://137.59.200.62/slims_apps/App_img/AsterLogo.png";
 String All_Client_Logo = 'assets/images/asterlabs.png';
 String Patient_report_URL = "";
 String Patient_OTP_URL = "";
 var Client_App_Code = null;
 /**-----------------------APP INFO---------------------------------------------------- */
+
+var Selectedlocationname = null;

@@ -210,7 +210,7 @@ class _PatientHomeState extends State<PatientHome> {
       onWillPop: () async => false,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Color(0xff123456),
+          backgroundColor: Color.fromARGB(255, 7, 185, 141),
           // backgroundColor: Color.fromARGB(179, 239, 243, 247),
           leading: Builder(
             builder: (context) => IconButton(
@@ -279,7 +279,7 @@ class _PatientHomeState extends State<PatientHome> {
             children: <Widget>[
               DrawerHeader(
                 decoration: const BoxDecoration(
-                  color: Color(0xff123456),
+                  color: Color.fromARGB(255, 7, 185, 141),
                 ),
                 child: Container(
                   child: Column(
@@ -348,7 +348,7 @@ class _PatientHomeState extends State<PatientHome> {
                     }
                   },
                   leading: const Icon(Icons.shopping_cart),
-                  title: const Text("Order History")),
+                  title: const Text("My Reports")),
               SizedBox(
                 height: 380,
               ),
@@ -378,14 +378,14 @@ class _PatientHomeState extends State<PatientHome> {
                               image: DecorationImage(
                                 fit: BoxFit.fill,
                                 image: AssetImage(
-                                  "assets/images/slider1.jpg",
+                                  "assets/images/aster_image_1.png",
                                 ),
                               ),
                             ),
                           ),
                         ),
 
-                        //2nd Image of Slider
+                        // 2nd Image of Slider
                         Padding(
                           padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                           child: Container(
@@ -395,14 +395,14 @@ class _PatientHomeState extends State<PatientHome> {
                               image: DecorationImage(
                                 fit: BoxFit.fill,
                                 image: AssetImage(
-                                  "assets/images/slider2.jpg",
+                                  "assets/images/aster_image_2.jpg",
                                 ),
                               ),
                             ),
                           ),
                         ),
 
-                        //3rd Image of Slider
+                        // 3rd Image of Slider
                         Padding(
                           padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                           child: Container(
@@ -412,41 +412,7 @@ class _PatientHomeState extends State<PatientHome> {
                               image: DecorationImage(
                                 fit: BoxFit.fill,
                                 image: AssetImage(
-                                  "assets/images/slider3.jpg",
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-
-                        //4th Image of Slider
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                          child: Container(
-                            //    margin: EdgeInsets.all(0.0),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(0.0),
-                              image: DecorationImage(
-                                fit: BoxFit.fill,
-                                image: AssetImage(
-                                  "assets/images/slider4.jpg",
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-
-                        //5th Image of Slider
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                          child: Container(
-                            //     margin: EdgeInsets.all(0.0),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(0.0),
-                              image: DecorationImage(
-                                fit: BoxFit.fill,
-                                image: AssetImage(
-                                  "assets/images/slider5.jpg",
+                                  "assets/images/aster_image_3.jpg",
                                 ),
                               ),
                             ),
@@ -471,68 +437,74 @@ class _PatientHomeState extends State<PatientHome> {
                 color: Color.fromARGB(179, 168, 185, 202),
                 // height: 60,
                 // width: MediaQuery.of(context).size.width * 1,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.38,
-                      // height: 55,
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(10, 8, 0, 8),
-                        child: TextButton(
-                          onPressed: () {
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 8.0, right: 8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      InkWell(
+                          onTap: () {
                             _SaveOrderHIStroy();
                           },
-                          child: Text(
-                            'My Reports',
-                            style: TextStyle(color: Colors.black),
-                          ),
-                          style: TextButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5.0)),
-                              backgroundColor: Colors.white),
+                          child: Card(
+                            color: Color.fromARGB(255, 49, 114, 179),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.fromLTRB(30, 10, 30, 10),
+                              child: Text(
+                                "My Reports",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                            ),
+                          )),
+
+                      // Padding(
+                      //   padding: const EdgeInsets.fromLTRB(0, 3, 0, 3),
+                      //   child: SizedBox(
+                      //       height: 43.0,
+                      //       width: 80.0,
+                      //       child: Image.asset("assets/images/asterlabs.png")),
+                      // ),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(0, 3, 0, 3),
+                        child: Container(
+                          height: 50.0,
+                          width: 70.0,
+                          decoration: const BoxDecoration(
+                              shape: BoxShape.rectangle,
+                              image: DecorationImage(
+                                  image:
+                                      AssetImage("assets/images/asterlabs.png"),
+                                  fit: BoxFit.fill)),
                         ),
                       ),
-                    ),
-                    // Padding(
-                    //   padding: const EdgeInsets.fromLTRB(0, 3, 0, 3),
-                    //   child: SizedBox(
-                    //       height: 43.0,
-                    //       width: 80.0,
-                    //       child: Image.asset("assets/images/asterlabs.png")),
-                    // ),
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(0, 3, 0, 3),
-                      child: Container(
-                        height: 50.0,
-                        width: 70.0,
-                        decoration: const BoxDecoration(
-                            shape: BoxShape.rectangle,
-                            image: DecorationImage(
-                                image:
-                                    AssetImage("assets/images/asterlabs.png"),
-                                fit: BoxFit.fill)),
-                      ),
-                    ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.38,
-                      // height: 55,
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 8, 10, 8),
-                        child: TextButton(
-                          onPressed: () {
+                      InkWell(
+                          onTap: () {
                             _SaveLoginDataTrends();
                           },
-                          child: Text('My Trends',
-                              style: TextStyle(color: Colors.black)),
-                          style: TextButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5.0)),
-                              backgroundColor: Colors.white),
-                        ),
-                      ),
-                    )
-                  ],
+                          child: Card(
+                            color: Color.fromARGB(255, 49, 114, 179),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.fromLTRB(30, 10, 30, 10),
+                              child: Text(
+                                "My Trends",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                            ),
+                          )),
+                    ],
+                  ),
                 ),
               ),
               SizedBox(
@@ -546,9 +518,9 @@ class _PatientHomeState extends State<PatientHome> {
                   Text(
                     "Our Services",
                     style: TextStyle(
-                        color: Color(0xff123456),
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold),
+                        color: Color.fromARGB(255, 49, 114, 179),
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600),
                   ),
                 ],
               ),
@@ -557,7 +529,9 @@ class _PatientHomeState extends State<PatientHome> {
                 child: Card(
                   elevation: 3.0,
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0)),
+                      borderRadius: BorderRadius.circular(10.0),
+                      side: BorderSide(
+                          color: Color.fromARGB(255, 196, 218, 241))),
                   child: Column(
                     children: [
                       GestureDetector(
@@ -579,10 +553,11 @@ class _PatientHomeState extends State<PatientHome> {
                                 ),
                               ),
                               child: Icon(Icons.account_circle_outlined,
+                                  size: 30,
                                   color: Color(
                                       0xFFA18875))), // You can replace this with your own icon or image
                           title: Text(
-                            'Book a Test',
+                            'Test Enquiry',
                             style: TextStyle(
                                 fontSize: 14, fontWeight: FontWeight.w500),
                           ),
@@ -596,6 +571,9 @@ class _PatientHomeState extends State<PatientHome> {
                             globals.SelectedlocationId = "";
                             HomeVisitBook();
                             globals.GlobalDiscountCoupons = '';
+
+                            globals.Glb_PATIENT_APP_STATES_ID = null;
+                            globals.Glb_PATIENT_APP_CITTY_ID = null;
                           }),
                           child: ListTile(
                             leading: Container(
@@ -608,6 +586,7 @@ class _PatientHomeState extends State<PatientHome> {
                                   ),
                                 ),
                                 child: Icon(Icons.home_outlined,
+                                    size: 30,
                                     color: Color(
                                         0xFFEC407A))), // You can replace this with your own icon or image
                             title: Text(
@@ -628,9 +607,9 @@ class _PatientHomeState extends State<PatientHome> {
                   ),
                   Text('Health Packages',
                       style: TextStyle(
-                          color: Color(0xff123456),
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20))
+                          color: Color.fromARGB(255, 49, 114, 179),
+                          fontWeight: FontWeight.w600,
+                          fontSize: 18))
                 ],
               ),
               SizedBox(height: 8),
@@ -667,7 +646,7 @@ Widget _PreferredServicesDetails(var data, BuildContext context) {
               width: 135,
               // height: 130,
               child: Card(
-                  color: Colors.white,
+                  color: Color.fromARGB(255, 49, 114, 179),
                   elevation: 4.0,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20)),
@@ -679,27 +658,27 @@ Widget _PreferredServicesDetails(var data, BuildContext context) {
                             child: Text(
                               data.srv_grp_name,
                               style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.bold),
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600),
                             )),
                         Padding(
                             padding: const EdgeInsets.fromLTRB(10, 0, 0, 18),
                             child: Text(
                               '\u{20B9} ' + data.srv_price,
                               style: TextStyle(
-                                  color: Colors.black,
+                                  color: Colors.white,
                                   fontSize: 15,
-                                  fontWeight: FontWeight.bold),
+                                  fontWeight: FontWeight.w600),
                             )),
                         Padding(
                           padding: const EdgeInsets.fromLTRB(5, 0, 2, 2),
                           child: Text(
                             data.srv_name,
                             style: TextStyle(
-                                color: Colors.black,
+                                color: Colors.white,
                                 fontSize: 11,
-                                fontWeight: FontWeight.w400),
+                                fontWeight: FontWeight.w500),
                           ),
                         )
                       ])),

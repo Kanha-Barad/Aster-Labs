@@ -244,7 +244,7 @@ errormsg1() {
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.CENTER,
       timeInSecForIosWeb: 1,
-      backgroundColor: Color.fromARGB(255, 238, 26, 11),
+      backgroundColor: Color.fromARGB(255, 235, 103, 93),
       textColor: Colors.white,
       fontSize: 16.0);
 }
@@ -255,7 +255,7 @@ Successtoaster() {
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.CENTER,
       timeInSecForIosWeb: 1,
-      backgroundColor: Color.fromARGB(255, 93, 204, 89),
+      backgroundColor: Color.fromARGB(189, 59, 227, 180),
       textColor: Colors.white,
       fontSize: 16.0);
 }

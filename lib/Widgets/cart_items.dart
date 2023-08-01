@@ -102,8 +102,7 @@ class CartItem extends StatelessWidget {
                                     Spacer(),
                                     // Text('$quantity'),
                                     Card(
-                                        color:
-                                            Color.fromARGB(255, 27, 165, 114),
+                                        color: Color.fromARGB(255, 7, 185, 141),
                                         child: Icon(
                                           Icons.download_done_outlined,
                                           size: 15,

@@ -83,7 +83,7 @@ class _BookingINProgressNotification
         iconTheme: IconThemeData(
           color: Colors.white, //change your color here
         ),
-        backgroundColor: Color(0xff123456),
+        backgroundColor: Color.fromARGB(255, 7, 185, 141),
         leading: Builder(
           builder: (BuildContext context) {
             return IconButton(

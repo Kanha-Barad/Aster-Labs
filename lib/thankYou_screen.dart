@@ -29,7 +29,7 @@ class _ThankYouScreenOFUploadPrescripTIOnState
         iconTheme: IconThemeData(
           color: Colors.white, //change your color here
         ),
-        backgroundColor: Color(0xff123456),
+        backgroundColor: Color.fromARGB(255, 7, 185, 141),
         leading: Builder(
           builder: (BuildContext context) {
             return IconButton(
@@ -58,7 +58,7 @@ class _ThankYouScreenOFUploadPrescripTIOnState
               color: Color.fromARGB(255, 21, 29, 118),
             ),
           ),
-           Text(
+          Text(
             'Thank you ! Your Request has been taken.\nOur Customer care will connect and confirm the test mentioned in your prescription for booking.',
             textAlign: TextAlign.center,
             style: TextStyle(

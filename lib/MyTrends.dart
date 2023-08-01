@@ -37,7 +37,7 @@ class _MyTrendsState extends State<MyTrends> {
                     side: BorderSide(color: Colors.white),
                   ),
                   color: _selectedIndex == index
-                      ? Color(0xB8C00E0E)
+                      ? Color(0xff123456)
                       : Color.fromARGB(192, 221, 194, 193),
                   child: _selectedIndex == index
                       ? Row(
@@ -270,7 +270,7 @@ class _MyTrendsState extends State<MyTrends> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: Color(0xff123456),
+        backgroundColor: Color.fromARGB(255, 7, 185, 141),
         toolbarHeight: 140,
         leadingWidth: 0,
         title: Column(
@@ -403,7 +403,7 @@ class NoContent3 extends StatelessWidget {
           children: <Widget>[
             Icon(
               Icons.verified_rounded,
-              color: Colors.indigo,
+              color: Color(0xff123456),
               size: 50,
             ),
             const Text('No Data Found'),
@@ -704,7 +704,7 @@ class NoContent extends StatelessWidget {
           children: <Widget>[
             Icon(
               Icons.verified_rounded,
-              color: Color.fromARGB(255, 45, 72, 194),
+              color: Color(0xff123456),
               size: 40,
             ),
             const Text('No Data Found'),
