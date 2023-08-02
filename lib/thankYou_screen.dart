@@ -2,15 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:asterlabs/PatientHome.dart';
 import 'package:asterlabs/Widgets/BottomNavigation.dart';
 
+import 'OrdersHistory.dart';
+
 String Bill_NUMber = "";
 String BIlling_DATe = "";
+String TestBookNav = "";
 
 class ThankYouScreenOFUploadPrescripTIOn extends StatefulWidget {
-  ThankYouScreenOFUploadPrescripTIOn(billno, Billdate) {
+  ThankYouScreenOFUploadPrescripTIOn(billno, Billdate, tsetBOOKNAV) {
     Bill_NUMber = "";
     Bill_NUMber = billno;
     BIlling_DATe = "";
     BIlling_DATe = Billdate;
+    TestBookNav = "";
+    TestBookNav = tsetBOOKNAV;
   }
 
   @override
@@ -35,8 +40,15 @@ class _ThankYouScreenOFUploadPrescripTIOnState
             return IconButton(
               icon: const Icon(Icons.arrow_back_ios),
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: ((context) => PatientHome())));
+                (TestBookNav == "TBNO")
+                    ? Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: ((context) => OredersHistory())))
+                    : Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: ((context) => PatientHome())));
               },
               // tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
             );

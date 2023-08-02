@@ -48,8 +48,8 @@ class _UpLoadPrescrIPtioNState extends State<UpLoadPrescrIPtioN> {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: ((context) =>
-                  ThankYouScreenOFUploadPrescripTIOn(BilLNuMbEr, billDATE))));
+              builder: ((context) => ThankYouScreenOFUploadPrescripTIOn(
+                  BilLNuMbEr, billDATE, ""))));
     } else {
       throw Exception('Failed to load jobs from API');
     }
@@ -226,8 +226,6 @@ class _UpLoadPrescrIPtioNState extends State<UpLoadPrescrIPtioN> {
           }),
       floatingActionButton: InkWell(
         onTap: () async {
-          SingleUserPaymentsBooking();
-
           SharedPreferences prefs = await SharedPreferences.getInstance();
 
           String? encodedJson = prefs.getString('data1');
@@ -340,8 +338,8 @@ Widget MultiUserBookings(data, BuildContext context, index) {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: ((context) =>
-                  ThankYouScreenOFUploadPrescripTIOn(BilLNuMbEr, billDATE))));
+              builder: ((context) => ThankYouScreenOFUploadPrescripTIOn(
+                  BilLNuMbEr, billDATE, ""))));
     } else {
       throw Exception('Failed to load jobs from API');
     }
@@ -435,7 +433,7 @@ Widget MultiUserBookings(data, BuildContext context, index) {
       // Call your API here to book the test
       MultiUserTestBooking();
       // Example delay to simulate API call
-      Future.delayed(Duration(seconds: 2), () {
+      Future.delayed(Duration(seconds: 5), () {
         // Enable the button again after the delay
         isButtonDisabled = false;
       });

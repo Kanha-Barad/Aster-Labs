@@ -1,3 +1,4 @@
+import 'package:asterlabs/thankYou_screen.dart';
 import 'package:badges/badges.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -144,33 +145,16 @@ class _CartScreenState extends State<CartScreen> {
       List jsonResponse = resposne["Data"];
       //  globals.Bill_No = resposne["Data"][0]["BILL_NO"].toString();
       globals.SelectedlocationId = "";
-
+      var bill_NUmber = resposne["Data"][0]["BILL_NO"].toString();
+      var Bill_Date = resposne["Data"][0]["CREATE_DT"].toString();
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  ThankYouScreenOFUploadPrescripTIOn(bill_NUmber, Bill_Date,"TBNO")));
       // globals.Preferedsrvs = jsonDecode(response.body);
       //  Push_Notification_Message(context, globals.Bill_No);
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('Thank you, Test booked Successfully'),
-        backgroundColor: Color.fromARGB(255, 26, 177, 122),
-        action: SnackBarAction(
-          label: "View",
-          textColor: Colors.white,
-          onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => OredersHistory()));
-            cartController.clear();
-            productcontroller.resetAll();
-            globals.GlobalDiscountCoupons = "";
-          },
-        ),
-        // duration: const Duration(seconds: 15),
-        //width: 320.0, // Width of the SnackBar.
-        padding: const EdgeInsets.symmetric(
-          horizontal: 4.0, // Inner padding for SnackBar content.
-        ),
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-      ));
+
       cartController.clear();
       productcontroller.resetAll();
     } else {
@@ -620,9 +604,9 @@ class _CartScreenState extends State<CartScreen> {
                                                         child: Card(
                                                           color: Color.fromARGB(
                                                               255,
-                                                              27,
-                                                              165,
-                                                              114),
+                                                              49,
+                                                              114,
+                                                              179),
                                                           shape: RoundedRectangleBorder(
                                                               borderRadius:
                                                                   BorderRadius
@@ -668,7 +652,11 @@ class _CartScreenState extends State<CartScreen> {
                                                                               .CENTER,
                                                                           timeInSecForIosWeb:
                                                                               1,
-                                                                          backgroundColor: Color.fromARGB(255, 235, 103, 93),
+                                                                          backgroundColor: Color.fromARGB(
+                                                                              255,
+                                                                              235,
+                                                                              103,
+                                                                              93),
                                                                           textColor: Colors
                                                                               .white,
                                                                           fontSize:
@@ -697,9 +685,9 @@ class _CartScreenState extends State<CartScreen> {
                                                         child: Card(
                                                           color: Color.fromARGB(
                                                               255,
-                                                              27,
-                                                              165,
-                                                              114),
+                                                              49,
+                                                              114,
+                                                              179),
                                                           shape: RoundedRectangleBorder(
                                                               borderRadius:
                                                                   BorderRadius
@@ -779,7 +767,7 @@ class _CartScreenState extends State<CartScreen> {
                             // Navigator.pop(context, true);
                           },
                           child: Card(
-                            color: Color.fromARGB(255, 7, 185, 141),
+                            color: Color.fromARGB(255, 49, 114, 179),
                             elevation: 2.0,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(16),
@@ -809,13 +797,6 @@ class _CartScreenState extends State<CartScreen> {
     );
   }
 }
-
-// GrossPaymentCard(BuildContext context) {
-//   var cartController = Get.put(CartController());
-//   var orderController = Get.put(OrderController());
-
-//   return
-// }
 
 _UserListBookingsBottomPicker(BuildContext context) {
   var res = showModalBottomSheet(
@@ -945,49 +926,42 @@ class _UserlistBottomPopupState extends State<UserlistBottomPopup> {
       // Push_Notification_Message(context, globals.Bill_No);
       globals.Slot_id = "";
       globals.SelectedlocationId = "";
-
+      var bill_NUmber = resposne["Data"][0]["BILL_NO"].toString();
+      var Bill_Date = resposne["Data"][0]["CREATE_DT"].toString();
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  ThankYouScreenOFUploadPrescripTIOn(bill_NUmber, Bill_Date,"TBNO")));
       // globals.SelectedlocationId = "";
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('Thank you, Test booked Successfully'),
-        backgroundColor: Color.fromARGB(255, 26, 177, 122),
-        action: SnackBarAction(
-          label: "View",
-          textColor: Colors.white,
-          onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => OredersHistory()));
-            cartController.clear();
-            productcontroller.resetAll();
-            globals.GlobalDiscountCoupons = "";
-          },
-        ),
-        // duration: const Duration(seconds: 15),
-        //width: 320.0, // Width of the SnackBar.
-        padding: const EdgeInsets.symmetric(
-          horizontal: 4.0, // Inner padding for SnackBar content.
-        ),
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-      ));
+      // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      //   content: Text('Thank you, Test booked Successfully'),
+      //   backgroundColor: Color.fromARGB(255, 26, 177, 122),
+      //   action: SnackBarAction(
+      //     label: "View",
+      //     textColor: Colors.white,
+      //     onPressed: () {
+      //       Navigator.push(context,
+      //           MaterialPageRoute(builder: (context) => OredersHistory()));
+      //       cartController.clear();
+      //       productcontroller.resetAll();
+      //       globals.GlobalDiscountCoupons = "";
+      //     },
+      //   ),
+      //   // duration: const Duration(seconds: 15),
+      //   //width: 320.0, // Width of the SnackBar.
+      //   padding: const EdgeInsets.symmetric(
+      //     horizontal: 4.0, // Inner padding for SnackBar content.
+      //   ),
+      //   behavior: SnackBarBehavior.floating,
+      //   shape: RoundedRectangleBorder(
+      //     borderRadius: BorderRadius.circular(10.0),
+      //   ),
+      // ));
       cartController.clear();
       productcontroller.resetAll();
     } else {
       throw Exception('Failed to load jobs from API');
-
-      // return SizedBox(
-      //   height: 100,
-      //   width: 100,
-      //   child: Center(
-      //     child: LoadingIndicator(
-      //       indicatorType: Indicator.ballClipRotateMultiple,
-      //       colors: Colors.primaries,
-      //       strokeWidth: 4.0,
-      //       //   pathBackgroundColor:ColorSwatch(Action[])
-      //     ),
-      //   ),
-      // );
     }
   }
 
@@ -996,22 +970,6 @@ class _UserlistBottomPopupState extends State<UserlistBottomPopup> {
     index,
     context,
   ) {
-    // bool isButtonDisabled = false;
-
-    // void MultiUserOrderPaymentsBooking() {
-    //   if (!isButtonDisabled) {
-    //     isButtonDisabled = true; // Disable the button
-
-    //     // Call your API here to book the test
-    //     MultiUserOrderPayments();
-    //     // Example delay to simulate API call
-    //     Future.delayed(Duration(seconds: 5), () {
-    //       // Enable the button again after the delay
-    //       isButtonDisabled = false;
-    //     });
-    //   }
-    // }
-
     return InkWell(
       onTap: () {
         bool _isLoading = false;

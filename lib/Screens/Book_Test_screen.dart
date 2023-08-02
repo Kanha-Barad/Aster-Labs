@@ -6,6 +6,7 @@ import 'package:asterlabs/Widgets/BottomNavigation.dart';
 import '../ClientCodeLogin.dart';
 import '../Controllers/cart_controller.dart';
 import '../Controllers/product_controller.dart';
+import '../Widgets/cart_items.dart';
 import 'Test_Cart_screen.dart';
 import '../Widgets/BookTestDrawer.dart';
 
@@ -35,20 +36,12 @@ class _ProductOverviewPageState extends State<ProductOverviewPage> {
 // Call fetchProducts to refresh the data
   @override
   void initState() {
-    // TODO: implement initState
     controller.fetchProducts(globals.Preferedsrvs);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    //  bookCart();
-
-    // Get.put(ProductController());
-    // Get.put(CartController());
-    // Get.appUpdate();
-    //setState(() {});
-
     return Scaffold(
       appBar: AppBar(
           iconTheme: IconThemeData(color: Colors.white),
@@ -58,6 +51,9 @@ class _ProductOverviewPageState extends State<ProductOverviewPage> {
               onPressed: () {
                 //   Get.find<ProductController>().onClose();
                 Navigator.of(context).pop();
+                cartController.clear();
+                productcontroller.resetAll();
+                globals.GlobalDiscountCoupons = "";
               },
               icon: Icon(
                 Icons.arrow_back,

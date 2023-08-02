@@ -81,7 +81,7 @@ String Patient_App_Connection_String =
     "Server=172.24.248.12;User id=ALUATDB.SVCA;Password=DSFg45THFD;Database=P_ASTER_LIMS_UAT_2023";
 //String All_Client_Logo = "http://137.59.200.62/slims_apps/App_img/AsterLogo.png";
 String All_Client_Logo = 'assets/images/asterlabs.png';
-String Patient_report_URL = "";
+String Patient_report_URL = "http://172.24.248.12/ASTER_NEW/public/HIMSREPORTVIEWER_SMS.ASPX?UNIUQ_ID=";
 String Patient_OTP_URL = "";
 var Client_App_Code = null;
 /**-----------------------APP INFO---------------------------------------------------- */

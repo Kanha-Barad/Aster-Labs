@@ -55,10 +55,11 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
               // side: BorderSide(color: Colors.red)
             )),
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            overlayColor:
-                MaterialStateColor.resolveWith((states) => Color.fromARGB(255, 30, 92, 153)),
+            overlayColor: MaterialStateColor.resolveWith(
+                (states) => Color.fromARGB(255, 30, 92, 153)),
             backgroundColor: selectedIndex == index && globals.fromDate == ''
-                ? MaterialStateColor.resolveWith((states) => Color.fromARGB(255, 30, 92, 153))
+                ? MaterialStateColor.resolveWith(
+                    (states) => Color.fromARGB(255, 30, 92, 153))
                 : MaterialStateColor.resolveWith((states) => Colors.blueGrey),
             shadowColor:
                 MaterialStateColor.resolveWith((states) => Colors.blueGrey),
@@ -748,7 +749,8 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
                                                 contentPadding: EdgeInsets.only(
                                                     left: 25, right: 25),
                                                 title: Card(
-                                                    color: Color(0xff123456),
+                                                    color: Color.fromARGB(
+                                                        255, 30, 92, 153),
                                                     shape:
                                                         RoundedRectangleBorder(
                                                             borderRadius:

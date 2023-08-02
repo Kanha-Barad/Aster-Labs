@@ -37,7 +37,7 @@ class _MyTrendsState extends State<MyTrends> {
                     side: BorderSide(color: Colors.white),
                   ),
                   color: _selectedIndex == index
-                      ? Color(0xff123456)
+                      ? Color.fromARGB(255, 30, 92, 153)
                       : Color.fromARGB(192, 221, 194, 193),
                   child: _selectedIndex == index
                       ? Row(
@@ -704,7 +704,7 @@ class NoContent extends StatelessWidget {
           children: <Widget>[
             Icon(
               Icons.verified_rounded,
-              color: Color(0xff123456),
+              color: Color.fromARGB(255, 30, 92, 153),
               size: 40,
             ),
             const Text('No Data Found'),

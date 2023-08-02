@@ -104,7 +104,6 @@ class ProductsGrid extends StatelessWidget {
                                                                 color: Colors
                                                                     .deepOrange)),
                                                         Spacer(),
-
                                                         InkWell(
                                                           borderRadius:
                                                               BorderRadius
@@ -235,62 +234,6 @@ class ProductsGrid extends StatelessWidget {
                                                             }),
                                                           ),
                                                         )
-//      InkWell(
-//   borderRadius: BorderRadius.circular(15.0),
-//   onTap: () {
-//     final filteredProductIndex = controller.productList.indexOf(e);
-
-//     if (filteredProductIndex >= 0) {
-//       final product = controller.productList[filteredProductIndex];
-
-//       if (!product.isAdded.value) {
-//         cartController.addItem(
-//           product.id,
-//           product.price,
-//           product.title,
-//           product.Service_Id,
-//           1,
-//         );
-//       } else {
-//         cartController.removeitem(
-//           product.Service_Id,
-//           product.price,
-//           product.title,
-//           product.id,
-//           1,
-//         );
-//       }
-//     }
-//   },
-//   child: Center(
-//     child: Obx(() {
-//       final filteredProductIndex = controller.productList.indexOf(e);
-//       final isAdded = filteredProductIndex >= 0 && controller.addedProductIds.contains(controller.productList[filteredProductIndex].id);
-
-//       return SizedBox(
-//         height: 36,
-//         width: 69,
-//         child: Card(
-//           color: isAdded ? Color.fromARGB(247, 216, 109, 102) : Color.fromARGB(255, 26, 177, 122),
-//           elevation: 1,
-//           shape: RoundedRectangleBorder(
-//             borderRadius: BorderRadius.circular(4),
-//           ),
-//           child: Center(
-//             child: Text(
-//               isAdded ? 'Remove' : 'Add',
-//               style: TextStyle(
-//                 color: Colors.white,
-//                 fontSize: 15,
-//                 fontWeight: FontWeight.w500,
-//               ),
-//             ),
-//           ),
-//         ),
-//       );
-//     }),
-//   ),
-// ),
                                                       ],
                                                     ),
                                                   ),
@@ -319,7 +262,7 @@ class ProductsGrid extends StatelessWidget {
                           child: Card(
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8)),
-                            color: Color.fromARGB(255, 7, 185, 141),
+                            color: Color.fromARGB(255, 49, 114, 179),
                             // margin: EdgeInsets.all(15),
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
@@ -879,3 +822,62 @@ void _showPickerDiagnProfilesHlthpackages(BuildContext context) {
               //           ),
               //         )
               //       :
+
+
+//--------------------------add remove code ------------------------------
+              //      InkWell(
+//   borderRadius: BorderRadius.circular(15.0),
+//   onTap: () {
+//     final filteredProductIndex = controller.productList.indexOf(e);
+
+//     if (filteredProductIndex >= 0) {
+//       final product = controller.productList[filteredProductIndex];
+
+//       if (!product.isAdded.value) {
+//         cartController.addItem(
+//           product.id,
+//           product.price,
+//           product.title,
+//           product.Service_Id,
+//           1,
+//         );
+//       } else {
+//         cartController.removeitem(
+//           product.Service_Id,
+//           product.price,
+//           product.title,
+//           product.id,
+//           1,
+//         );
+//       }
+//     }
+//   },
+//   child: Center(
+//     child: Obx(() {
+//       final filteredProductIndex = controller.productList.indexOf(e);
+//       final isAdded = filteredProductIndex >= 0 && controller.addedProductIds.contains(controller.productList[filteredProductIndex].id);
+
+//       return SizedBox(
+//         height: 36,
+//         width: 69,
+//         child: Card(
+//           color: isAdded ? Color.fromARGB(247, 216, 109, 102) : Color.fromARGB(255, 26, 177, 122),
+//           elevation: 1,
+//           shape: RoundedRectangleBorder(
+//             borderRadius: BorderRadius.circular(4),
+//           ),
+//           child: Center(
+//             child: Text(
+//               isAdded ? 'Remove' : 'Add',
+//               style: TextStyle(
+//                 color: Colors.white,
+//                 fontSize: 15,
+//                 fontWeight: FontWeight.w500,
+//               ),
+//             ),
+//           ),
+//         ),
+//       );
+//     }),
+//   ),
+// ),
