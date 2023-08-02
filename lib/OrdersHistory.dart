@@ -1488,7 +1488,7 @@ class NoContent extends StatelessWidget {
           children: <Widget>[
             Icon(
               Icons.verified_rounded,
-              color: Color.fromARGB(255, 45, 72, 194),
+              color: Color.fromARGB(255, 30, 92, 153),
               size: 30,
             ),
             const Text('No Data Found', style: TextStyle(fontSize: 12)),

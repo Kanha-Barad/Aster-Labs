@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:asterlabs/Widgets/BottomNavigation.dart';
 import 'package:flutter/material.dart';
 import './OrdersHistory.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -20,111 +21,6 @@ class MyBooking extends StatefulWidget {
 class _MyBookingState extends State<MyBooking> {
   @override
   Widget build(BuildContext context) {
-    Widget myBottomNavigationBar = Container(
-        // height: 150,
-        width: MediaQuery.of(context).size.width,
-        height: 48,
-        color: Color(0xff123456),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(30, 5, 0, 0),
-              child: InkWell(
-                onTap: () {
-                  globals.SelectedlocationId = "";
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => PatientHome()));
-                },
-                child: Column(children: [
-                  Icon(
-                    Icons.home,
-                    color: Colors.white,
-                    size: 18,
-                  ),
-                  SizedBox(
-                    height: 2,
-                  ),
-                  Text(
-                    "Home",
-                    style: TextStyle(color: Colors.white, fontSize: 12),
-                  )
-                ]),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
-              child: InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => UsersProfile()),
-                  );
-                },
-                child: Column(
-                  children: [
-                    Icon(
-                      Icons.person,
-                      color: Colors.white,
-                      size: 18,
-                    ),
-                    SizedBox(
-                      height: 2,
-                    ),
-                    Text(
-                      "Profile",
-                      style: TextStyle(color: Colors.white, fontSize: 12),
-                    )
-                  ],
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 5, 30, 0),
-              child: InkWell(
-                onTap: () async {
-                  globals.umr_no = "";
-                  SharedPreferences prefs =
-                      await SharedPreferences.getInstance();
-                  prefs.setString("Msg_id", "");
-                  prefs.setString('Mobileno', "");
-
-                  prefs.setString('email', "");
-                  //     prefs.setString('Mobileno', MobNocontroller.text.toString()).toString();
-                  prefs.setString("Otp", "");
-                  // prefs.getStringList('data1') ?? [];
-                  (prefs.setString('data1', ""));
-                  (prefs.setString('AppCODE', ''));
-                  (prefs.setString('CompanyLogo', ''));
-                  (prefs.setString('ReportURL', ''));
-                  (prefs.setString('OTPURL', ''));
-                  (prefs.setString('PatientAppApiURL', ''));
-                  (prefs.setString('ConnectionString', ''));
-                  if (prefs.getString('Mobileno') != "") {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => PatientLogin("")),
-                    );
-                  }
-                },
-                child: Column(children: [
-                  Icon(
-                    Icons.logout_rounded,
-                    color: Colors.white,
-                    size: 18,
-                  ),
-                  SizedBox(
-                    height: 2,
-                  ),
-                  Text(
-                    "Log Out",
-                    style: TextStyle(color: Colors.white, fontSize: 12),
-                  )
-                ]),
-              ),
-            )
-          ],
-        ));
     Future<List<UserBOOKINGs>> _fetchManagerDetails() async {
       Map data = {
         "umr_no": globals.umr_no,
@@ -305,7 +201,7 @@ class _MyBookingState extends State<MyBooking> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xff123456),
+        backgroundColor: Color.fromARGB(255, 7, 185, 141),
         centerTitle: true,
         automaticallyImplyLeading: false,
         title: Text('Your Bookings', style: TextStyle(color: Colors.white)),
@@ -360,7 +256,7 @@ class _MyBookingState extends State<MyBooking> {
       // ),
       body: Container(
           color: Color.fromARGB(255, 236, 236, 236), child: BookTestDetails),
-      bottomNavigationBar: myBottomNavigationBar,
+      bottomNavigationBar: AllBottOMNaviGAtionBar(),
     );
   }
 }

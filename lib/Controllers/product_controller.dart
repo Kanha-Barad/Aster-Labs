@@ -27,14 +27,6 @@ class ProductController extends GetxController {
     fetchProducts(globals.Preferedsrvs);
   }
 
-  // @override
-  // void onClose() {
-  //   super.onClose();
-  //   searchController.clear();
-  //   productList.clear();
-  //   productTempList.clear();
-  // }
-
   List<Product> newProductList = [];
 
   fetchProducts(Map<String, dynamic> responseBody) async {
