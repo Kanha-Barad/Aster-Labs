@@ -449,10 +449,10 @@ class _PatientHomeState extends State<PatientHome> {
                           child: Card(
                             color: Color.fromARGB(255, 49, 114, 179),
                             shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)),
+                                borderRadius: BorderRadius.circular(12)),
                             child: Padding(
                               padding:
-                                  const EdgeInsets.fromLTRB(30, 10, 30, 10),
+                                  const EdgeInsets.fromLTRB(32, 11, 32, 11),
                               child: Text(
                                 "My Reports",
                                 style: TextStyle(
@@ -473,8 +473,8 @@ class _PatientHomeState extends State<PatientHome> {
                       Padding(
                         padding: EdgeInsets.fromLTRB(0, 3, 0, 3),
                         child: Container(
-                          height: 50.0,
-                          width: 70.0,
+                          height: 60.0,
+                          width: 60.0,
                           decoration: const BoxDecoration(
                               shape: BoxShape.rectangle,
                               image: DecorationImage(
@@ -490,10 +490,10 @@ class _PatientHomeState extends State<PatientHome> {
                           child: Card(
                             color: Color.fromARGB(255, 49, 114, 179),
                             shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)),
+                                borderRadius: BorderRadius.circular(12)),
                             child: Padding(
                               padding:
-                                  const EdgeInsets.fromLTRB(30, 10, 30, 10),
+                                  const EdgeInsets.fromLTRB(32, 11, 32, 11),
                               child: Text(
                                 "My Trends",
                                 style: TextStyle(
