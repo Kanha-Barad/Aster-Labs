@@ -45,7 +45,7 @@ class _PatientAppState extends State<PatientApp> {
     return GetMaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          primarySwatch: Colors.grey,
+          primarySwatch: Colors.blueGrey,
           accentColor: Color.fromARGB(255, 22, 225, 205),
         ),
         home: PatientHome());

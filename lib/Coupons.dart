@@ -80,7 +80,7 @@ class _CouponsCardApplyState extends State<CouponsCardApply> {
         automaticallyImplyLeading: false,
         centerTitle: true,
         title: Text('Discount Coupons', style: TextStyle(color: Colors.white)),
-        backgroundColor: Color.fromARGB(240, 18, 69, 121),
+        backgroundColor: Color.fromARGB(255, 7, 185, 141),
       ),
       body: Container(
           height: MediaQuery.of(context).size.height,

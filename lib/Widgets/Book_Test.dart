@@ -364,7 +364,7 @@ class _BookedStatsState extends State<BookedStats> {
         });
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: Color(0xff123456),
+          backgroundColor: Color.fromARGB(255, 7, 185, 141),
           leading: InkWell(
             child: Icon(
               Icons.arrow_back_ios_new_rounded,
@@ -682,7 +682,7 @@ class _DiagnProfilesHlthpackagesState extends State<DiagnProfilesHlthpackages> {
               ),
             ],
           ),
-          backgroundColor: Color(0xff123456),
+          backgroundColor: Color.fromARGB(255, 7, 185, 141),
           automaticallyImplyLeading: false),
       body: Container(
         child: Column(

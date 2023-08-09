@@ -474,7 +474,7 @@ class _PatientHomeState extends State<PatientHome> {
                         padding: EdgeInsets.fromLTRB(0, 3, 0, 3),
                         child: Container(
                           height: 60.0,
-                          width: 60.0,
+                          width: 75.0,
                           decoration: const BoxDecoration(
                               shape: BoxShape.rectangle,
                               image: DecorationImage(

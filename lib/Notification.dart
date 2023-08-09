@@ -305,7 +305,7 @@ Widget _ProgressNotiFication(var data, BuildContext context) {
               borderRadius: BorderRadius.circular(20),
             ),
             leading: CircleAvatar(
-                backgroundColor: Color.fromARGB(255, 24, 36, 113),
+                backgroundColor: Color.fromARGB(255, 49, 114, 179),
                 child: Icon(Icons.difference_outlined)),
             title: Padding(
               padding: const EdgeInsets.only(top: 8.0),
@@ -339,115 +339,7 @@ Widget _ProgressNotiFication(var data, BuildContext context) {
                           color: Color.fromARGB(255, 218, 75, 65),
                           fontWeight: FontWeight.bold,
                           fontSize: 13.0)),
-                  // (data.ReQuire_CancEl == "Y")
-                  //     ? InkWell(
-                  //         onTap: () {
-                  //           showDialog<String>(
-                  //               context: context,
-                  //               builder: (BuildContext context) {
-                  //                 return StatefulBuilder(builder:
-                  //                     (BuildContext context,
-                  //                         StateSetter setState) {
-                  //                   return AlertDialog(
-                  //                       shape: const RoundedRectangleBorder(
-                  //                           borderRadius: BorderRadius.all(
-                  //                               Radius.circular(16.0))),
-                  //                       title: const Text('Cancel Order :',
-                  //                           style: TextStyle(
-                  //                               fontSize: 16,
-                  //                               fontWeight: FontWeight.w500)),
-                  //                       content: SingleChildScrollView(
-                  //                           child: ConstrainedBox(
-                  //                         constraints: BoxConstraints(
-                  //                           maxHeight: MediaQuery.of(context)
-                  //                                   .size
-                  //                                   .height *
-                  //                               0.1, // Set the preferred height here
-                  //                         ),
-                  //                         child: Column(
-                  //                           children: [
-                  //                             TextFormField(
-                  //                               autofocus: true,
-                  //                               keyboardType:
-                  //                                   TextInputType.text,
-                  //                               controller: CancelReaSON,
-                  //                               decoration: InputDecoration(
-                  //                                 border: OutlineInputBorder(
-                  //                                     borderRadius:
-                  //                                         BorderRadius.circular(
-                  //                                             50)),
-                  //                                 // prefixIcon:
-                  //                                 //     Icon(Icons
-                  //                                 //         .phone_android),
-                  //                                 focusColor: Color(0xff123456),
-                  //                                 hintText: 'Cancel Reason',
-                  //                               ),
-                  //                             ),
-                  //                             Row(
-                  //                               mainAxisAlignment:
-                  //                                   MainAxisAlignment.end,
-                  //                               children: [
-                  //                                 InkWell(
-                  //                                   child: SizedBox(
-                  //                                     width: 50,
-                  //                                     height: 30,
-                  //                                     child: Card(
-                  //                                       color: Color.fromARGB(
-                  //                                           255, 21, 50, 179),
-                  //                                       elevation: 2.0,
-                  //                                       shape:
-                  //                                           RoundedRectangleBorder(
-                  //                                               borderRadius:
-                  //                                                   BorderRadius
-                  //                                                       .circular(
-                  //                                                           4)),
-                  //                                       child: Padding(
-                  //                                         padding:
-                  //                                             const EdgeInsets
-                  //                                                 .all(3.0),
-                  //                                         child: Center(
-                  //                                             child: Text("ok",
-                  //                                                 style: TextStyle(
-                  //                                                     color: Colors
-                  //                                                         .white,
-                  //                                                     fontSize: 14 *
-                  //                                                         mediaQuery
-                  //                                                             .textScaleFactor,
-                  //                                                     fontWeight:
-                  //                                                         FontWeight
-                  //                                                             .w600))),
-                  //                                       ),
-                  //                                     ),
-                  //                                   ),
-                  //                                   onTap: () {
-                  //                                     CanCELTesT(data.bill_no,
-                  //                                         CancelReaSON.text);
-                  //                                   },
-                  //                                 ),
-                  //                               ],
-                  //                             )
-                  //                           ],
-                  //                         ),
-                  //                       )));
-                  //                 });
-                  //               });
-                  //         },
-                  //         child: Card(
-                  //             color: Color.fromARGB(255, 216, 33, 20),
-                  //             shape: RoundedRectangleBorder(
-                  //                 borderRadius: BorderRadius.circular(8)),
-                  //             child: Padding(
-                  //                 padding:
-                  //                     const EdgeInsets.fromLTRB(6.0, 4, 6, 4),
-                  //                 child: Center(
-                  //                   child: Text("Cancel",
-                  //                       style: TextStyle(
-                  //                           color: Colors.white,
-                  //                           fontWeight: FontWeight.w600,
-                  //                           fontSize: 11.0)),
-                  //                 ))),
-                  //       )
-                  //     : SizedBox(),
+                 
                 ],
               ),
             ),
@@ -476,7 +368,7 @@ Widget _ProgressNotiFication(var data, BuildContext context) {
                         Spacer(),
                         if (data.Status == "Assigned")
                           Card(
-                              color: Color.fromARGB(255, 221, 180, 65),
+                              color: Color.fromARGB(255, 209, 180, 101),
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8)),
                               child: Padding(
@@ -491,7 +383,7 @@ Widget _ProgressNotiFication(var data, BuildContext context) {
                                   )))
                         else if (data.Status == "Accepted")
                           Card(
-                              color: Color.fromARGB(255, 25, 160, 66),
+                              color: Color.fromARGB(255, 110, 178, 130),
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8)),
                               child: Padding(
@@ -506,7 +398,7 @@ Widget _ProgressNotiFication(var data, BuildContext context) {
                                   )))
                         else if (data.Status == "Started")
                           Card(
-                              color: Color.fromARGB(255, 174, 178, 178),
+                              color: Color.fromARGB(255, 149, 205, 205),
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8)),
                               child: Padding(
@@ -521,7 +413,7 @@ Widget _ProgressNotiFication(var data, BuildContext context) {
                                   )))
                         else if (data.Status == "Reached")
                           Card(
-                              color: Color.fromARGB(255, 191, 76, 176),
+                              color: Color.fromARGB(255, 204, 100, 190),
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8)),
                               child: Padding(
@@ -536,7 +428,7 @@ Widget _ProgressNotiFication(var data, BuildContext context) {
                                   )))
                         else if (data.Status == "Completed")
                           Card(
-                              color: Color.fromARGB(255, 108, 86, 214),
+                              color: Color.fromARGB(255, 120, 99, 221),
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8)),
                               child: Padding(
@@ -551,7 +443,7 @@ Widget _ProgressNotiFication(var data, BuildContext context) {
                                   )))
                         else if (data.Status == "Rejected")
                           Card(
-                              color: Color.fromARGB(255, 235, 30, 26),
+                              color: Color.fromARGB(255, 223, 72, 69),
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8)),
                               child: Padding(
@@ -566,7 +458,7 @@ Widget _ProgressNotiFication(var data, BuildContext context) {
                                   )))
                         else
                           Card(
-                              color: Color.fromARGB(255, 233, 117, 28),
+                              color: Color.fromARGB(255, 221, 149, 95),
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8)),
                               child: Padding(
@@ -638,7 +530,7 @@ class _SERvicEDEtailSState extends State<SERvicEDEtailS> {
         iconTheme: IconThemeData(
           color: Colors.white, //change your color here
         ),
-        backgroundColor: Color(0xff123456),
+        backgroundColor: Color.fromARGB(255, 7, 185, 141),
         leading: Builder(
           builder: (BuildContext context) {
             return IconButton(
