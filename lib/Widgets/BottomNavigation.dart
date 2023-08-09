@@ -25,12 +25,12 @@ class _AllBottOMNaviGAtionBarState extends State<AllBottOMNaviGAtionBar> {
         height: 63,
         color: Color.fromARGB(255, 7, 185, 141),
         child: Padding(
-          padding: const EdgeInsets.only(top: 4.0),
+          padding: const EdgeInsets.only(top: 10.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(30, 5, 0, 0),
+                padding: const EdgeInsets.only(left: 30),
                 child: InkWell(
                   onTap: () {
                     globals.SelectedlocationId = "";
@@ -50,43 +50,39 @@ class _AllBottOMNaviGAtionBarState extends State<AllBottOMNaviGAtionBar> {
                   ]),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
-                child: InkWell(
-                  onTap: () async {
-                    SharedPreferences prefs =
-                        await SharedPreferences.getInstance();
-                    if (prefs.getString('Mobileno') == "" ||
-                        prefs.getString('Mobileno') == null) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => PatientLogin("")),
-                      );
-                    } else {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => UsersProfile()),
-                      );
-                    }
-                  },
-                  child: Column(
-                    children: [
-                      Icon(
-                        Icons.person,
-                        color: Colors.white,
-                        size: 19,
-                      ),
-                      Text(
-                        "Profile",
-                        style: TextStyle(color: Colors.white, fontSize: 12),
-                      )
-                    ],
-                  ),
+              InkWell(
+                onTap: () async {
+                  SharedPreferences prefs =
+                      await SharedPreferences.getInstance();
+                  if (prefs.getString('Mobileno') == "" ||
+                      prefs.getString('Mobileno') == null) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => PatientLogin("")),
+                    );
+                  } else {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => UsersProfile()),
+                    );
+                  }
+                },
+                child: Column(
+                  children: [
+                    Icon(
+                      Icons.person,
+                      color: Colors.white,
+                      size: 19,
+                    ),
+                    Text(
+                      "Profile",
+                      style: TextStyle(color: Colors.white, fontSize: 12),
+                    )
+                  ],
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(0, 5, 30, 0),
+                padding: const EdgeInsets.only(right: 30),
                 child: InkWell(
                   onTap: () async {
                     // globals.umr_no = "";

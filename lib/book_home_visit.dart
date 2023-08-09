@@ -220,28 +220,25 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
 
 //Date Selection...........................................
   Widget Application_Widget(var data, BuildContext context, index) {
-    return Container(
-        height: 800,
-        child: GridView.builder(
-            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                maxCrossAxisExtent: 100,
-                childAspectRatio: 3 / 2,
-                crossAxisSpacing: 20,
-                mainAxisSpacing: 20),
-            itemCount: GridViewList.length,
-            itemBuilder: (BuildContext ctx, index) {
-              return Container(
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                    color: Colors.amber,
-                    borderRadius: BorderRadius.circular(15)),
-                child: Column(
-                  children: [
-                    Text(GridViewList[index]["SLOT_TIME"]),
-                  ],
-                ),
-              );
-            }));
+    return GridView.builder(
+        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+            maxCrossAxisExtent: 100,
+            childAspectRatio: 3 / 2,
+            crossAxisSpacing: 20,
+            mainAxisSpacing: 20),
+        itemCount: GridViewList.length,
+        itemBuilder: (BuildContext ctx, index) {
+          return Container(
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+                color: Colors.amber, borderRadius: BorderRadius.circular(15)),
+            child: Column(
+              children: [
+                Text(GridViewList[index]["SLOT_TIME"]),
+              ],
+            ),
+          );
+        });
   }
 
   ListView Application_ListView(data, BuildContext context) {
@@ -256,7 +253,7 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
   }
 
   void initState() {
-    _selectedItem2 = "";
+    _selectedCiTY = "";
     Select_State_Wise_Services();
     clearDropdownValue();
     clearDropdownValue_Location();
@@ -347,11 +344,7 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
         },
         body: params,
         encoding: Encoding.getByName("utf-8"));
-
-    print('im here');
-    print(response.body);
     map = json.decode(response.body);
-    print(response.body);
     if (response.statusCode == 200) {
       Map<String, dynamic> resposne = jsonDecode(response.body);
       List jsonResponse = resposne["Data"];
@@ -359,10 +352,8 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
       throw Exception('Failed to load jobs from API');
     }
     setState(() {
-      data1 = map["Data"] as List;
+      StateDATA = map["Data"] as List;
     });
-
-    return "Sucess";
   }
 
   Select_City_Wise_Services() async {
@@ -390,7 +381,7 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
     map = json.decode(response.body);
     print(response.body);
     if (response.statusCode == 200) {
-      data2 = [];
+      CityDATA = [];
       globals.Glb_PATIENT_APP_STATES_ID = "";
       Map<String, dynamic> resposne = jsonDecode(response.body);
       List jsonResponse = resposne["Data"];
@@ -398,14 +389,14 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
       throw Exception('Failed to load jobs from API');
     }
     setState(() {
-      data2 = map["Data"] as List;
+      CityDATA = map["Data"] as List;
     });
 
     return "Sucess";
   }
 
-  Select_Location_Wise_Services() async {
-    params = {
+  Future<String> select_LocationWise_Services() async {
+    var params = {
       "IP_FLAG": "L",
       "IP_STATE_ID": globals.Glb_PATIENT_APP_STATES_ID,
       "IP_AREA_ID": globals.Glb_PATIENT_APP_CITTY_ID,
@@ -415,33 +406,30 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
     };
 
     final response = await http.post(
-        Uri.parse(globals.Global_Patient_Api_URL +
-            'PatinetMobileApp/GET_PATIENT_APP_AREAS'),
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/x-www-form-urlencoded"
-        },
-        body: params,
-        encoding: Encoding.getByName("utf-8"));
+      Uri.parse(globals.Global_Patient_Api_URL +
+          'PatinetMobileApp/GET_PATIENT_APP_AREAS'),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      body: params,
+      encoding: Encoding.getByName("utf-8"),
+    );
 
-    print('im here');
-    print(response.body);
-    map = json.decode(response.body);
-    print(response.body);
     if (response.statusCode == 200) {
-      data3 = [];
-      List<dynamic> jsonResponse;
-      // List<dynamic> list = jsonDecode(response.body);
-      // jsonResponse = json.decode(resposne["Data"]);
+      final map = json.decode(response.body);
+      if (map.containsKey("Data")) {
+        setState(() {
+          LocationDATA = List.from(
+              map["Data"]); // Make sure the API response contains a List
+        });
+        return "Success";
+      } else {
+        throw Exception('Data key not found in API response');
+      }
     } else {
-      throw Exception('Failed to load jobs from API');
+      throw Exception('Failed to load data from API');
     }
-    setState(() {
-      data3 = jsonDecode(response.body)["Data"]
-          .cast<Map<String, dynamic>>(); //map["Data"];
-    });
-
-    return "Success";
   }
 
   SeleCTLocationWIseServices(var SelectedLOCID) async {
@@ -468,14 +456,6 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
       List jsonResponse = resposne["Data"];
 
       globals.Preferedsrvs = jsonDecode(response.body);
-      // List<String> newData = jsonResponse.map((e) => e.toString()).toList();
-
-      // globals.Preferedsrvs.clear();
-      // globals.Preferedsrvs.addAll(newData);
-
-      // var controller = Get.find<ProductController>();
-      // controller.productList.clear();
-      // controller.productList.addAll(globals.Preferedsrvs.length);
     } else {
       throw Exception('Failed to load jobs from API');
     }
@@ -508,168 +488,175 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
     }
   }
 
-  var _selectedItem;
-  var _selectedItem1;
-  var _selectedItem2;
+  //var _selectedItem;
+  var _selectedState;
+  var _selectedCiTY;
   late Map<String, dynamic> params;
   late Map<String, dynamic> map;
-  List data = []; //edi
-  List data1 = []; //edi
-  List data2 = []; //edi
-  List<Map<String, dynamic>> data3 = [];
-  Map<String, dynamic>? selectedItem5;
+  // List data = []; //edi
+  List StateDATA = []; //edi
+  List CityDATA = []; //edi
+  List LocationDATA = [];
+  var _selectedLOcatiON;
 
   void clearDropdownValue() {
     setState(() {
-      _selectedItem2 = null;
+      _selectedCiTY = null;
     });
   }
 
   void clearDropdownValue_Location() {
     setState(() {
-      selectedItem5 = null;
+      _selectedLOcatiON = null;
     });
   }
 
   Widget build(BuildContext context) {
-    final State_Dropdwon = SizedBox(
-        width: 340,
-        height: 48,
-        child: Card(
-          elevation: 2.0,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(10, 3, 10, 3),
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton(
-                isDense: true,
-                isExpanded: true,
-                value: _selectedItem1,
-                hint: MediaQuery(
-                    data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-                    child: Text('Select State')),
-                onChanged: (value) {
-                  setState(() {
-                    _selectedItem1 = value;
-                    globals.Glb_PATIENT_APP_STATES_ID = _selectedItem1;
-                    clearDropdownValue();
-                    clearDropdownValue_Location();
-                    Select_City_Wise_Services();
-                    // globals.Glb_PATIENT_APP_STATES_ID = null;
-                    globals.Glb_PATIENT_APP_CITTY_ID = null;
-                    globals.SelectedlocationId = "";
-                    globals.Selectedlocationname = null;
-                  });
-                },
-                items: data1.map((ldata) {
-                  return DropdownMenuItem(
-                    child: MediaQuery(
-                      data:
-                          MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-                      child: Text(
-                        ldata['STATE_NAME'].toString(),
-                        style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w400),
-                      ),
-                    ),
-                    value: ldata['PATIENT_APP_STATES_ID'].toString(),
-                  );
-                }).toList(),
-                // style: TextStyle(color: Colors.black, fontSize: 20,fontFamily: "Montserrat"),
-              ),
-            ),
+    final State_Dropdwon = Padding(
+      padding: const EdgeInsets.fromLTRB(12, 8, 12, 6),
+      child: DropdownButtonFormField(
+        hint: Text(
+          'Select State',
+          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+        ),
+        decoration: InputDecoration(
+          enabledBorder: UnderlineInputBorder(
+            //<-- SEE HERE
+            borderSide:
+                BorderSide(color: Color.fromARGB(255, 183, 181, 181), width: 1),
           ),
-        ));
-
-    final City_Dropdwon = SizedBox(
-        width: 340,
-        height: 48,
-        child: Card(
-          elevation: 2.0,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(10, 3, 10, 3),
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton(
-                isDense: true,
-                isExpanded: true,
-                value: _selectedItem2,
-                hint: MediaQuery(
-                    data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-                    child: Text('Select City')),
-                onChanged: (value) {
-                  setState(() {
-                    _selectedItem2 = value;
-
-                    globals.Glb_PATIENT_APP_CITTY_ID = _selectedItem2;
-                    clearDropdownValue_Location();
-                    Select_Location_Wise_Services();
-                    globals.SelectedlocationId = "";
-                    globals.Selectedlocationname = null;
-                  });
-                },
-                items: data2.map((ldata) {
-                  return DropdownMenuItem(
-                    child: MediaQuery(
-                      data:
-                          MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-                      child: Text(
-                        ldata['AREA_NAME'].toString(),
-                        style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w400),
-                      ),
-                    ),
-                    value: ldata['PATIENT_APP_AREA_ID'].toString(),
-                  );
-                }).toList(),
-                // style: TextStyle(color: Colors.black, fontSize: 20,fontFamily: "Montserrat"),
-              ),
-            ),
+          focusedBorder: UnderlineInputBorder(
+            //<-- SEE HERE
+            borderSide:
+                BorderSide(color: Color.fromARGB(255, 183, 181, 181), width: 1),
           ),
-        ));
-
-    void _showDropdown() {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Select Location'),
-            content: Container(
-              width: double.minPositive,
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: data3.length,
-                itemBuilder: (context, index) {
-                  final item = data3[index];
-                  return ListTile(
-                    title: Text(item['LOCATION_NAME']),
-                    onTap: () {
-                      setState(() {
-                        var selectedItem5 = item['LOC_ID'].toString();
-                        globals.SelectedlocationId = selectedItem5;
-                        globals.Selectedlocationname = item['LOCATION_NAME'];
-                        GridViewList = [];
-                        _onLoading();
-                        Book_Home_Visit(this.selectedIndex);
-                        globals.Is_search = "";
-                        SeleCTLocationWIseServices(globals.SelectedlocationId);
-                      });
-                      Navigator.of(context).pop();
-                    },
-                  );
-                },
-              ),
+          filled: true,
+          // fillColor: Color.fromARGB(255, 243, 247, 245),
+        ),
+        dropdownColor: Color.fromARGB(255, 232, 240, 242),
+        // value: _selectedState,
+        onChanged: (String? newValue) {
+          setState(() {
+            _selectedState = newValue!;
+            globals.Glb_PATIENT_APP_STATES_ID = _selectedState;
+            clearDropdownValue();
+            clearDropdownValue_Location();
+            Select_City_Wise_Services();
+            globals.Glb_PATIENT_APP_CITTY_ID = null;
+            globals.SelectedlocationId = "";
+            globals.Selectedlocationname = null;
+          });
+        },
+        items: StateDATA.map<DropdownMenuItem<String>>((value) {
+          return DropdownMenuItem<String>(
+            value: value['PATIENT_APP_STATES_ID'].toString(),
+            child: Text(
+              value['STATE_NAME'].toString(),
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
             ),
           );
+        }).toList(),
+      ),
+    );
+
+    final City_Dropdwon = Padding(
+      padding: const EdgeInsets.fromLTRB(12, 8, 12, 6),
+      child: DropdownButtonFormField(
+        hint: Text(
+          'Select City',
+          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+        ),
+        decoration: InputDecoration(
+          enabledBorder: UnderlineInputBorder(
+            //<-- SEE HERE
+            borderSide:
+                BorderSide(color: Color.fromARGB(255, 183, 181, 181), width: 1),
+          ),
+          focusedBorder: UnderlineInputBorder(
+            //<-- SEE HERE
+            borderSide:
+                BorderSide(color: Color.fromARGB(255, 183, 181, 181), width: 1),
+          ),
+          filled: true,
+          // fillColor: Color.fromARGB(255, 243, 247, 245),
+        ),
+        dropdownColor: Color.fromARGB(255, 232, 240, 242),
+        value: _selectedCiTY,
+        onChanged: (newValue) {
+          setState(() {
+            _selectedCiTY = newValue;
+
+            globals.Glb_PATIENT_APP_CITTY_ID = _selectedCiTY;
+            clearDropdownValue_Location();
+            select_LocationWise_Services();
+            globals.SelectedlocationId = "";
+            globals.Selectedlocationname = null;
+          });
         },
-      );
-    }
+        items: CityDATA.map((Citydata) {
+          return DropdownMenuItem(
+            child: Text(
+              Citydata['AREA_NAME'].toString(),
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+            ),
+            value: Citydata['PATIENT_APP_AREA_ID'].toString(),
+          );
+        }).toList(),
+      ),
+    );
+
+    final Location_Dropdwon = Padding(
+      padding: const EdgeInsets.fromLTRB(12, 8, 12, 6),
+      child: DropdownButtonFormField(
+        hint: Text(
+          'Select Location',
+          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+        ),
+        decoration: InputDecoration(
+          enabledBorder: UnderlineInputBorder(
+            //<-- SEE HERE
+            borderSide:
+                BorderSide(color: Color.fromARGB(255, 183, 181, 181), width: 1),
+          ),
+          focusedBorder: UnderlineInputBorder(
+            //<-- SEE HERE
+            borderSide:
+                BorderSide(color: Color.fromARGB(255, 183, 181, 181), width: 1),
+          ),
+          filled: true,
+          // fillColor: Color.fromARGB(255, 243, 247, 245),
+        ),
+        dropdownColor: Color.fromARGB(255, 232, 240, 242),
+        value: _selectedLOcatiON,
+        onChanged: (newValue) {
+          setState(() {
+            _selectedLOcatiON = newValue;
+            var abc = LocationDATA.firstWhere(
+                (element) => element['LOCATION_NAME'] == newValue);
+            if (abc.length > 0) {
+              print(abc['LOC_ID']);
+              globals.SelectedlocationId = abc['LOC_ID'].toString();
+              //   globals.Selectedlocationname = abc['LOCATION_NAME'];
+              GridViewList = [];
+              _onLoading();
+              Book_Home_Visit(this.selectedIndex);
+            }
+            SeleCTLocationWIseServices(globals.SelectedlocationId);
+          });
+        },
+        isExpanded: true,
+        items: LocationDATA.map<DropdownMenuItem<String>>((Locdata) {
+          return DropdownMenuItem(
+            onTap: () {},
+            child: Text(
+              Locdata['LOCATION_NAME'].toString(),
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+            ),
+            value: Locdata['LOCATION_NAME'].toString(),
+          );
+        }).toList(),
+      ),
+    );
 
     Widget verticalList3 = Container(
       child: FutureBuilder<List<Data_Model>>(
@@ -703,100 +690,580 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
     );
 
     All_Test_Widget(var data, BuildContext context) {
-      return Column(
-        children: [
-          Card(
+      return SizedBox(
+        height: 300,
+        child: Card(
+          child: SingleChildScrollView(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                    height: MediaQuery.of(context).size.height * 0.05,
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 5.0),
-                          child: Text(
-                            "Booking Slots:",
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ],
-                    )),
-                Container(
-                    height: MediaQuery.of(context).size.height * 0.39,
-                    child: GridView.builder(
-                        gridDelegate:
-                            const SliverGridDelegateWithMaxCrossAxisExtent(
-                                maxCrossAxisExtent: 100,
-                                childAspectRatio: 3 / 2,
-                                crossAxisSpacing: 10,
-                                mainAxisSpacing: 20),
-                        itemCount: GridViewList.length,
-                        itemBuilder: (BuildContext ctx, index) {
-                          return FormattedDateForSlots ==
-                                  GridViewList[index]["SLOT_DATE"].split('T')[0]
-                              ? GridViewList[index]["SLOT_TIME"]
-                                          .compareTo(formattedTimeForSlots) >
-                                      0
-                                  ? InkWell(
-                                      onTap: () {
-                                        showDialog(
-                                            context: context,
-                                            barrierDismissible: true,
-                                            //context: _scaffoldKey.currentContext,
-                                            builder: (BuildContext context) {
-                                              return AlertDialog(
-                                                contentPadding: EdgeInsets.only(
-                                                    left: 25, right: 25),
-                                                title: Card(
-                                                    color: Color.fromARGB(
-                                                        255, 30, 92, 153),
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        12),
-                                                            side: BorderSide(
-                                                                color: Colors
-                                                                    .grey)),
-                                                    elevation: 4.0,
-                                                    child: Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .fromLTRB(
-                                                                0, 12, 0, 12),
-                                                        child: Center(
-                                                          child: Text(
-                                                              "Bookings ",
-                                                              style: TextStyle(
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
+                  child: Text(
+                    "Booking Slots:",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+                  child: Container(
+                      height: MediaQuery.of(context).size.height,
+                      child: GridView.builder(
+                          gridDelegate:
+                              const SliverGridDelegateWithMaxCrossAxisExtent(
+                                  maxCrossAxisExtent: 100,
+                                  childAspectRatio: 3 / 1.9,
+                                  crossAxisSpacing: 10,
+                                  mainAxisSpacing: 10),
+                          itemCount: GridViewList.length,
+                          itemBuilder: (BuildContext ctx, index) {
+                            return FormattedDateForSlots ==
+                                    GridViewList[index]["SLOT_DATE"]
+                                        .split('T')[0]
+                                ? GridViewList[index]["SLOT_TIME"]
+                                            .compareTo(formattedTimeForSlots) >
+                                        0
+                                    ? InkWell(
+                                        onTap: () {
+                                          showDialog(
+                                              context: context,
+                                              barrierDismissible: true,
+                                              //context: _scaffoldKey.currentContext,
+                                              builder: (BuildContext context) {
+                                                return AlertDialog(
+                                                  contentPadding:
+                                                      EdgeInsets.only(
+                                                          left: 25, right: 25),
+                                                  title: Card(
+                                                      color: Color.fromARGB(
+                                                          255, 30, 92, 153),
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          12),
+                                                              side: BorderSide(
                                                                   color: Colors
-                                                                      .white,
-                                                                  fontSize: 14,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w600)),
-                                                        ))),
-                                                shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.all(
-                                                            Radius.circular(
-                                                                20.0))),
-                                                content: Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          top: 10),
-                                                  child: SizedBox(
-                                                    height: 100,
-                                                    width: 200,
-                                                    child:
-                                                        SingleChildScrollView(
-                                                      child: Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: <Widget>[
-                                                          GestureDetector(
+                                                                      .grey)),
+                                                      elevation: 4.0,
+                                                      child: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .fromLTRB(
+                                                                  0, 12, 0, 12),
+                                                          child: Center(
+                                                            child: Text(
+                                                                "Bookings ",
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontSize:
+                                                                        14,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600)),
+                                                          ))),
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                              Radius.circular(
+                                                                  20.0))),
+                                                  content: Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            top: 10),
+                                                    child: SizedBox(
+                                                      height: 100,
+                                                      width: 200,
+                                                      child:
+                                                          SingleChildScrollView(
+                                                        child: Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: <Widget>[
+                                                            GestureDetector(
+                                                              onTap: () {
+                                                                globals
+                                                                    .Location_BookedTest = GridViewList[
+                                                                            index]
+                                                                        [
+                                                                        "LOC_NAME"]
+                                                                    .toString();
+                                                                globals
+                                                                    .SlotsBooked = GridViewList[
+                                                                            index]
+                                                                        [
+                                                                        "SLOT_TIME"]
+                                                                    .toString();
+                                                                globals
+                                                                    .Slot_id = GridViewList[
+                                                                            index]
+                                                                        [
+                                                                        "SLOT_ID"]
+                                                                    .toString();
+
+                                                                GridViewList[index]
+                                                                            [
+                                                                            "SLOT_COUNT"] <=
+                                                                        0
+                                                                    ? print(
+                                                                        "Slots finished")
+                                                                    : Navigator.push(
+                                                                        context,
+                                                                        MaterialPageRoute(
+                                                                            builder: (context) =>
+                                                                                UpLoadPrescrIPtioN()));
+                                                              },
+                                                              child: Container(
+                                                                width: 300,
+                                                                height: 30,
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  border: Border.all(
+                                                                      color: Color.fromARGB(
+                                                                          95,
+                                                                          218,
+                                                                          212,
+                                                                          212)),
+                                                                  gradient:
+                                                                      LinearGradient(
+                                                                    colors: [
+                                                                      Color.fromARGB(
+                                                                          255,
+                                                                          234,
+                                                                          229,
+                                                                          229),
+                                                                      Color.fromARGB(
+                                                                          255,
+                                                                          234,
+                                                                          229,
+                                                                          229),
+                                                                      // Color.fromARGB(255, 26, 69, 112),
+                                                                      // Color.fromARGB(255, 37, 98, 158),
+                                                                    ],
+                                                                    begin: Alignment
+                                                                        .topLeft,
+                                                                    end: Alignment
+                                                                        .bottomRight,
+                                                                  ),
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              20),
+                                                                  boxShadow: [
+                                                                    BoxShadow(
+                                                                      color: Colors
+                                                                          .black12,
+                                                                      offset:
+                                                                          Offset(
+                                                                              5,
+                                                                              5),
+                                                                      blurRadius:
+                                                                          10,
+                                                                    )
+                                                                  ],
+                                                                ),
+                                                                child: Padding(
+                                                                  padding: const EdgeInsets
+                                                                          .only(
+                                                                      left: 10,
+                                                                      right:
+                                                                          10),
+                                                                  child: Row(
+                                                                    children: [
+                                                                      Center(
+                                                                        child:
+                                                                            Text(
+                                                                          'Upload Prescription',
+                                                                          style:
+                                                                              TextStyle(
+                                                                            color:
+                                                                                Colors.black,
+                                                                            fontSize:
+                                                                                14,
+                                                                            fontWeight:
+                                                                                FontWeight.w500,
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      Spacer(),
+                                                                      Icon(
+                                                                          Icons
+                                                                              .arrow_circle_right_outlined,
+                                                                          color:
+                                                                              Color(0xff123456))
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                          .only(
+                                                                      top:
+                                                                          12.0),
+                                                              child:
+                                                                  GestureDetector(
+                                                                onTap: () {
+                                                                  globals
+                                                                      .Location_BookedTest = GridViewList[
+                                                                              index]
+                                                                          [
+                                                                          "LOC_NAME"]
+                                                                      .toString();
+                                                                  globals
+                                                                      .SlotsBooked = GridViewList[
+                                                                              index]
+                                                                          [
+                                                                          "SLOT_TIME"]
+                                                                      .toString();
+                                                                  globals
+                                                                      .Slot_id = GridViewList[
+                                                                              index]
+                                                                          [
+                                                                          "SLOT_ID"]
+                                                                      .toString();
+
+                                                                  GridViewList[index]
+                                                                              [
+                                                                              "SLOT_COUNT"] <=
+                                                                          0
+                                                                      ? print(
+                                                                          "Slots finished")
+                                                                      : Navigator.push(
+                                                                          context,
+                                                                          MaterialPageRoute(
+                                                                              builder: (context) => ProductOverviewPage()));
+                                                                },
+                                                                child:
+                                                                    Container(
+                                                                  width: 300,
+                                                                  height: 30,
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    border: Border.all(
+                                                                        color: Color.fromARGB(
+                                                                            95,
+                                                                            218,
+                                                                            212,
+                                                                            212)),
+                                                                    gradient:
+                                                                        LinearGradient(
+                                                                      colors: [
+                                                                        Color.fromARGB(
+                                                                            255,
+                                                                            234,
+                                                                            229,
+                                                                            229),
+                                                                        Color.fromARGB(
+                                                                            255,
+                                                                            234,
+                                                                            229,
+                                                                            229),
+                                                                        // Color.fromARGB(255, 26, 69, 112),
+                                                                        // Color.fromARGB(255, 37, 98, 158),
+                                                                      ],
+                                                                      begin: Alignment
+                                                                          .topLeft,
+                                                                      end: Alignment
+                                                                          .bottomRight,
+                                                                    ),
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            20),
+                                                                    boxShadow: [
+                                                                      BoxShadow(
+                                                                        color: Colors
+                                                                            .black12,
+                                                                        offset: Offset(
+                                                                            5,
+                                                                            5),
+                                                                        blurRadius:
+                                                                            10,
+                                                                      )
+                                                                    ],
+                                                                  ),
+                                                                  child:
+                                                                      Padding(
+                                                                    padding: const EdgeInsets
+                                                                            .only(
+                                                                        left:
+                                                                            10,
+                                                                        right:
+                                                                            10),
+                                                                    child: Row(
+                                                                      children: [
+                                                                        Center(
+                                                                          child:
+                                                                              Text(
+                                                                            'TestWise Bookings',
+                                                                            style:
+                                                                                TextStyle(
+                                                                              color: Colors.black,
+                                                                              fontSize: 14,
+                                                                              fontWeight: FontWeight.w500,
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                        Spacer(),
+                                                                        Icon(
+                                                                            Icons
+                                                                                .arrow_circle_right_outlined,
+                                                                            color:
+                                                                                Color(0xff123456))
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                );
+                                              });
+                                        },
+                                        child: Card(
+                                          color: Color.fromARGB(
+                                              255, 246, 244, 244),
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(6)),
+                                          elevation: 5,
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                GridViewList[index]
+                                                    ["SLOT_TIME"],
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: GridViewList[index]
+                                                              ["SLOT_COUNT"] >
+                                                          5
+                                                      ? Colors.green
+                                                      : GridViewList[index][
+                                                                      "SLOT_COUNT"] <=
+                                                                  5 &&
+                                                              GridViewList[
+                                                                          index]
+                                                                      [
+                                                                      "SLOT_COUNT"] >
+                                                                  0
+                                                          ? Colors.orange
+                                                          : GridViewList[index][
+                                                                      "SLOT_COUNT"] <=
+                                                                  0
+                                                              ? Colors.grey
+                                                              : Colors.white,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      )
+                                    : Card(
+                                        color:
+                                            Color.fromARGB(255, 203, 199, 199),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(6)),
+                                        elevation: 5,
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              GridViewList[index]["SLOT_TIME"],
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Color.fromARGB(
+                                                      255, 127, 122, 122)),
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                : InkWell(
+                                    onTap: () {
+                                      showDialog(
+                                          context: context,
+                                          barrierDismissible: true,
+                                          //context: _scaffoldKey.currentContext,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              contentPadding: EdgeInsets.only(
+                                                  left: 25, right: 25),
+                                              title: Card(
+                                                  color: Color(0xff123456),
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              12),
+                                                      side: BorderSide(
+                                                          color: Colors.grey)),
+                                                  elevation: 4.0,
+                                                  child: Padding(
+                                                      padding: const EdgeInsets
+                                                              .fromLTRB(
+                                                          0, 12, 0, 12),
+                                                      child: Center(
+                                                        child: Text("Bookings ",
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                                fontSize: 14,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600)),
+                                                      ))),
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(
+                                                              20.0))),
+                                              content: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 10),
+                                                child: SizedBox(
+                                                  height: 100,
+                                                  width: 200,
+                                                  child: SingleChildScrollView(
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: <Widget>[
+                                                        GestureDetector(
+                                                          onTap: () {
+                                                            globals.Location_BookedTest =
+                                                                GridViewList[
+                                                                            index]
+                                                                        [
+                                                                        "LOC_NAME"]
+                                                                    .toString();
+                                                            globals.SlotsBooked =
+                                                                GridViewList[
+                                                                            index]
+                                                                        [
+                                                                        "SLOT_TIME"]
+                                                                    .toString();
+                                                            globals.Slot_id =
+                                                                GridViewList[
+                                                                            index]
+                                                                        [
+                                                                        "SLOT_ID"]
+                                                                    .toString();
+
+                                                            GridViewList[index][
+                                                                        "SLOT_COUNT"] <=
+                                                                    0
+                                                                ? print(
+                                                                    "Slots finished")
+                                                                : Navigator.push(
+                                                                    context,
+                                                                    MaterialPageRoute(
+                                                                        builder:
+                                                                            (context) =>
+                                                                                UpLoadPrescrIPtioN()));
+                                                          },
+                                                          child: Container(
+                                                            width: 300,
+                                                            height: 30,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              border: Border.all(
+                                                                  color: Color
+                                                                      .fromARGB(
+                                                                          95,
+                                                                          218,
+                                                                          212,
+                                                                          212)),
+                                                              gradient:
+                                                                  LinearGradient(
+                                                                colors: [
+                                                                  Color
+                                                                      .fromARGB(
+                                                                          255,
+                                                                          234,
+                                                                          229,
+                                                                          229),
+                                                                  Color
+                                                                      .fromARGB(
+                                                                          255,
+                                                                          234,
+                                                                          229,
+                                                                          229),
+                                                                  // Color.fromARGB(255, 26, 69, 112),
+                                                                  // Color.fromARGB(255, 37, 98, 158),
+                                                                ],
+                                                                begin: Alignment
+                                                                    .topLeft,
+                                                                end: Alignment
+                                                                    .bottomRight,
+                                                              ),
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          20),
+                                                              boxShadow: [
+                                                                BoxShadow(
+                                                                  color: Colors
+                                                                      .black12,
+                                                                  offset:
+                                                                      Offset(
+                                                                          5, 5),
+                                                                  blurRadius:
+                                                                      10,
+                                                                )
+                                                              ],
+                                                            ),
+                                                            child: Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                          .only(
+                                                                      left: 10,
+                                                                      right:
+                                                                          10),
+                                                              child: Row(
+                                                                children: [
+                                                                  Center(
+                                                                    child: Text(
+                                                                      'Upload Prescription',
+                                                                      style:
+                                                                          TextStyle(
+                                                                        color: Colors
+                                                                            .black,
+                                                                        fontSize:
+                                                                            14,
+                                                                        fontWeight:
+                                                                            FontWeight.w500,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  Spacer(),
+                                                                  Icon(
+                                                                      Icons
+                                                                          .arrow_circle_right_outlined,
+                                                                      color: Color(
+                                                                          0xff123456))
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  top: 12.0),
+                                                          child:
+                                                              GestureDetector(
                                                             onTap: () {
                                                               globals.Location_BookedTest =
                                                                   GridViewList[
@@ -827,7 +1294,7 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
                                                                       context,
                                                                       MaterialPageRoute(
                                                                           builder: (context) =>
-                                                                              UpLoadPrescrIPtioN()));
+                                                                              ProductOverviewPage()));
                                                             },
                                                             child: Container(
                                                               width: 300,
@@ -892,7 +1359,7 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
                                                                     Center(
                                                                       child:
                                                                           Text(
-                                                                        'Upload Prescription',
+                                                                        'TestWise Bookings',
                                                                         style:
                                                                             TextStyle(
                                                                           color:
@@ -915,176 +1382,17 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
                                                               ),
                                                             ),
                                                           ),
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                        .only(
-                                                                    top: 12.0),
-                                                            child:
-                                                                GestureDetector(
-                                                              onTap: () {
-                                                                globals
-                                                                    .Location_BookedTest = GridViewList[
-                                                                            index]
-                                                                        [
-                                                                        "LOC_NAME"]
-                                                                    .toString();
-                                                                globals
-                                                                    .SlotsBooked = GridViewList[
-                                                                            index]
-                                                                        [
-                                                                        "SLOT_TIME"]
-                                                                    .toString();
-                                                                globals
-                                                                    .Slot_id = GridViewList[
-                                                                            index]
-                                                                        [
-                                                                        "SLOT_ID"]
-                                                                    .toString();
-
-                                                                GridViewList[index]
-                                                                            [
-                                                                            "SLOT_COUNT"] <=
-                                                                        0
-                                                                    ? print(
-                                                                        "Slots finished")
-                                                                    : Navigator.push(
-                                                                        context,
-                                                                        MaterialPageRoute(
-                                                                            builder: (context) =>
-                                                                                ProductOverviewPage()));
-                                                              },
-                                                              child: Container(
-                                                                width: 300,
-                                                                height: 30,
-                                                                decoration:
-                                                                    BoxDecoration(
-                                                                  border: Border.all(
-                                                                      color: Color.fromARGB(
-                                                                          95,
-                                                                          218,
-                                                                          212,
-                                                                          212)),
-                                                                  gradient:
-                                                                      LinearGradient(
-                                                                    colors: [
-                                                                      Color.fromARGB(
-                                                                          255,
-                                                                          234,
-                                                                          229,
-                                                                          229),
-                                                                      Color.fromARGB(
-                                                                          255,
-                                                                          234,
-                                                                          229,
-                                                                          229),
-                                                                      // Color.fromARGB(255, 26, 69, 112),
-                                                                      // Color.fromARGB(255, 37, 98, 158),
-                                                                    ],
-                                                                    begin: Alignment
-                                                                        .topLeft,
-                                                                    end: Alignment
-                                                                        .bottomRight,
-                                                                  ),
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              20),
-                                                                  boxShadow: [
-                                                                    BoxShadow(
-                                                                      color: Colors
-                                                                          .black12,
-                                                                      offset:
-                                                                          Offset(
-                                                                              5,
-                                                                              5),
-                                                                      blurRadius:
-                                                                          10,
-                                                                    )
-                                                                  ],
-                                                                ),
-                                                                child: Padding(
-                                                                  padding: const EdgeInsets
-                                                                          .only(
-                                                                      left: 10,
-                                                                      right:
-                                                                          10),
-                                                                  child: Row(
-                                                                    children: [
-                                                                      Center(
-                                                                        child:
-                                                                            Text(
-                                                                          'TestWise Bookings',
-                                                                          style:
-                                                                              TextStyle(
-                                                                            color:
-                                                                                Colors.black,
-                                                                            fontSize:
-                                                                                14,
-                                                                            fontWeight:
-                                                                                FontWeight.w500,
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                      Spacer(),
-                                                                      Icon(
-                                                                          Icons
-                                                                              .arrow_circle_right_outlined,
-                                                                          color:
-                                                                              Color(0xff123456))
-                                                                    ],
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
+                                                        ),
+                                                      ],
                                                     ),
                                                   ),
                                                 ),
-                                              );
-                                            });
-                                      },
-                                      child: Card(
-                                        color:
-                                            Color.fromARGB(255, 246, 244, 244),
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(6)),
-                                        elevation: 5,
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              GridViewList[index]["SLOT_TIME"],
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                color: GridViewList[index]
-                                                            ["SLOT_COUNT"] >
-                                                        5
-                                                    ? Colors.green
-                                                    : GridViewList[index][
-                                                                    "SLOT_COUNT"] <=
-                                                                5 &&
-                                                            GridViewList[index][
-                                                                    "SLOT_COUNT"] >
-                                                                0
-                                                        ? Colors.orange
-                                                        : GridViewList[index][
-                                                                    "SLOT_COUNT"] <=
-                                                                0
-                                                            ? Colors.grey
-                                                            : Colors.white,
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    )
-                                  : Card(
-                                      color: Color.fromARGB(255, 203, 199, 199),
+                                            );
+                                          });
+                                    },
+                                    child: Card(
+                                      color: Color.fromARGB(255, 246, 244, 244),
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(6)),
@@ -1096,346 +1404,35 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
                                           Text(
                                             GridViewList[index]["SLOT_TIME"],
                                             style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                color: Color.fromARGB(
-                                                    255, 127, 122, 122)),
+                                              fontWeight: FontWeight.bold,
+                                              color: GridViewList[index]
+                                                          ["SLOT_COUNT"] >
+                                                      5
+                                                  ? Colors.green
+                                                  : GridViewList[index][
+                                                                  "SLOT_COUNT"] <=
+                                                              5 &&
+                                                          GridViewList[index][
+                                                                  "SLOT_COUNT"] >
+                                                              0
+                                                      ? Colors.orange
+                                                      : GridViewList[index][
+                                                                  "SLOT_COUNT"] <=
+                                                              0
+                                                          ? Colors.grey
+                                                          : Colors.white,
+                                            ),
                                           ),
                                         ],
                                       ),
-                                    )
-                              : InkWell(
-                                  onTap: () {
-                                    showDialog(
-                                        context: context,
-                                        barrierDismissible: true,
-                                        //context: _scaffoldKey.currentContext,
-                                        builder: (BuildContext context) {
-                                          return AlertDialog(
-                                            contentPadding: EdgeInsets.only(
-                                                left: 25, right: 25),
-                                            title: Card(
-                                                color: Color(0xff123456),
-                                                shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            12),
-                                                    side: BorderSide(
-                                                        color: Colors.grey)),
-                                                elevation: 4.0,
-                                                child: Padding(
-                                                    padding: const EdgeInsets
-                                                        .fromLTRB(0, 12, 0, 12),
-                                                    child: Center(
-                                                      child: Text("Bookings ",
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.white,
-                                                              fontSize: 14,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w600)),
-                                                    ))),
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(20.0))),
-                                            content: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  top: 10),
-                                              child: SizedBox(
-                                                height: 100,
-                                                width: 200,
-                                                child: SingleChildScrollView(
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: <Widget>[
-                                                      GestureDetector(
-                                                        onTap: () {
-                                                          globals.Location_BookedTest =
-                                                              GridViewList[
-                                                                          index]
-                                                                      [
-                                                                      "LOC_NAME"]
-                                                                  .toString();
-                                                          globals.SlotsBooked =
-                                                              GridViewList[
-                                                                          index]
-                                                                      [
-                                                                      "SLOT_TIME"]
-                                                                  .toString();
-                                                          globals.Slot_id =
-                                                              GridViewList[
-                                                                          index]
-                                                                      [
-                                                                      "SLOT_ID"]
-                                                                  .toString();
-
-                                                          GridViewList[index][
-                                                                      "SLOT_COUNT"] <=
-                                                                  0
-                                                              ? print(
-                                                                  "Slots finished")
-                                                              : Navigator.push(
-                                                                  context,
-                                                                  MaterialPageRoute(
-                                                                      builder:
-                                                                          (context) =>
-                                                                              UpLoadPrescrIPtioN()));
-                                                        },
-                                                        child: Container(
-                                                          width: 300,
-                                                          height: 30,
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            border: Border.all(
-                                                                color: Color
-                                                                    .fromARGB(
-                                                                        95,
-                                                                        218,
-                                                                        212,
-                                                                        212)),
-                                                            gradient:
-                                                                LinearGradient(
-                                                              colors: [
-                                                                Color.fromARGB(
-                                                                    255,
-                                                                    234,
-                                                                    229,
-                                                                    229),
-                                                                Color.fromARGB(
-                                                                    255,
-                                                                    234,
-                                                                    229,
-                                                                    229),
-                                                                // Color.fromARGB(255, 26, 69, 112),
-                                                                // Color.fromARGB(255, 37, 98, 158),
-                                                              ],
-                                                              begin: Alignment
-                                                                  .topLeft,
-                                                              end: Alignment
-                                                                  .bottomRight,
-                                                            ),
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        20),
-                                                            boxShadow: [
-                                                              BoxShadow(
-                                                                color: Colors
-                                                                    .black12,
-                                                                offset: Offset(
-                                                                    5, 5),
-                                                                blurRadius: 10,
-                                                              )
-                                                            ],
-                                                          ),
-                                                          child: Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                        .only(
-                                                                    left: 10,
-                                                                    right: 10),
-                                                            child: Row(
-                                                              children: [
-                                                                Center(
-                                                                  child: Text(
-                                                                    'Upload Prescription',
-                                                                    style:
-                                                                        TextStyle(
-                                                                      color: Colors
-                                                                          .black,
-                                                                      fontSize:
-                                                                          14,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w500,
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                                Spacer(),
-                                                                Icon(
-                                                                    Icons
-                                                                        .arrow_circle_right_outlined,
-                                                                    color: Color(
-                                                                        0xff123456))
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .only(
-                                                                top: 12.0),
-                                                        child: GestureDetector(
-                                                          onTap: () {
-                                                            globals.Location_BookedTest =
-                                                                GridViewList[
-                                                                            index]
-                                                                        [
-                                                                        "LOC_NAME"]
-                                                                    .toString();
-                                                            globals.SlotsBooked =
-                                                                GridViewList[
-                                                                            index]
-                                                                        [
-                                                                        "SLOT_TIME"]
-                                                                    .toString();
-                                                            globals.Slot_id =
-                                                                GridViewList[
-                                                                            index]
-                                                                        [
-                                                                        "SLOT_ID"]
-                                                                    .toString();
-
-                                                            GridViewList[index][
-                                                                        "SLOT_COUNT"] <=
-                                                                    0
-                                                                ? print(
-                                                                    "Slots finished")
-                                                                : Navigator.push(
-                                                                    context,
-                                                                    MaterialPageRoute(
-                                                                        builder:
-                                                                            (context) =>
-                                                                                ProductOverviewPage()));
-                                                          },
-                                                          child: Container(
-                                                            width: 300,
-                                                            height: 30,
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              border: Border.all(
-                                                                  color: Color
-                                                                      .fromARGB(
-                                                                          95,
-                                                                          218,
-                                                                          212,
-                                                                          212)),
-                                                              gradient:
-                                                                  LinearGradient(
-                                                                colors: [
-                                                                  Color
-                                                                      .fromARGB(
-                                                                          255,
-                                                                          234,
-                                                                          229,
-                                                                          229),
-                                                                  Color
-                                                                      .fromARGB(
-                                                                          255,
-                                                                          234,
-                                                                          229,
-                                                                          229),
-                                                                  // Color.fromARGB(255, 26, 69, 112),
-                                                                  // Color.fromARGB(255, 37, 98, 158),
-                                                                ],
-                                                                begin: Alignment
-                                                                    .topLeft,
-                                                                end: Alignment
-                                                                    .bottomRight,
-                                                              ),
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          20),
-                                                              boxShadow: [
-                                                                BoxShadow(
-                                                                  color: Colors
-                                                                      .black12,
-                                                                  offset:
-                                                                      Offset(
-                                                                          5, 5),
-                                                                  blurRadius:
-                                                                      10,
-                                                                )
-                                                              ],
-                                                            ),
-                                                            child: Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                          .only(
-                                                                      left: 10,
-                                                                      right:
-                                                                          10),
-                                                              child: Row(
-                                                                children: [
-                                                                  Center(
-                                                                    child: Text(
-                                                                      'TestWise Bookings',
-                                                                      style:
-                                                                          TextStyle(
-                                                                        color: Colors
-                                                                            .black,
-                                                                        fontSize:
-                                                                            14,
-                                                                        fontWeight:
-                                                                            FontWeight.w500,
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                  Spacer(),
-                                                                  Icon(
-                                                                      Icons
-                                                                          .arrow_circle_right_outlined,
-                                                                      color: Color(
-                                                                          0xff123456))
-                                                                ],
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          );
-                                        });
-                                  },
-                                  child: Card(
-                                    color: Color.fromARGB(255, 246, 244, 244),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(6)),
-                                    elevation: 5,
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          GridViewList[index]["SLOT_TIME"],
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: GridViewList[index]
-                                                        ["SLOT_COUNT"] >
-                                                    5
-                                                ? Colors.green
-                                                : GridViewList[index][
-                                                                "SLOT_COUNT"] <=
-                                                            5 &&
-                                                        GridViewList[index]
-                                                                ["SLOT_COUNT"] >
-                                                            0
-                                                    ? Colors.orange
-                                                    : GridViewList[index][
-                                                                "SLOT_COUNT"] <=
-                                                            0
-                                                        ? Colors.grey
-                                                        : Colors.white,
-                                          ),
-                                        ),
-                                      ],
                                     ),
-                                  ),
-                                );
-                        })),
+                                  );
+                          })),
+                ),
               ],
             ),
           ),
-        ],
+        ),
       );
     }
 
@@ -1450,7 +1447,7 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
       child: Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
-          backgroundColor: Color.fromARGB(255, 26, 177, 122),
+          backgroundColor: Color.fromARGB(255, 7, 185, 141),
           leading: Builder(
             builder: (BuildContext context) {
               return IconButton(
@@ -1496,72 +1493,83 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
             ],
           ),
         ),
-        body: Container(
-          color: Colors.blue[50],
-          child: Column(
-            children: [
-              SizedBox(height: 48, child: DateSelection()),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: State_Dropdwon,
-              ),
-              globals.Glb_PATIENT_APP_STATES_ID == null
-                  ? Container()
-                  : Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: City_Dropdwon,
-                    ),
-              globals.Glb_PATIENT_APP_CITTY_ID == null
-                  ? Container()
-                  : Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Card(
-                        elevation: 2.0,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15)),
-                        child: TextButton(
-                          onPressed: () => _showDropdown(),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Text(globals.Selectedlocationname == null
-                                  ? "Select Location"
-                                  : globals.Selectedlocationname.length > 45
-                                      ? globals.Selectedlocationname.substring(
-                                          0, 45)
-                                      : globals.Selectedlocationname),
-                              Icon(Icons.arrow_drop_down),
-                            ],
+        body: SingleChildScrollView(
+          child: Container(
+            height: MediaQuery.of(context).size.height,
+            color: Colors.blue[50],
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 48, child: DateSelection()),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(12, 6, 12, 4),
+                  child: Text(
+                    "Select State :",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  ),
+                ),
+                State_Dropdwon,
+                globals.Glb_PATIENT_APP_STATES_ID == null
+                    ? Container()
+                    : Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(12, 6, 12, 4),
+                            child: Text(
+                              "Select City :",
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w600),
+                            ),
                           ),
-                        ),
+                          City_Dropdwon,
+                        ],
                       ),
-                    ),
-              Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: globals.SelectedlocationId == null ||
-                          globals.SelectedlocationId == "" ||
-                          GridViewList.length == 0
-                      ? Container(
-                          child: Padding(
-                          padding: const EdgeInsets.only(top: 200.0),
-                          child: globals.SelectedlocationId == ""
-                              ? Text(
-                                  "",
-                                  style: TextStyle(
-                                      fontSize: 30,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.red),
-                                )
-                              : Text(
-                                  "Slots Not Available",
-                                  style: TextStyle(
-                                      fontSize: 30,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.red),
-                                ),
-                        ))
-                      : Container(child: function_widet())),
-            ],
+                globals.Glb_PATIENT_APP_CITTY_ID == null
+                    ? Container()
+                    : Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(12, 6, 12, 4),
+                            child: Text(
+                              "Select Location :",
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w600),
+                            ),
+                          ),
+                          Location_Dropdwon
+                        ],
+                      ),
+                Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: globals.SelectedlocationId == null ||
+                            globals.SelectedlocationId == "" ||
+                            GridViewList.length == 0
+                        ? Container(
+                            child: Padding(
+                            padding: const EdgeInsets.only(top: 200.0),
+                            child: globals.SelectedlocationId == ""
+                                ? Text(
+                                    "",
+                                    style: TextStyle(
+                                        fontSize: 30,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.red),
+                                  )
+                                : Center(
+                                    child: Text(
+                                      "Slots Not Available",
+                                      style: TextStyle(
+                                          fontSize: 30,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.red),
+                                    ),
+                                  ),
+                          ))
+                        : function_widet()),
+              ],
+            ),
           ),
         ),
         bottomNavigationBar: AllBottOMNaviGAtionBar(),
@@ -1607,3 +1615,89 @@ class NoContent3 extends StatelessWidget {
     );
   }
 }
+
+/**---------------------------------Loaction DATA--------------------------------------- */
+
+// void _showDropdown() {
+    //   showDialog(
+    //     context: context,
+    //     builder: (BuildContext context) {
+    //       return AlertDialog(
+    //         title: Text(
+    //           'Select Location',
+    //           style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+    //         ),
+    //         content: Container(
+    //           width: double.minPositive,
+    //           child: ListView.builder(
+    //             shrinkWrap: true,
+    //             itemCount: data3.length,
+    //             itemBuilder: (context, index) {
+    //               final item = data3[index];
+    //               return ListTile(
+    //                 title: Text(item['LOCATION_NAME']),
+    //                 onTap: () {
+    //                   setState(() {
+    //                     selectedItem5 = item['LOC_ID'].toString();
+    //                     globals.SelectedlocationId = selectedItem5;
+    //                     globals.Selectedlocationname = item['LOCATION_NAME'];
+    //                     GridViewList = [];
+    //                     // _onLoading();
+    //                     Book_Home_Visit(this.selectedIndex);
+
+    //                     SeleCTLocationWIseServices(globals.SelectedlocationId);
+    //                   });
+    //                   Navigator.pop(context);
+    //                 },
+    //               );
+    //             },
+    //           ),
+    //         ),
+    //       );
+    //     },
+    //   );
+    // }
+
+    // Padding(
+                          //   padding: const EdgeInsets.fromLTRB(12, 6, 12, 4),
+                          //   child: InkWell(
+                          //     onTap: () => _showDropdown(),
+                          //     child: Container(
+                          //       // color: Color.fromARGB(255, 183, 181, 181),
+                          //       decoration: BoxDecoration(
+                          //         color: Color.fromARGB(255, 216, 233, 242),
+                          //         border: Border(
+                          //           bottom: BorderSide(
+                          //               color:
+                          //                   Color.fromARGB(255, 183, 181, 181),
+                          //               width:
+                          //                   1), // Replace with your desired border style
+                          //         ),
+                          //       ),
+                          //       child: Padding(
+                          //         padding:
+                          //             const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                          //         child: Row(
+                          //           mainAxisAlignment:
+                          //               MainAxisAlignment.spaceBetween,
+                          //           children: <Widget>[
+                          //             Text(
+                          //                 globals.Selectedlocationname == null
+                          //                     ? "Select Location"
+                          //                     : globals.Selectedlocationname
+                          //                                 .length >
+                          //                             45
+                          //                         ? globals.Selectedlocationname
+                          //                             .substring(0, 45)
+                          //                         : globals
+                          //                             .Selectedlocationname,
+                          //                 style: TextStyle(
+                          //                     fontSize: 14,
+                          //                     fontWeight: FontWeight.w500)),
+                          //             Icon(Icons.arrow_drop_down),
+                          //           ],
+                          //         ),
+                          //       ),
+                          //     ),
+                          //   ),
+                          // ),

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:loading_indicator/loading_indicator.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import './UserProfile.dart';
 import './PatientLogin.dart';
@@ -32,12 +33,16 @@ class ValidateOTP extends StatefulWidget {
 }
 
 class _ValidateOTPState extends State<ValidateOTP> {
+  bool isLoading = false;
   PatientOTP() async {
     //globals.logindata = await SharedPreferences.getInstance();
     if (OTPController.text.toString() == "" ||
         OTPController.text.toString() == null) {
       return OTPError();
     }
+    setState(() {
+      isLoading = true; // Show loading indicator
+    });
 
     Map data = {
       "msg_id": globals.MsgId.split('.')[0],
@@ -60,13 +65,8 @@ class _ValidateOTPState extends State<ValidateOTP> {
       Map<String, dynamic> map = jsonDecode(response.body);
 
       OTPController.text = '';
-      if (resposne["Data"].length == 0)
-      // && resposne["Data"] == ""
-      {
-        //   Successtoaster();
+      if (resposne["Data"].length == 0) {
         loginerror();
-        // Navigator.push(
-        //     context, MaterialPageRoute(builder: (context) => OredersHistory()));
       }
       globals.Booking_Status_Flag =
           resposne["Data"][0]['STATUS_FLAG'].toString();
@@ -86,64 +86,69 @@ class _ValidateOTPState extends State<ValidateOTP> {
         (prefs.setString('data1', json.encode(map)));
       });
 
-      // prefs.setInt('counter', int.parse(globals.sesson_Id));
-      //globals.logindata.setString('username', globals.sesson_Id);
-
       if (globals.umr_no != "") {
         if (ValiDate_Flag == "B") {
+          setState(() {
+            isLoading = false; // Hide loading indicator
+          });
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => ProductOverviewPage()));
         } else if (ValiDate_Flag == "T") {
+          setState(() {
+            isLoading = false; // Hide loading indicator
+          });
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => MyTrends()));
         } else if (ValiDate_Flag == "H") {
+          setState(() {
+            isLoading = false; // Hide loading indicator
+          });
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => Book_Home_Visit(0)));
         } else if (ValiDate_Flag == "UP") {
+          setState(() {
+            isLoading = false; // Hide loading indicator
+          });
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => UsersProfile()));
         } else if (ValiDate_Flag == "N") {
+          setState(() {
+            isLoading = false; // Hide loading indicator
+          });
           Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) => BookingINProgressNotification()));
         } else {
+          setState(() {
+            isLoading = false; // Hide loading indicator
+          });
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => OredersHistory()));
           OTPController.text = '';
           MobileNocontroller.text = '';
         }
       }
-      // else {
-      //   return loginerror();
-      // }
-
       throw Exception('Failed to load jobs from API');
       // OTPController.text = '';
     }
-//     else if(response.statusCode == 200 && response.body:"{"status":"401","message":"Please Check The Details","Data":[]}"
-// )
-// {
-
-    // }
   }
 
   bool isButtonDisabled = false;
 
-  Future<void> PatientREGIstraTIoN() async {
+  Future<void> ValidateOTPFunTion() async {
     if (!isButtonDisabled) {
       setState(() {
         isButtonDisabled = true; // Disable the button
+        isLoading = true; // Show loading indicator
       });
 
-      // Call your API here to book the test
-      PatientOTP();
-      // Example delay to simulate API call
-      Future.delayed(Duration(seconds: 5), () {
-        // Enable the button again after the delay
-        setState(() {
-          isButtonDisabled = false;
-        });
+      // Call your API here to validate OTP
+      await PatientOTP();
+
+      // No need for delay, the button will be re-enabled automatically after the API call
+      setState(() {
+        isLoading = false; // Hide loading indicator
       });
     }
   }
@@ -151,109 +156,123 @@ class _ValidateOTPState extends State<ValidateOTP> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-       // backgroundColor: Colors.grey[500],
-        body: AlertDialog(
-            backgroundColor: Colors.grey[200],
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(20.0))),
-            title: Column(
-              children: [
-                PinCodeTextField(
-                  length: 4,
-                  obscureText: true,
-                  animationType: AnimationType.fade,
-                  pinTheme: PinTheme(
-                    shape: PinCodeFieldShape.underline,
-                    borderRadius: BorderRadius.circular(20),
-                    fieldHeight: 40,
-                    fieldWidth: 40,
-                    activeColor: Color.fromARGB(255, 7, 185, 141),
-                    inactiveColor: Colors.blueGrey,
-                    activeFillColor: Colors.black,
-                  ),
-                  animationDuration: const Duration(milliseconds: 300),
-                  // backgroundColor: Colors.blue.shade50,
-                  // enableActiveFill: true,
-                  keyboardType: TextInputType.number,
-                  controller: OTPController,
-                  onCompleted: (v) {
-                    debugPrint("Completed");
-                  },
-                  onChanged: (value) {
-                    debugPrint(value);
-                    // setState(() {
-                    //   //      currentText = value;
-                    // });
-                  },
-                  beforeTextPaste: (text) {
-                    return true;
-                  },
-                  appContext: context,
+        // backgroundColor: Colors.grey[500],
+        body: Stack(children: [
+      AlertDialog(
+          backgroundColor: Colors.grey[200],
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20.0))),
+          title: Column(
+            children: [
+              PinCodeTextField(
+                length: 4,
+                obscureText: true,
+                animationType: AnimationType.fade,
+                pinTheme: PinTheme(
+                  shape: PinCodeFieldShape.underline,
+                  borderRadius: BorderRadius.circular(20),
+                  fieldHeight: 40,
+                  fieldWidth: 40,
+                  activeColor: Color.fromARGB(255, 7, 185, 141),
+                  inactiveColor: Colors.blueGrey,
+                  activeFillColor: Colors.black,
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          print(MobileNocontroller.text);
-                          print(OTPController.text);
-                          PatientREGIstraTIoN();
-                        },
-                        child: Card(
-                            color: Color.fromARGB(255, 7, 185, 141),
-                            shape: RoundedRectangleBorder(
-                                side: BorderSide(
-                                    color: Color.fromARGB(255, 215, 242, 243)),
-                                borderRadius: BorderRadius.circular(20)),
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                              child: Text('Validate OTP',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w500)),
-                            )),
-                      ),
-                      InkWell(
-                        onTap: () async {
-                          SharedPreferences prefs =
-                              await SharedPreferences.getInstance();
-                          prefs.setString("Msg_id", "");
-                          prefs.setString('Mobileno', "");
+                animationDuration: const Duration(milliseconds: 300),
+                // backgroundColor: Colors.blue.shade50,
+                // enableActiveFill: true,
+                keyboardType: TextInputType.number,
+                controller: OTPController,
+                onCompleted: (v) {
+                  debugPrint("Completed");
+                },
+                onChanged: (value) {
+                  debugPrint(value);
+                },
+                beforeTextPaste: (text) {
+                  return true;
+                },
+                appContext: context,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        print(MobileNocontroller.text);
+                        print(OTPController.text);
+                        ValidateOTPFunTion();
+                      },
+                      child: Card(
+                          color: Color.fromARGB(255, 7, 185, 141),
+                          shape: RoundedRectangleBorder(
+                              side: BorderSide(
+                                  color: Color.fromARGB(255, 215, 242, 243)),
+                              borderRadius: BorderRadius.circular(20)),
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                            child: Text('Validate OTP',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500)),
+                          )),
+                    ),
+                    InkWell(
+                      onTap: () async {
+                        SharedPreferences prefs =
+                            await SharedPreferences.getInstance();
+                        prefs.setString("Msg_id", "");
+                        prefs.setString('Mobileno', "");
 
-                          prefs.setString('email', "");
+                        prefs.setString('email', "");
 
-                          prefs.setString("Otp", "");
-                          // prefs.getStringList('data1') ?? [];
-                          (prefs.setString('data1', ""));
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => PatientLogin("")));
-                        },
-                        child: Card(
-                            color: Color.fromARGB(255, 178, 236, 239),
-                            shape: RoundedRectangleBorder(
-                                side: BorderSide(
-                                    color: Color.fromARGB(255, 33, 208, 199)),
-                                borderRadius: BorderRadius.circular(20)),
-                            child: Padding(
-                              padding: const EdgeInsets.fromLTRB(25, 9, 25, 9),
-                              child: Text('Cancel',
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w500)),
-                            )),
-                      ),
-                    ],
-                  ),
+                        prefs.setString("Otp", "");
+                        // prefs.getStringList('data1') ?? [];
+                        (prefs.setString('data1', ""));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => PatientLogin("")));
+                      },
+                      child: Card(
+                          color: Color.fromARGB(255, 178, 236, 239),
+                          shape: RoundedRectangleBorder(
+                              side: BorderSide(
+                                  color: Color.fromARGB(255, 33, 208, 199)),
+                              borderRadius: BorderRadius.circular(20)),
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(25, 9, 25, 9),
+                            child: Text('Cancel',
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500)),
+                          )),
+                    ),
+                  ],
                 ),
+              ),
+            ],
+          )),
+      if (isLoading)
+        Center(
+          child: SizedBox(
+            height: 100,
+            width: 100,
+            child: LoadingIndicator(
+              indicatorType: Indicator.ballClipRotateMultiple,
+              colors: [
+                // Color.fromARGB(255, 49, 213, 169),
+                // Color.fromARGB(255, 246, 246, 246),
+                Color.fromARGB(255, 41, 69, 173),
               ],
-            )));
+              strokeWidth: 4.0,
+            ),
+          ),
+        ),
+    ]));
   }
 }
 
