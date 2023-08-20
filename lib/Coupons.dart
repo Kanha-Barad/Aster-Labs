@@ -4,12 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:http/http.dart' as http;
-
-import 'Controllers/cart_controller.dart';
-import 'Screens/Test_Cart_screen.dart';
 import 'globals.dart' as globals;
-
-import 'dart:math' as math;
 
 class CouponsCardApply extends StatefulWidget {
   const CouponsCardApply({Key? key}) : super(key: key);
@@ -37,8 +32,8 @@ class _CouponsCardApplyState extends State<CouponsCardApply> {
         "connection": globals.Patient_App_Connection_String
       };
 
-      final jobsListAPIUrl =
-          Uri.parse(globals.Global_Patient_Api_URL + '/PatinetMobileApp/GetDiscountpolicys');
+      final jobsListAPIUrl = Uri.parse(globals.Global_Patient_Api_URL +
+          '/PatinetMobileApp/GetDiscountpolicys');
 
       var response = await http.post(jobsListAPIUrl,
           headers: {
@@ -99,25 +94,25 @@ ListView DisCountCouponsList(var data, BuildContext contex) {
   );
 }
 
-var cartController = Get.put(CartController());
+//var cartController = Get.put(CartController());
 Widget _buildDisCountCoupons(data, BuildContext context) {
-  ApplyDiscount(DiscountPercentage) {
-    var discount = DiscountPercentage;
-    var Discount_Amount =
-        double.parse(cartController.totalAmount.toString()) * discount / 100;
+  // ApplyDiscount(DiscountPercentage) {
+  //   var discount = DiscountPercentage;
+  //   var Discount_Amount =
+  //       double.parse(cartController.totalAmount.toString()) * discount / 100;
 
-    globals.Discount_Amount_Coupon = Discount_Amount.toString();
-    globals.Net_Amount_Coupon =
-        double.parse(cartController.totalAmount.toString()) -
-            double.parse(Discount_Amount.toString());
-    var sag_discnt =
-        (Discount_Amount / int.parse(cartController.itemCount.toString()))
-            .round();
-    globals.GlobalDiscountCoupons = sag_discnt.toString();
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => CartScreen()));
-    // GrossPaymentCard(context);
-  }
+  //   globals.Discount_Amount_Coupon = Discount_Amount.toString();
+  //   globals.Net_Amount_Coupon =
+  //       double.parse(cartController.totalAmount.toString()) -
+  //           double.parse(Discount_Amount.toString());
+  //   var sag_discnt =
+  //       (Discount_Amount / int.parse(cartController.itemCount.toString()))
+  //           .round();
+  //   globals.GlobalDiscountCoupons = sag_discnt.toString();
+  //   Navigator.push(
+  //       context, MaterialPageRoute(builder: (context) => CartScreen()));
+  //   // GrossPaymentCard(context);
+  // }
 
   return GestureDetector(
       child: Padding(

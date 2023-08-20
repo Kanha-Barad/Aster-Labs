@@ -350,7 +350,7 @@ class _PatientLoginState extends State<PatientLogin> {
                   colors: [
                     // Color.fromARGB(255, 49, 213, 169),
                     // Color.fromARGB(255, 246, 246, 246),
-                    Color.fromARGB(255, 41, 69, 173),
+                    Color.fromARGB(255, 49, 114, 179),
                   ],
                   strokeWidth: 4.0,
                 ),

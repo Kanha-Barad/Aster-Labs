@@ -2,8 +2,10 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 import './PatientHome.dart';
 import './ClientCodeLogin.dart';
+import 'Cartprovider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -42,12 +44,19 @@ class _PatientAppState extends State<PatientApp> {
     // //  Device_token_ID = value.toString();
     //   print(value);
     // });
-    return GetMaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primarySwatch: Colors.blueGrey,
-          accentColor: Color.fromARGB(255, 22, 225, 205),
-        ),
-        home: PatientHome());
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+            create: (_) => CartProvider()), // Your CartProvider
+        // Add more providers here if needed
+      ],
+      child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            primarySwatch: Colors.blueGrey,
+            accentColor: Color.fromARGB(255, 22, 225, 205),
+          ),
+          home: PatientHome()),
+    );
   }
 }

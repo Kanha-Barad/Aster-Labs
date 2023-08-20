@@ -3,7 +3,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:asterlabs/Widgets/BottomNavigation.dart';
 import './MyTrends.dart';
-import 'Screens/Test_Cart_screen.dart';
 import 'globals.dart' as globals;
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;

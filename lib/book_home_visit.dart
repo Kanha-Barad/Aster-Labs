@@ -1,14 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:asterlabs/Controllers/product_controller.dart';
 import 'package:asterlabs/Upload_Prescription.dart';
 import 'package:asterlabs/Widgets/BottomNavigation.dart';
-import 'Models/product.dart';
 import 'PatientHome.dart';
-import 'Screens/Book_Test_screen.dart';
-import 'Widgets/cart_items.dart';
+import 'TestBooking.dart';
 import 'globals.dart' as globals;
 import 'package:http/http.dart' as http;
 import 'package:loading_indicator/loading_indicator.dart';
@@ -201,7 +197,9 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
             height: 100,
             child: LoadingIndicator(
               indicatorType: Indicator.ballClipRotateMultiple,
-              colors: Colors.primaries,
+              colors: [
+                Color.fromARGB(255, 49, 114, 179),
+              ],
               strokeWidth: 4.0,
               //   pathBackgroundColor:ColorSwatch(Action[])
             ),
@@ -432,34 +430,34 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
     }
   }
 
-  SeleCTLocationWIseServices(var SelectedLOCID) async {
-    Map data = {
-      "IP_LOCATION_ID": SelectedLOCID,
-      "IP_SESSION_ID": "1",
-      "connection": globals.Patient_App_Connection_String
-      //"Server_Flag":""
-    };
-    print(data.toString());
+  // SeleCTLocationWIseServices(var SelectedLOCID) async {
+  //   Map data = {
+  //     "IP_LOCATION_ID": SelectedLOCID,
+  //     "IP_SESSION_ID": "1",
+  //     "connection": globals.Patient_App_Connection_String
+  //     //"Server_Flag":""
+  //   };
+  //   print(data.toString());
 
-    final response = await http.post(
-        Uri.parse(globals.Global_Patient_Api_URL +
-            '/PatinetMobileApp/PreferedServices'),
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/x-www-form-urlencoded"
-        },
-        body: data,
-        encoding: Encoding.getByName("utf-8"));
+  //   final response = await http.post(
+  //       Uri.parse(globals.Global_Patient_Api_URL +
+  //           '/PatinetMobileApp/PreferedServices'),
+  //       headers: {
+  //         "Accept": "application/json",
+  //         "Content-Type": "application/x-www-form-urlencoded"
+  //       },
+  //       body: data,
+  //       encoding: Encoding.getByName("utf-8"));
 
-    if (response.statusCode == 200) {
-      Map<String, dynamic> resposne = jsonDecode(response.body);
-      List jsonResponse = resposne["Data"];
+  //   if (response.statusCode == 200) {
+  //     Map<String, dynamic> resposne = jsonDecode(response.body);
+  //     List jsonResponse = resposne["Data"];
 
-      globals.Preferedsrvs = jsonDecode(response.body);
-    } else {
-      throw Exception('Failed to load jobs from API');
-    }
-  }
+  //    // globals.Preferedsrvs = jsonDecode(response.body);
+  //   } else {
+  //     throw Exception('Failed to load jobs from API');
+  //   }
+  // }
 
   Future<List<Data_Model>> _Add_Test_fetchSaleTransaction1() async {
     var jobsListAPIUrl = null;
@@ -641,7 +639,7 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
               _onLoading();
               Book_Home_Visit(this.selectedIndex);
             }
-            SeleCTLocationWIseServices(globals.SelectedlocationId);
+            //SeleCTLocationWIseServices(globals.SelectedlocationId);
           });
         },
         isExpanded: true,
@@ -650,7 +648,7 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
             onTap: () {},
             child: Text(
               Locdata['LOCATION_NAME'].toString(),
-              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+              style: TextStyle(fontSize: 11.4, fontWeight: FontWeight.w600),
             ),
             value: Locdata['LOCATION_NAME'].toString(),
           );
@@ -680,7 +678,9 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
               child: Center(
                 child: LoadingIndicator(
                   indicatorType: Indicator.ballClipRotateMultiple,
-                  colors: Colors.primaries,
+                  colors: [
+                    Color.fromARGB(255, 49, 114, 179),
+                  ],
                   strokeWidth: 4.0,
                   //   pathBackgroundColor:ColorSwatch(Action[])
                 ),
@@ -690,38 +690,45 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
     );
 
     All_Test_Widget(var data, BuildContext context) {
-      return SizedBox(
-        height: 300,
-        child: Card(
-          child: SingleChildScrollView(
+      return SingleChildScrollView(
+          child: Container(
+        decoration: BoxDecoration(
+          borderRadius:
+              BorderRadius.circular(12), // Adjust the radius as needed
+          color: Colors.white, // Container background color
+        ),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
+            child: Text(
+              "Booking Slots:",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(10, 0, 10, 2),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
-                  child: Text(
-                    "Booking Slots:",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
                   child: Container(
-                      height: MediaQuery.of(context).size.height,
+                      height: 350, // Constrain the height here
                       child: GridView.builder(
                           gridDelegate:
                               const SliverGridDelegateWithMaxCrossAxisExtent(
-                                  maxCrossAxisExtent: 100,
-                                  childAspectRatio: 3 / 1.9,
-                                  crossAxisSpacing: 10,
-                                  mainAxisSpacing: 10),
+                            maxCrossAxisExtent: 100,
+                            childAspectRatio: 3 / 1.9,
+                            crossAxisSpacing: 10,
+                            mainAxisSpacing: 10,
+                          ),
                           itemCount: GridViewList.length,
                           itemBuilder: (BuildContext ctx, index) {
                             return FormattedDateForSlots ==
                                     GridViewList[index]["SLOT_DATE"]
                                         .split('T')[0]
                                 ? GridViewList[index]["SLOT_TIME"]
-                                            .compareTo(formattedTimeForSlots) >
+                                            .compareTo(
+                                                formattedTimeForSlots) >
                                         0
                                     ? InkWell(
                                         onTap: () {
@@ -729,29 +736,33 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
                                               context: context,
                                               barrierDismissible: true,
                                               //context: _scaffoldKey.currentContext,
-                                              builder: (BuildContext context) {
+                                              builder:
+                                                  (BuildContext context) {
                                                 return AlertDialog(
                                                   contentPadding:
                                                       EdgeInsets.only(
-                                                          left: 25, right: 25),
+                                                          left: 25,
+                                                          right: 25),
                                                   title: Card(
                                                       color: Color.fromARGB(
                                                           255, 30, 92, 153),
-                                                      shape:
-                                                          RoundedRectangleBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          12),
-                                                              side: BorderSide(
-                                                                  color: Colors
-                                                                      .grey)),
+                                                      shape: RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      12),
+                                                          side: BorderSide(
+                                                              color: Colors
+                                                                  .grey)),
                                                       elevation: 4.0,
                                                       child: Padding(
                                                           padding:
                                                               const EdgeInsets
                                                                       .fromLTRB(
-                                                                  0, 12, 0, 12),
+                                                                  0,
+                                                                  12,
+                                                                  0,
+                                                                  12),
                                                           child: Center(
                                                             child: Text(
                                                                 "Bookings ",
@@ -761,8 +772,7 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
                                                                     fontSize:
                                                                         14,
                                                                     fontWeight:
-                                                                        FontWeight
-                                                                            .w600)),
+                                                                        FontWeight.w600)),
                                                           ))),
                                                   shape: RoundedRectangleBorder(
                                                       borderRadius:
@@ -771,8 +781,8 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
                                                                   20.0))),
                                                   content: Padding(
                                                     padding:
-                                                        const EdgeInsets.only(
-                                                            top: 10),
+                                                        const EdgeInsets
+                                                            .only(top: 10),
                                                     child: SizedBox(
                                                       height: 100,
                                                       width: 200,
@@ -782,41 +792,36 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
                                                           crossAxisAlignment:
                                                               CrossAxisAlignment
                                                                   .start,
-                                                          children: <Widget>[
+                                                          children: <
+                                                              Widget>[
                                                             GestureDetector(
                                                               onTap: () {
                                                                 globals
-                                                                    .Location_BookedTest = GridViewList[
-                                                                            index]
+                                                                    .Location_BookedTest = GridViewList[index]
                                                                         [
                                                                         "LOC_NAME"]
                                                                     .toString();
                                                                 globals
-                                                                    .SlotsBooked = GridViewList[
-                                                                            index]
+                                                                    .SlotsBooked = GridViewList[index]
                                                                         [
                                                                         "SLOT_TIME"]
                                                                     .toString();
                                                                 globals
-                                                                    .Slot_id = GridViewList[
-                                                                            index]
+                                                                    .Slot_id = GridViewList[index]
                                                                         [
                                                                         "SLOT_ID"]
                                                                     .toString();
 
-                                                                GridViewList[index]
-                                                                            [
-                                                                            "SLOT_COUNT"] <=
+                                                                GridViewList[index]["SLOT_COUNT"] <=
                                                                         0
                                                                     ? print(
                                                                         "Slots finished")
                                                                     : Navigator.push(
                                                                         context,
-                                                                        MaterialPageRoute(
-                                                                            builder: (context) =>
-                                                                                UpLoadPrescrIPtioN()));
+                                                                        MaterialPageRoute(builder: (context) => UpLoadPrescrIPtioN()));
                                                               },
-                                                              child: Container(
+                                                              child:
+                                                                  Container(
                                                                 width: 300,
                                                                 height: 30,
                                                                 decoration:
@@ -849,99 +854,89 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
                                                                         .bottomRight,
                                                                   ),
                                                                   borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              20),
+                                                                      BorderRadius.circular(
+                                                                          20),
                                                                   boxShadow: [
                                                                     BoxShadow(
-                                                                      color: Colors
-                                                                          .black12,
-                                                                      offset:
-                                                                          Offset(
-                                                                              5,
-                                                                              5),
+                                                                      color:
+                                                                          Colors.black12,
+                                                                      offset: Offset(
+                                                                          5,
+                                                                          5),
                                                                       blurRadius:
                                                                           10,
                                                                     )
                                                                   ],
                                                                 ),
-                                                                child: Padding(
+                                                                child:
+                                                                    Padding(
                                                                   padding: const EdgeInsets
                                                                           .only(
-                                                                      left: 10,
+                                                                      left:
+                                                                          10,
                                                                       right:
                                                                           10),
-                                                                  child: Row(
+                                                                  child:
+                                                                      Row(
                                                                     children: [
                                                                       Center(
                                                                         child:
                                                                             Text(
                                                                           'Upload Prescription',
-                                                                          style:
-                                                                              TextStyle(
-                                                                            color:
-                                                                                Colors.black,
-                                                                            fontSize:
-                                                                                14,
-                                                                            fontWeight:
-                                                                                FontWeight.w500,
+                                                                          style: TextStyle(
+                                                                            color: Colors.black,
+                                                                            fontSize: 14,
+                                                                            fontWeight: FontWeight.w500,
                                                                           ),
                                                                         ),
                                                                       ),
                                                                       Spacer(),
                                                                       Icon(
-                                                                          Icons
-                                                                              .arrow_circle_right_outlined,
-                                                                          color:
-                                                                              Color(0xff123456))
+                                                                          Icons.arrow_circle_right_outlined,
+                                                                          color: Color(0xff123456))
                                                                     ],
                                                                   ),
                                                                 ),
                                                               ),
                                                             ),
                                                             Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                          .only(
-                                                                      top:
-                                                                          12.0),
+                                                              padding: const EdgeInsets
+                                                                      .only(
+                                                                  top:
+                                                                      12.0),
                                                               child:
                                                                   GestureDetector(
                                                                 onTap: () {
                                                                   globals
-                                                                      .Location_BookedTest = GridViewList[
-                                                                              index]
+                                                                      .Location_BookedTest = GridViewList[index]
                                                                           [
                                                                           "LOC_NAME"]
                                                                       .toString();
                                                                   globals
-                                                                      .SlotsBooked = GridViewList[
-                                                                              index]
+                                                                      .SlotsBooked = GridViewList[index]
                                                                           [
                                                                           "SLOT_TIME"]
                                                                       .toString();
                                                                   globals
-                                                                      .Slot_id = GridViewList[
-                                                                              index]
+                                                                      .Slot_id = GridViewList[index]
                                                                           [
                                                                           "SLOT_ID"]
                                                                       .toString();
 
-                                                                  GridViewList[index]
-                                                                              [
-                                                                              "SLOT_COUNT"] <=
+                                                                  GridViewList[index]["SLOT_COUNT"] <=
                                                                           0
                                                                       ? print(
                                                                           "Slots finished")
                                                                       : Navigator.push(
                                                                           context,
-                                                                          MaterialPageRoute(
-                                                                              builder: (context) => ProductOverviewPage()));
+                                                                          MaterialPageRoute(builder: (context) => bookATeSt(globals.SelectedlocationId)));
                                                                 },
                                                                 child:
                                                                     Container(
-                                                                  width: 300,
-                                                                  height: 30,
+                                                                  width:
+                                                                      300,
+                                                                  height:
+                                                                      30,
                                                                   decoration:
                                                                       BoxDecoration(
                                                                     border: Border.all(
@@ -966,21 +961,19 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
                                                                         // Color.fromARGB(255, 26, 69, 112),
                                                                         // Color.fromARGB(255, 37, 98, 158),
                                                                       ],
-                                                                      begin: Alignment
-                                                                          .topLeft,
+                                                                      begin:
+                                                                          Alignment.topLeft,
                                                                       end: Alignment
                                                                           .bottomRight,
                                                                     ),
                                                                     borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            20),
+                                                                        BorderRadius.circular(20),
                                                                     boxShadow: [
                                                                       BoxShadow(
-                                                                        color: Colors
-                                                                            .black12,
-                                                                        offset: Offset(
-                                                                            5,
-                                                                            5),
+                                                                        color:
+                                                                            Colors.black12,
+                                                                        offset:
+                                                                            Offset(5, 5),
                                                                         blurRadius:
                                                                             10,
                                                                       )
@@ -988,20 +981,18 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
                                                                   ),
                                                                   child:
                                                                       Padding(
-                                                                    padding: const EdgeInsets
-                                                                            .only(
+                                                                    padding: const EdgeInsets.only(
                                                                         left:
                                                                             10,
                                                                         right:
                                                                             10),
-                                                                    child: Row(
+                                                                    child:
+                                                                        Row(
                                                                       children: [
                                                                         Center(
-                                                                          child:
-                                                                              Text(
+                                                                          child: Text(
                                                                             'TestWise Bookings',
-                                                                            style:
-                                                                                TextStyle(
+                                                                            style: TextStyle(
                                                                               color: Colors.black,
                                                                               fontSize: 14,
                                                                               fontWeight: FontWeight.w500,
@@ -1009,11 +1000,8 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
                                                                           ),
                                                                         ),
                                                                         Spacer(),
-                                                                        Icon(
-                                                                            Icons
-                                                                                .arrow_circle_right_outlined,
-                                                                            color:
-                                                                                Color(0xff123456))
+                                                                        Icon(Icons.arrow_circle_right_outlined,
+                                                                            color: Color(0xff123456))
                                                                       ],
                                                                     ),
                                                                   ),
@@ -1043,9 +1031,11 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
                                                 GridViewList[index]
                                                     ["SLOT_TIME"],
                                                 style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
+                                                  fontWeight:
+                                                      FontWeight.bold,
                                                   color: GridViewList[index]
-                                                              ["SLOT_COUNT"] >
+                                                              [
+                                                              "SLOT_COUNT"] >
                                                           5
                                                       ? Colors.green
                                                       : GridViewList[index][
@@ -1057,11 +1047,13 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
                                                                       "SLOT_COUNT"] >
                                                                   0
                                                           ? Colors.orange
-                                                          : GridViewList[index][
+                                                          : GridViewList[index]
+                                                                      [
                                                                       "SLOT_COUNT"] <=
                                                                   0
                                                               ? Colors.grey
-                                                              : Colors.white,
+                                                              : Colors
+                                                                  .white,
                                                 ),
                                               ),
                                             ],
@@ -1069,8 +1061,8 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
                                         ),
                                       )
                                     : Card(
-                                        color:
-                                            Color.fromARGB(255, 203, 199, 199),
+                                        color: Color.fromARGB(
+                                            255, 203, 199, 199),
                                         shape: RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(6)),
@@ -1080,9 +1072,11 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
                                               MainAxisAlignment.center,
                                           children: [
                                             Text(
-                                              GridViewList[index]["SLOT_TIME"],
+                                              GridViewList[index]
+                                                  ["SLOT_TIME"],
                                               style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
+                                                  fontWeight:
+                                                      FontWeight.bold,
                                                   color: Color.fromARGB(
                                                       255, 127, 122, 122)),
                                             ),
@@ -1097,27 +1091,34 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
                                           //context: _scaffoldKey.currentContext,
                                           builder: (BuildContext context) {
                                             return AlertDialog(
-                                              contentPadding: EdgeInsets.only(
-                                                  left: 25, right: 25),
+                                              contentPadding:
+                                                  EdgeInsets.only(
+                                                      left: 25, right: 25),
                                               title: Card(
                                                   color: Color(0xff123456),
-                                                  shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              12),
-                                                      side: BorderSide(
-                                                          color: Colors.grey)),
+                                                  shape:
+                                                      RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      12),
+                                                          side: BorderSide(
+                                                              color: Colors
+                                                                  .grey)),
                                                   elevation: 4.0,
                                                   child: Padding(
-                                                      padding: const EdgeInsets
-                                                              .fromLTRB(
-                                                          0, 12, 0, 12),
+                                                      padding:
+                                                          const EdgeInsets
+                                                                  .fromLTRB(
+                                                              0, 12, 0, 12),
                                                       child: Center(
-                                                        child: Text("Bookings ",
+                                                        child: Text(
+                                                            "Bookings ",
                                                             style: TextStyle(
                                                                 color: Colors
                                                                     .white,
-                                                                fontSize: 14,
+                                                                fontSize:
+                                                                    14,
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .w600)),
@@ -1128,12 +1129,14 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
                                                           Radius.circular(
                                                               20.0))),
                                               content: Padding(
-                                                padding: const EdgeInsets.only(
-                                                    top: 10),
+                                                padding:
+                                                    const EdgeInsets.only(
+                                                        top: 10),
                                                 child: SizedBox(
                                                   height: 100,
                                                   width: 200,
-                                                  child: SingleChildScrollView(
+                                                  child:
+                                                      SingleChildScrollView(
                                                     child: Column(
                                                       crossAxisAlignment:
                                                           CrossAxisAlignment
@@ -1141,26 +1144,27 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
                                                       children: <Widget>[
                                                         GestureDetector(
                                                           onTap: () {
-                                                            globals.Location_BookedTest =
-                                                                GridViewList[
-                                                                            index]
-                                                                        [
-                                                                        "LOC_NAME"]
-                                                                    .toString();
-                                                            globals.SlotsBooked =
-                                                                GridViewList[
-                                                                            index]
-                                                                        [
-                                                                        "SLOT_TIME"]
-                                                                    .toString();
-                                                            globals.Slot_id =
-                                                                GridViewList[
-                                                                            index]
-                                                                        [
-                                                                        "SLOT_ID"]
-                                                                    .toString();
+                                                            globals
+                                                                .Location_BookedTest = GridViewList[
+                                                                        index]
+                                                                    [
+                                                                    "LOC_NAME"]
+                                                                .toString();
+                                                            globals
+                                                                .SlotsBooked = GridViewList[
+                                                                        index]
+                                                                    [
+                                                                    "SLOT_TIME"]
+                                                                .toString();
+                                                            globals
+                                                                .Slot_id = GridViewList[
+                                                                        index]
+                                                                    [
+                                                                    "SLOT_ID"]
+                                                                .toString();
 
-                                                            GridViewList[index][
+                                                            GridViewList[index]
+                                                                        [
                                                                         "SLOT_COUNT"] <=
                                                                     0
                                                                 ? print(
@@ -1168,9 +1172,8 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
                                                                 : Navigator.push(
                                                                     context,
                                                                     MaterialPageRoute(
-                                                                        builder:
-                                                                            (context) =>
-                                                                                UpLoadPrescrIPtioN()));
+                                                                        builder: (context) =>
+                                                                            UpLoadPrescrIPtioN()));
                                                           },
                                                           child: Container(
                                                             width: 300,
@@ -1178,27 +1181,24 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
                                                             decoration:
                                                                 BoxDecoration(
                                                               border: Border.all(
-                                                                  color: Color
-                                                                      .fromARGB(
-                                                                          95,
-                                                                          218,
-                                                                          212,
-                                                                          212)),
+                                                                  color: Color.fromARGB(
+                                                                      95,
+                                                                      218,
+                                                                      212,
+                                                                      212)),
                                                               gradient:
                                                                   LinearGradient(
                                                                 colors: [
-                                                                  Color
-                                                                      .fromARGB(
-                                                                          255,
-                                                                          234,
-                                                                          229,
-                                                                          229),
-                                                                  Color
-                                                                      .fromARGB(
-                                                                          255,
-                                                                          234,
-                                                                          229,
-                                                                          229),
+                                                                  Color.fromARGB(
+                                                                      255,
+                                                                      234,
+                                                                      229,
+                                                                      229),
+                                                                  Color.fromARGB(
+                                                                      255,
+                                                                      234,
+                                                                      229,
+                                                                      229),
                                                                   // Color.fromARGB(255, 26, 69, 112),
                                                                   // Color.fromARGB(255, 37, 98, 158),
                                                                 ],
@@ -1217,28 +1217,29 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
                                                                       .black12,
                                                                   offset:
                                                                       Offset(
-                                                                          5, 5),
+                                                                          5,
+                                                                          5),
                                                                   blurRadius:
                                                                       10,
                                                                 )
                                                               ],
                                                             ),
                                                             child: Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                          .only(
-                                                                      left: 10,
-                                                                      right:
-                                                                          10),
+                                                              padding: const EdgeInsets
+                                                                      .only(
+                                                                  left: 10,
+                                                                  right:
+                                                                      10),
                                                               child: Row(
                                                                 children: [
                                                                   Center(
-                                                                    child: Text(
+                                                                    child:
+                                                                        Text(
                                                                       'Upload Prescription',
                                                                       style:
                                                                           TextStyle(
-                                                                        color: Colors
-                                                                            .black,
+                                                                        color:
+                                                                            Colors.black,
                                                                         fontSize:
                                                                             14,
                                                                         fontWeight:
@@ -1250,8 +1251,8 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
                                                                   Icon(
                                                                       Icons
                                                                           .arrow_circle_right_outlined,
-                                                                      color: Color(
-                                                                          0xff123456))
+                                                                      color:
+                                                                          Color(0xff123456))
                                                                 ],
                                                               ),
                                                             ),
@@ -1261,28 +1262,29 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
                                                           padding:
                                                               const EdgeInsets
                                                                       .only(
-                                                                  top: 12.0),
+                                                                  top:
+                                                                      12.0),
                                                           child:
                                                               GestureDetector(
                                                             onTap: () {
-                                                              globals.Location_BookedTest =
-                                                                  GridViewList[
-                                                                              index]
-                                                                          [
-                                                                          "LOC_NAME"]
-                                                                      .toString();
-                                                              globals.SlotsBooked =
-                                                                  GridViewList[
-                                                                              index]
-                                                                          [
-                                                                          "SLOT_TIME"]
-                                                                      .toString();
-                                                              globals.Slot_id =
-                                                                  GridViewList[
-                                                                              index]
-                                                                          [
-                                                                          "SLOT_ID"]
-                                                                      .toString();
+                                                              globals
+                                                                  .Location_BookedTest = GridViewList[
+                                                                          index]
+                                                                      [
+                                                                      "LOC_NAME"]
+                                                                  .toString();
+                                                              globals
+                                                                  .SlotsBooked = GridViewList[
+                                                                          index]
+                                                                      [
+                                                                      "SLOT_TIME"]
+                                                                  .toString();
+                                                              globals
+                                                                  .Slot_id = GridViewList[
+                                                                          index]
+                                                                      [
+                                                                      "SLOT_ID"]
+                                                                  .toString();
 
                                                               GridViewList[index]
                                                                           [
@@ -1293,21 +1295,20 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
                                                                   : Navigator.push(
                                                                       context,
                                                                       MaterialPageRoute(
-                                                                          builder: (context) =>
-                                                                              ProductOverviewPage()));
+                                                                          builder: (context) => bookATeSt(globals.SelectedlocationId)));
                                                             },
-                                                            child: Container(
+                                                            child:
+                                                                Container(
                                                               width: 300,
                                                               height: 30,
                                                               decoration:
                                                                   BoxDecoration(
                                                                 border: Border.all(
-                                                                    color: Color
-                                                                        .fromARGB(
-                                                                            95,
-                                                                            218,
-                                                                            212,
-                                                                            212)),
+                                                                    color: Color.fromARGB(
+                                                                        95,
+                                                                        218,
+                                                                        212,
+                                                                        212)),
                                                                 gradient:
                                                                     LinearGradient(
                                                                   colors: [
@@ -1330,30 +1331,28 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
                                                                       .bottomRight,
                                                                 ),
                                                                 borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            20),
+                                                                    BorderRadius.circular(
+                                                                        20),
                                                                 boxShadow: [
                                                                   BoxShadow(
                                                                     color: Colors
                                                                         .black12,
-                                                                    offset:
-                                                                        Offset(
-                                                                            5,
-                                                                            5),
+                                                                    offset: Offset(
+                                                                        5,
+                                                                        5),
                                                                     blurRadius:
                                                                         10,
                                                                   )
                                                                 ],
                                                               ),
-                                                              child: Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                            .only(
-                                                                        left:
-                                                                            10,
-                                                                        right:
-                                                                            10),
+                                                              child:
+                                                                  Padding(
+                                                                padding: const EdgeInsets
+                                                                        .only(
+                                                                    left:
+                                                                        10,
+                                                                    right:
+                                                                        10),
                                                                 child: Row(
                                                                   children: [
                                                                     Center(
@@ -1362,12 +1361,9 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
                                                                         'TestWise Bookings',
                                                                         style:
                                                                             TextStyle(
-                                                                          color:
-                                                                              Colors.black,
-                                                                          fontSize:
-                                                                              14,
-                                                                          fontWeight:
-                                                                              FontWeight.w500,
+                                                                          color: Colors.black,
+                                                                          fontSize: 14,
+                                                                          fontWeight: FontWeight.w500,
                                                                         ),
                                                                       ),
                                                                     ),
@@ -1375,8 +1371,8 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
                                                                     Icon(
                                                                         Icons
                                                                             .arrow_circle_right_outlined,
-                                                                        color: Color(
-                                                                            0xff123456))
+                                                                        color:
+                                                                            Color(0xff123456))
                                                                   ],
                                                                 ),
                                                               ),
@@ -1392,7 +1388,8 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
                                           });
                                     },
                                     child: Card(
-                                      color: Color.fromARGB(255, 246, 244, 244),
+                                      color: Color.fromARGB(
+                                          255, 246, 244, 244),
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(6)),
@@ -1402,7 +1399,8 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
                                             MainAxisAlignment.center,
                                         children: [
                                           Text(
-                                            GridViewList[index]["SLOT_TIME"],
+                                            GridViewList[index]
+                                                ["SLOT_TIME"],
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               color: GridViewList[index]
@@ -1412,7 +1410,9 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
                                                   : GridViewList[index][
                                                                   "SLOT_COUNT"] <=
                                                               5 &&
-                                                          GridViewList[index][
+                                                          GridViewList[
+                                                                      index]
+                                                                  [
                                                                   "SLOT_COUNT"] >
                                                               0
                                                       ? Colors.orange
@@ -1432,8 +1432,8 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
               ],
             ),
           ),
-        ),
-      );
+        ]),
+      ));
     }
 
     function_widet() {
@@ -1493,10 +1493,10 @@ class _Book_Home_VisitState extends State<Book_Home_Visit> {
             ],
           ),
         ),
-        body: SingleChildScrollView(
-          child: Container(
-            height: MediaQuery.of(context).size.height,
-            color: Colors.blue[50],
+        body: Container(
+          height: MediaQuery.of(context).size.height,
+          color: Colors.blue[50],
+          child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
