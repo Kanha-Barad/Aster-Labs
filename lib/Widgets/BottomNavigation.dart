@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:asterlabs/Controllers/product_controller.dart';
-import 'package:asterlabs/Coupons.dart';
 
-import '../ClientCodeLogin.dart';
+import '../Cartprovider.dart';
 import '../PatientHome.dart';
 import '../PatientLogin.dart';
+import '../TestBooking.dart';
 import '../UserProfile.dart';
 import '../globals.dart' as globals;
 
@@ -36,6 +36,9 @@ class _AllBottOMNaviGAtionBarState extends State<AllBottOMNaviGAtionBar> {
                     globals.SelectedlocationId = "";
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => PatientHome()));
+                    searchController.clear();
+                    // Trigger a UI update by rebuilding the widget tree
+                    context.read<CartProvider>().notifyListeners();
                   },
                   child: Column(children: [
                     Icon(
@@ -66,6 +69,9 @@ class _AllBottOMNaviGAtionBarState extends State<AllBottOMNaviGAtionBar> {
                       MaterialPageRoute(builder: (context) => UsersProfile()),
                     );
                   }
+                  searchController.clear();
+                  // Trigger a UI update by rebuilding the widget tree
+                  context.read<CartProvider>().notifyListeners();
                 },
                 child: Column(
                   children: [
@@ -106,8 +112,12 @@ class _AllBottOMNaviGAtionBarState extends State<AllBottOMNaviGAtionBar> {
                     // (prefs.setString('Status_FLag', ''));
                     (prefs.setString('SeSSion_ID', ''));
                     (prefs.setString('singleUMr_No', ''));
-                    cartController.items.clear();
+                    // cartController.items.clear();
 //ProductController.clear();
+                    searchController.clear();
+                    // Trigger a UI update by rebuilding the widget tree
+                    context.read<CartProvider>().notifyListeners();
+
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => PatientLogin("")),

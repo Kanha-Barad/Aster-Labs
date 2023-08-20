@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:asterlabs/TestBooking.dart';
 import 'package:flutter/material.dart';
 
 import 'package:fluttertoast/fluttertoast.dart';
@@ -12,8 +13,6 @@ import 'MyTrends.dart';
 import 'Notification.dart';
 import 'OrdersHistory.dart';
 
-import 'PatientHome.dart';
-import 'Screens/Book_Test_screen.dart';
 import 'book_home_visit.dart';
 import 'globals.dart' as globals;
 import 'package:http/http.dart' as http;
@@ -86,13 +85,13 @@ class _ValidateOTPState extends State<ValidateOTP> {
         (prefs.setString('data1', json.encode(map)));
       });
 
-      if (globals.umr_no != "") {
+      if (globals.umr_no.isNotEmpty == true ) {
         if (ValiDate_Flag == "B") {
           setState(() {
             isLoading = false; // Hide loading indicator
           });
           Navigator.push(context,
-              MaterialPageRoute(builder: (context) => ProductOverviewPage()));
+              MaterialPageRoute(builder: (context) => bookATeSt("0")));
         } else if (ValiDate_Flag == "T") {
           setState(() {
             isLoading = false; // Hide loading indicator
@@ -266,7 +265,7 @@ class _ValidateOTPState extends State<ValidateOTP> {
               colors: [
                 // Color.fromARGB(255, 49, 213, 169),
                 // Color.fromARGB(255, 246, 246, 246),
-                Color.fromARGB(255, 41, 69, 173),
+                Color.fromARGB(255, 49, 114, 179),
               ],
               strokeWidth: 4.0,
             ),
