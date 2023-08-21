@@ -351,26 +351,27 @@ class _PatientHomeState extends State<PatientHome> {
         ),
         body: Stack(
           children: [
-            if (isLoading)
-              Center(
-                child: SizedBox(
-                  height: 100,
-                  width: 100,
-                  child: LoadingIndicator(
-                    indicatorType: Indicator.ballClipRotateMultiple,
-                    colors: [
-                      Color.fromARGB(255, 49, 114, 179),
-                    ],
-                    strokeWidth: 4.0,
-                  ),
-                ),
-              ),
+            // if (isLoading)
+            //   Center(
+            //     child: SizedBox(
+            //       height: 100,
+            //       width: 100,
+            //       child: LoadingIndicator(
+            //         indicatorType: Indicator.ballClipRotateMultiple,
+            //         colors: [
+            //           Color.fromARGB(255, 49, 114, 179),
+            //         ],
+            //         strokeWidth: 4.0,
+            //       ),
+            //     ),
+            //   ),
             FutureBuilder<List<PreferredServices>>(
               future: _fetchManagerDetails(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData && !snapshot.hasError) {
                   // Loading indicator while waiting for data
-                  return Center(
+                  return 
+                  Center(
                     child: SizedBox(
                       height: 100,
                       width: 100,
